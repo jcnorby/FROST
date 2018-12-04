@@ -27,7 +27,7 @@
 
 
 ## data files
-*.mat
+## *.mat
 *.bin
 
 ## build directories

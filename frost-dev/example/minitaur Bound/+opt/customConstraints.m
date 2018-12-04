@@ -64,7 +64,7 @@ plant = nlp.Phase(end).Plant;
 xf = nlp.Phase(end).Plant.States.xn;
 dxf = nlp.Phase(end).Plant.States.dxn;
 
-% Readding Periodicity (ignoring first 6 coordinates)
+% Readding Periodicity (ignoring first coordinate)
     R = plant.R;
     x = plant.States.x;
     xn = plant.States.xn;

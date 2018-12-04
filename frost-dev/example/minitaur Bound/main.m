@@ -58,8 +58,8 @@ toc
 
 %% Compile stuff if needed
 
-compileObjective(nlp,[],[],export_path);
-compileConstraint(nlp,[],[],export_path);
+% compileObjective(nlp,[],[],export_path);
+% compileConstraint(nlp,[],[],export_path);
 
 % compileConstraint(nlp,[],{'nonPenetration_FrontStance', 'nonPenetration_BackStance'},export_path);
 % compileConstraint(nlp,[],{'u_friction_cone_Foot0', 'u_friction_cone_Foot1', 'u_friction_cone_Foot2', 'u_friction_cone_Foot3'},export_path);
@@ -68,10 +68,12 @@ compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],'dynamics_equation',export_path);
 % compileConstraint(nlp,[],{'paramContD', 'dfinalCont'},export_path);
 % compileConstraint(nlp,[],{'gsm'},export_path);
+% compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
+
 
 % % Save expression 
-load_path   = 'gen/sym';
-robot.saveExpression(load_path); % run this after loading the optimization problem
+% load_path   = 'gen/sym';
+% robot.saveExpression(load_path); % run this after loading the optimization problem
 
 %% Load initial gait
 
@@ -80,7 +82,7 @@ robot.saveExpression(load_path); % run this after loading the optimization probl
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
 % temp = load('local/current_gait.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch300LighterGSM.mat');
-temp = load('local/energyOptimalBoundInstantaneousSwitchGSM.mat');
+temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
 
 
 % bounds = temp.bounds;
@@ -107,11 +109,11 @@ gait = temp.gait;
 % x0 = ones(length(x0),1);
 % [gait, sol, info] = opt.solve(nlp, x0);
 
-opt.updateInitCondition(nlp,gait);
-[gait, sol, info] = opt.solve(nlp);
-
 % opt.updateInitCondition(nlp,gait);
-% [gait, sol, info] = opt.solve(nlp, sol, info);
+% [gait, sol, info] = opt.solve(nlp);
+
+opt.updateInitCondition(nlp,gait);
+[gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% you can check the violation of constraints/variables and the value of each cost function by calling the following functions.
 tol = 1e-3;

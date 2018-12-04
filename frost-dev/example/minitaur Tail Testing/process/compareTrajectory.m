@@ -4,7 +4,7 @@
 % set(0, 'DefaultLineMarkerSize', 10)
 
 close all; clc; clear;
-if strcmp(pwd,'C:\Users\Joe\Documents\frost-dev\example\minitaur Tail Testing\process')
+if strcmp(pwd,'C:\Users\Joe\Documents\FROST\frost-dev\example\minitaur Tail Testing\process')
     cd ..
 end
 set(0, 'DefaultAxesFontSize', 24);
@@ -42,7 +42,7 @@ addpath C:\Users\Joe\Documents\MATLAB\Add-Ons\Functions\'Joe Functions'\
 % gait.df = 1/(0.95*V)*(gait.inputs.u*Ra/(kt*R*Rineff) + kt*R*gait.states.dx(tailMotIndex, :)');
 
 
-dataPath = 'LOG00873.txt';
+dataPath = 'LOG00877.txt';
 mData = processMData(dataPath);
 %
 % tFinalData = mData.t(end);
@@ -75,7 +75,7 @@ mData = processMData(dataPath);
 
 tailMotIndex = [];
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
-temp = load('local/energyOptimalBoundInstantaneousSwitchGSM.mat');
+temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
 nlp = temp.nlp;
 sol = temp.sol;
 gait = temp.gait;
@@ -94,14 +94,14 @@ end
 
 
 motorIndex = [7,8,11,12,15,16,19,20];
-subplotIndex = [1,2,6,7,3,4,8,9];
+subplotIndex = [1,2,5,6,3,4,7,8];
 frontMotors = [0 1 4 5];
 refcolor = [0 0 0];
 actcolor = [1 0 0];
 
 f1 = figure(1)
 for motor = 0:length(motorIndex)-1
-    subplot(2,5, subplotIndex(motor+1))
+    subplot(2,4, subplotIndex(motor+1))
     plot(mData.t, mData.pos(:,motor+1),'Color', actcolor);
     hold on
     plot(loopedgait.tspan, loopedgait.states.x(motorIndex(motor+1),:), 'Color', refcolor)
