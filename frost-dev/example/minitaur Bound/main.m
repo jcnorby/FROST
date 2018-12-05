@@ -21,7 +21,7 @@ utils.init_path(export_path);
 
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurate.urdf');
 delay_set = true;
 %% load robot model
 tic
@@ -67,8 +67,8 @@ toc
 % compileConstraint(nlp,[],[],export_path, 'dynamics_equation');
 % compileConstraint(nlp,[],'dynamics_equation',export_path);
 % compileConstraint(nlp,[],{'paramContD', 'dfinalCont'},export_path);
-% compileConstraint(nlp,[],{'gsm'},export_path);
-% compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
+compileConstraint(nlp,[],{'gsm'},export_path);
+compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
 
 
 % % Save expression 
@@ -82,7 +82,7 @@ toc
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
 % temp = load('local/current_gait.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch300LighterGSM.mat');
-temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
+temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
 
 
 % bounds = temp.bounds;
