@@ -1,7 +1,7 @@
 function ground_speed_matching(nlp, bounds)
 % constraints for impact velocities
 
-% return;
+return;
 domain = nlp.Plant;
 x = domain.States.x;
 dx = domain.States.dx;

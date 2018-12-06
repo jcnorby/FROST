@@ -109,11 +109,11 @@ gait = temp.gait;
 % x0 = ones(length(x0),1);
 % [gait, sol, info] = opt.solve(nlp, x0);
 
-% opt.updateInitCondition(nlp,gait);
-% [gait, sol, info] = opt.solve(nlp);
-
 opt.updateInitCondition(nlp,gait);
-[gait, sol, info] = opt.solve(nlp, sol, info);
+[gait, sol, info] = opt.solve(nlp);
+
+% opt.updateInitCondition(nlp,gait);
+% [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% you can check the violation of constraints/variables and the value of each cost function by calling the following functions.
 tol = 1e-3;
