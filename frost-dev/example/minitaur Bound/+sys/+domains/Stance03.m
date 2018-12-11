@@ -1,7 +1,7 @@
  % Back Stance Domain 
  %
  % Contact: Back toes
-function domain = 03Stance(model, load_path)
+function domain = Stance03(model, load_path)
     % construct the back stance domain of Minitaur
     
     %% first make a copy of the robot model
@@ -9,7 +9,7 @@ function domain = 03Stance(model, load_path)
     %handle object.
     domain = copy(model);
     % set the name of the new copy
-    domain.setName('03Stance');
+    domain.setName('Stance03');
     
     % Extract state variables
     q = domain.States.x;

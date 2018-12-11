@@ -21,7 +21,7 @@ utils.init_path(export_path);
 
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
 delay_set = true;
 %% load robot model
 tic
@@ -68,21 +68,24 @@ toc
 % compileConstraint(nlp,[],'dynamics_equation',export_path);
 % compileConstraint(nlp,[],{'paramContD', 'dfinalCont'},export_path);
 compileConstraint(nlp,[],{'gsm'},export_path);
-compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
+% compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
 
-
+ 
 % % Save expression 
 % load_path   = 'gen/sym';
 % robot.saveExpression(load_path); % run this after loading the optimization problem
 
 %% Load initial gait
 
-% temp = load('local/energyOptimalBoundInstantaneousSwitch.mat');
+% temp = load('local/energyOptimalTrotInstantaneousSwitchClearance.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch360Lighter.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
-% temp = load('local/current_gait.mat');
+temp = load('local/current_gait.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch300LighterGSM.mat');
-temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
+% temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
+% temp = load('local/energyOptimalTrotWithTailBackOffsetInstantaneousSwitchClearance.mat');
+
+
 
 
 % bounds = temp.bounds;
@@ -109,11 +112,11 @@ gait = temp.gait;
 % x0 = ones(length(x0),1);
 % [gait, sol, info] = opt.solve(nlp, x0);
 
-opt.updateInitCondition(nlp,gait);
-[gait, sol, info] = opt.solve(nlp);
-
 % opt.updateInitCondition(nlp,gait);
-% [gait, sol, info] = opt.solve(nlp, sol, info);
+% [gait, sol, info] = opt.solve(nlp);
+
+opt.updateInitCondition(nlp,gait);
+[gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% you can check the violation of constraints/variables and the value of each cost function by calling the following functions.
 tol = 1e-3;
