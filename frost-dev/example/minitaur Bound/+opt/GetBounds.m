@@ -19,12 +19,19 @@ model_bounds = model.getLimits(); % x, dx, ddx, u
 model_bounds.constrBounds.stallTorque = 3;
 
 % state constraints
-motorlb = -pi/2;
-motorub = pi;
+% motorlb = -pi/2;
+% motorub = pi;
+% kneelb = 0;
+% kneeub = pi;
+motorlb = pi/2;
+motorub = pi/2;
 kneelb = 0;
 kneeub = pi;
 
 if model.numState == 22
+    model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
+    model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub];
+    
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub];
     
