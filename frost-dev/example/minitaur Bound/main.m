@@ -21,12 +21,12 @@ utils.init_path(export_path);
 
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailFrontOffsetAccurate.urdf');
 delay_set = true;
 %% load robot model
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
-exo_disp = plot.LoadRobotDisplay(robot);
+% exo_disp = plot.LoadRobotDisplay(robot);
 
 % load hybrid system
 system = sys.LoadSystem(robot, load_path);
@@ -67,26 +67,31 @@ toc
 % compileConstraint(nlp,[],[],export_path, 'dynamics_equation');
 % compileConstraint(nlp,[],'dynamics_equation',export_path);
 % compileConstraint(nlp,[],{'paramContD', 'dfinalCont'},export_path);
-compileConstraint(nlp,[],{'gsm'},export_path);
-compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
+% compileConstraint(nlp,[],{'gsm'},export_path);
+% compileConstraint(nlp,[],{'smooth_FrontImpact', 'smooth_BackImpact'},export_path);
 
+% compileConstraint(nlp,[],{'nonPenetration_Stance03', 'nonPenetration_Stance12'},export_path);
 
+ 
 % % Save expression 
 % load_path   = 'gen/sym';
 % robot.saveExpression(load_path); % run this after loading the optimization problem
 
 %% Load initial gait
 
-% temp = load('local/energyOptimalBoundInstantaneousSwitch.mat');
+% temp = load('local/energyOptimalTrotInstantaneousSwitchClearance.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch360Lighter.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
 % temp = load('local/current_gait.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch300LighterGSM.mat');
-temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
+% temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
+temp = load('local/energyOptimalTrotWithTailBackOffsetInstantaneousSwitchClearance.mat');
+
+
 
 
 % bounds = temp.bounds;
-% nlp = temp.nlp;
+nlp = temp.nlp;
 % robot = temp.robot;
 sol = temp.sol;
 info = temp.info;
@@ -101,6 +106,7 @@ gait = temp.gait;
 % end
 
 % Create initial gait if needed
+
 % gait = opt.addTailToGait(gait)
 % gait = opt.getInitGait(nlp, bounds)';
  
@@ -134,8 +140,8 @@ loopedGait = plot.createLoopedGait(gait);
 anim = plot.LoadAnimator(robot, loopedGait,'SkipExporting',true);
 
 %% Export gait to txt files for execution on the robot
-% fullgait = mergeGait(gait, nlp)
-% exportTrajectory(fullgait)
+fullgait = mergeGait(gait, nlp)
+exportTrajectory(fullgait)
 
 fullgait = mergeGait(gait, nlp);
 figure
