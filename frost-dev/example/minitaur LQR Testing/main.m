@@ -19,7 +19,7 @@ delay_set = true;
 %% load robot model
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
-% exo_disp = plot.LoadRobotDisplay(robot);
+exo_disp = plot.LoadRobotDisplay(robot);
 
 % load hybrid system
 % system = sys.LoadSystem(robot, load_path);

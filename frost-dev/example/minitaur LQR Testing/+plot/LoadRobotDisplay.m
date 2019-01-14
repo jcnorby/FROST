@@ -141,7 +141,7 @@ if ~isnan(getJointIndices(robot, 'tail_joint'))
         'R',[0,0,0]...
         );
     name = 'tail_link';
-    offset = [0,0,0.5];
+    offset = robot.Links(getLinkIndices(robot, 'tail_link')).Offset;
     tail_link = frost.Animator.Cylinder(minitaur_disp.axs, robot, tail, offset, name, opts);
     minitaur_disp.addItem(tail_link);
     

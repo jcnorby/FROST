@@ -1,0 +1,33 @@
+function foot_clearance(nlp, bounds, frame)
+    % constraints for swing foot clearance
+    
+    domain = nlp.Plant;
+    x = domain.States.x;
+    
+    Foot0 = sys.frames.Foot0(robot);
+    Foot1 = sys.frames.Foot1(robot);
+    Foot2 = sys.frames.Foot2(robot);
+    Foot3 = sys.frames.Foot3(robot);
+    
+    p_Foot0 = getCartesianPosition(robot, Foot0);
+    p_Foot1 = getCartesianPosition(robot, Foot1);
+    p_Foot2 = getCartesianPosition(robot, Foot2);
+    p_Foot3 = getCartesianPosition(robot, Foot3);
+    
+    
+    
+    % Foot Clearance Middle
+%     numNode = nlp.NumNode;
+%     addNodeConstraint(nlp, constraint_func, {'x'}, 'first', 0, 0, 'Nonlinear');
+%     addNodeConstraint(nlp, constraint_func, {'x'}, floor(1*numNode/4), ...
+%         bounds.constrBounds.foot_clearance_1.lb, ...
+%         bounds.constrBounds.foot_clearance_1.ub,'Nonlinear');
+%     addNodeConstraint(nlp, constraint_func, {'x'}, floor(2*numNode/4)+1, ...
+%         bounds.constrBounds.foot_clearance_2.lb, ...
+%         bounds.constrBounds.foot_clearance_2.ub,'Nonlinear');
+%     addNodeConstraint(nlp, constraint_func, {'x'}, floor(3*numNode/4), ...
+%         bounds.constrBounds.foot_clearance_3.lb, ...
+%         bounds.constrBounds.foot_clearance_3.ub,'Nonlinear');
+%     addNodeConstraint(nlp, constraint_func, {'x'}, 'last', 0, 0, 'Nonlinear');
+end
+

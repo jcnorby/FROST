@@ -36,8 +36,8 @@ for i = 1:length(nlp.Phase)
 end
 
 % average step velocity
-p_lb = bounds.FrontStance.constrBounds.periodicity.lb;
-p_ub = bounds.FrontStance.constrBounds.periodicity.ub;
+p_lb = bounds.Stance03.constrBounds.periodicity.lb;
+p_ub = bounds.Stance03.constrBounds.periodicity.ub;
 
 xf = SymVariable('xf',size(xf));
 dxf = SymVariable('dxf',size(dxf));
@@ -55,7 +55,7 @@ addConstraint(nlp.Phase(end), 'periodicity', 'last', p_cstr);
 
 % the relabeling/periodicity of joint coordinate is no longer valid
 % (this only affects position peridicity, velocity still applies)
-removeConstraint(nlp.Phase(end),'xDiscreteMapBackImpact');
+removeConstraint(nlp.Phase(end),'xDiscreteMapImpact03');
 
 
 

@@ -12,7 +12,7 @@ function [conGUI] = LoadAnimator(robot, gait, varargin)
         q = [q,gait(j).states.x];        
     end
     
-    exo_disp = plot.LoadRobotNoLegsDisplay(robot, varargin{:});
+    exo_disp = plot.LoadRobotDisplay(robot, varargin{:});
     
     anim = frost.Animator.AbstractAnimator(exo_disp, t, q);
     anim.isLooping = false;

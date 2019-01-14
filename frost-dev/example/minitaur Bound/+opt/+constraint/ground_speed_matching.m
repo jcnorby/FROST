@@ -1,7 +1,7 @@
 function ground_speed_matching(nlp, bounds)
 % constraints for impact velocities
 
-return;
+% return;
 domain = nlp.Plant;
 x = domain.States.x;
 dx = domain.States.dx;
@@ -20,7 +20,7 @@ J_pos = jacobian([pos0'; pos1'; pos2'; pos3'], x);
 footVel = J_pos * dx;
 
 epsilon = 0.01;
-cutoffHeight = 0.01; % foot height in m below which foot speed must approach 0 (allowed to be 1 m/s at this height)
+cutoffHeight = 0.02; % foot height in m below which foot speed must approach 0 (allowed to be 1 m/s at this height)
 
 gsm_func_pos = [footVel(1) - ((pos0(3)/cutoffHeight).^3 + epsilon); footVel(4) - ((pos1(3)/cutoffHeight).^3 + epsilon)];
 gsm_func_neg = [-footVel(1) - ((pos0(3)/cutoffHeight).^3 + epsilon); -footVel(4) - ((pos1(3)/cutoffHeight).^3 + epsilon)];
