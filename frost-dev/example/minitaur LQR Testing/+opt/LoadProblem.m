@@ -5,7 +5,7 @@ function nlp  = LoadProblem(robot, bounds, load_path)
     end
     
 
-    num_grid = 40;
+    num_grid = 20;
     horizon = 1;
     
     options = {'EqualityConstraintBoundary', 1e-4,...

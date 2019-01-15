@@ -19,7 +19,7 @@ delay_set = true;
 %% load robot model
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
-exo_disp = plot.LoadRobotDisplay(robot);
+% exo_disp = plot.LoadRobotDisplay(robot);
 
 % load hybrid system
 % system = sys.LoadSystem(robot, load_path);
@@ -77,14 +77,14 @@ nlp = opt.LoadProblem(robot, bounds, load_path);
 toc
 %% Compile stuff if needed
 
-compileObjective(nlp,[],export_path);
-compileConstraint(nlp,[],export_path);
+% compileObjective(nlp,[],export_path);
+% compileConstraint(nlp,[],export_path);
 % compileConstraint(nlp,{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'nonPenetration_Stance'},export_path);
+compileConstraint(nlp,{'trackState'},export_path);
 
 % % Save expression 
-load_path   = 'gen/sym';
-robot.saveExpression(load_path); % run this after loaded the optimization problem
+% load_path   = 'gen/sym';
+% robot.saveExpression(load_path); % run this after loaded the optimization problem
 
 %% update bounds
 % opt.updateVariableBounds(nlp, bounds);
@@ -99,17 +99,29 @@ robot.saveExpression(load_path); % run this after loaded the optimization proble
 % sol = temp.sol;
 % info = temp.info;
 
+% temp = load('local/stand_low.mat');
+temp = load('local/current_gait.mat');
+
+% bounds = temp.bounds;
+% nlp = temp.nlp;
+% robot = temp.robot;
+sol = temp.sol;
+info = temp.info;
+gait = temp.gait;
+% cost = temp.cost;
+
 % gait = opt.getInitGait(nlp, bounds);
  
 % opt.updateInitCondition(nlp,gait);
 %% solve
-[gait, sol, info] = opt.solve(nlp);
+% [gait, sol, info] = opt.solve(nlp);
+[gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 %% save
-save('local/current_gait.mat','nlp','gait','sol','info','bounds');
+% save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 
 %% animation
-% anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
+anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
 %% you can check the violation of constraints/variables and the value of each cost function by calling the following functions.
 tol = 1e-3;
 checkConstraints(nlp,sol,tol,'local/constr_check.txt'); % 

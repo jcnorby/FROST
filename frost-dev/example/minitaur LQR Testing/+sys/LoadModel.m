@@ -38,47 +38,47 @@ q = robot.States.x;
 
 fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseRotY'); q('BaseRotZ')];
 
-fixedbase_constr = HolonomicConstraint(robot, fb, 'Fixedbase',...
-    'ConstrLabel',{{'fbx','fby','fbz','fbr','fbp','fby'}},...
-    'DerivativeOrder',2, 'LoadPath', load_path);
+% fixedbase_constr = HolonomicConstraint(robot, fb, 'Fixedbase',...
+%     'ConstrLabel',{{'fbx','fby','fbz','fbr','fbp','fby'}},...
+%     'DerivativeOrder',2, 'LoadPath', load_path);
 
 % robot = addHolonomicConstraint(robot, fixedbase_constr, load_path);
-%
-%     l1 = 0.1;
-%     l2 = 0.2;
-%
-%     h0c = l1*cos(q('motor_front_leftL_joint')) - l2*cos(q('motor_front_leftL_joint') - q('knee_front_leftL_link')) ...
-%         - (l1*cos(q('motor_front_leftR_joint')) - l2*cos(q('motor_front_leftR_joint') - q('knee_front_leftR_link')));
-%
-%     h1c = l1*cos(q('motor_back_leftL_joint')) - l2*cos(q('motor_back_leftL_joint') - q('knee_back_leftL_link')) ...
-%         - (l1*cos(q('motor_back_leftR_joint')) - l2*cos(q('motor_back_leftR_joint') - q('knee_back_leftR_link')));
-%
-%     h2c = l1*cos(q('motor_front_rightL_joint')) - l2*cos(q('motor_front_rightL_joint') - q('knee_front_rightL_link')) ...
-%         - (l1*cos(q('motor_front_rightR_joint')) - l2*cos(q('motor_front_rightR_joint') - q('knee_front_rightR_link')));
-%
-%     h3c = l1*cos(q('motor_back_rightL_joint')) - l2*cos(q('motor_back_rightL_joint') - q('knee_back_rightL_link')) ...
-%         - (l1*cos(q('motor_back_rightR_joint')) - l2*cos(q('motor_back_rightR_joint') - q('knee_back_rightR_link')));
-%
-%     h0s = l1*sin(q('motor_front_leftL_joint')) - l2*sin(q('motor_front_leftL_joint') - q('knee_front_leftL_link')) ...
-%         + (l1*sin(q('motor_front_leftR_joint')) - l2*sin(q('motor_front_leftR_joint') - q('knee_front_leftR_link')));
-%
-%     h1s = l1*sin(q('motor_back_leftL_joint')) - l2*sin(q('motor_back_leftL_joint') - q('knee_back_leftL_link')) ...
-%         + (l1*sin(q('motor_back_leftR_joint')) - l2*sin(q('motor_back_leftR_joint') - q('knee_back_leftR_link')));
-%
-%     h2s = l1*sin(q('motor_front_rightL_joint')) - l2*sin(q('motor_front_rightL_joint') - q('knee_front_rightL_link')) ...
-%         + (l1*sin(q('motor_front_rightR_joint')) - l2*sin(q('motor_front_rightR_joint') - q('knee_front_rightR_link')));
-%
-%     h3s = l1*sin(q('motor_back_rightL_joint')) - l2*sin(q('motor_back_rightL_joint') - q('knee_back_rightL_link')) ...
-%         + (l1*sin(q('motor_back_rightR_joint')) - l2*sin(q('motor_back_rightR_joint') - q('knee_back_rightR_link')));
-%
-%     h = [h0c; h1c; h2c; h3c; h0s; h1s; h2s; h3s];
-%
-%
-%     four_bar_constr = HolonomicConstraint(robot, h, 'fourBar',...
-%         'ConstrLabel',{{'Leg0cos','Leg1cos','Leg2cos','Leg3cos','Leg0sin','Leg1sin','Leg2sin','Leg3sin'}},...
-%         'DerivativeOrder',2, 'LoadPath', load_path);
-%
-%     robot = addHolonomicConstraint(robot, four_bar_constr, load_path);
+
+    l1 = 0.1;
+    l2 = 0.2;
+
+    h0c = l1*cos(q('motor_front_leftL_joint')) - l2*cos(q('motor_front_leftL_joint') - q('knee_front_leftL_link')) ...
+        - (l1*cos(q('motor_front_leftR_joint')) - l2*cos(q('motor_front_leftR_joint') - q('knee_front_leftR_link')));
+
+    h1c = l1*cos(q('motor_back_leftL_joint')) - l2*cos(q('motor_back_leftL_joint') - q('knee_back_leftL_link')) ...
+        - (l1*cos(q('motor_back_leftR_joint')) - l2*cos(q('motor_back_leftR_joint') - q('knee_back_leftR_link')));
+
+    h2c = l1*cos(q('motor_front_rightL_joint')) - l2*cos(q('motor_front_rightL_joint') - q('knee_front_rightL_link')) ...
+        - (l1*cos(q('motor_front_rightR_joint')) - l2*cos(q('motor_front_rightR_joint') - q('knee_front_rightR_link')));
+
+    h3c = l1*cos(q('motor_back_rightL_joint')) - l2*cos(q('motor_back_rightL_joint') - q('knee_back_rightL_link')) ...
+        - (l1*cos(q('motor_back_rightR_joint')) - l2*cos(q('motor_back_rightR_joint') - q('knee_back_rightR_link')));
+
+    h0s = l1*sin(q('motor_front_leftL_joint')) - l2*sin(q('motor_front_leftL_joint') - q('knee_front_leftL_link')) ...
+        + (l1*sin(q('motor_front_leftR_joint')) - l2*sin(q('motor_front_leftR_joint') - q('knee_front_leftR_link')));
+
+    h1s = l1*sin(q('motor_back_leftL_joint')) - l2*sin(q('motor_back_leftL_joint') - q('knee_back_leftL_link')) ...
+        + (l1*sin(q('motor_back_leftR_joint')) - l2*sin(q('motor_back_leftR_joint') - q('knee_back_leftR_link')));
+
+    h2s = l1*sin(q('motor_front_rightL_joint')) - l2*sin(q('motor_front_rightL_joint') - q('knee_front_rightL_link')) ...
+        + (l1*sin(q('motor_front_rightR_joint')) - l2*sin(q('motor_front_rightR_joint') - q('knee_front_rightR_link')));
+
+    h3s = l1*sin(q('motor_back_rightL_joint')) - l2*sin(q('motor_back_rightL_joint') - q('knee_back_rightL_link')) ...
+        + (l1*sin(q('motor_back_rightR_joint')) - l2*sin(q('motor_back_rightR_joint') - q('knee_back_rightR_link')));
+
+    h = [h0c; h1c; h2c; h3c; h0s; h1s; h2s; h3s];
+
+
+    four_bar_constr = HolonomicConstraint(robot, h, 'fourBar',...
+        'ConstrLabel',{{'Leg0cos','Leg1cos','Leg2cos','Leg3cos','Leg0sin','Leg1sin','Leg2sin','Leg3sin'}},...
+        'DerivativeOrder',2, 'LoadPath', load_path);
+
+    robot = addHolonomicConstraint(robot, four_bar_constr, load_path);
 %
 %     d = SymVariable('d');
 %     robot = addParam(robot, 'd', d);

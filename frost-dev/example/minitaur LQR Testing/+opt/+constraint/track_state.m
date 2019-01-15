@@ -32,9 +32,10 @@ dx = domain.States.dx;
 
 tc = 1;
 tvec = (1/tc)*linspace(nlp.Options.ConstantTimeHorizon(1),nlp.Options.ConstantTimeHorizon(2),nlp.NumNode);
+T = tvec(end) - tvec(1);
 
-pitch_pos_des = 0.25*sin(2*pi*tvec);
-pitch_vel_des = 0.25*2*pi*cos(2*pi*tvec);
+pitch_pos_des = 0.1*sin(2*pi*tvec/T);
+pitch_vel_des = 0.1*2*pi*cos(2*pi*tvec/T);
 targetx = SymVariable('targetx');
 targetdx = SymVariable('targetdx');
 state_error = [x('BaseRotY') - tomatrix(targetx);dx('BaseRotY') - targetdx];
