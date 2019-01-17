@@ -54,7 +54,7 @@ feet_height_fun = SymFunction(['nonPenetration_', nlp.Name], feet_height, {x});
 
 % % USE THIS FOR INSTANTANEOUS SWITCH
 
-N = 5; % Has to be odd
+N = 13; % Has to be odd
 
 N1 = (nlp.NumNode - N)/2;
 

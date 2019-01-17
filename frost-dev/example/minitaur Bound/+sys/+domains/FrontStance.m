@@ -1,7 +1,7 @@
  % Back Stance Domain 
  %
  % Contact: Back toes
-function domain = FrontStance(model, load_path)
+function domain = 03Stance(model, load_path)
     % construct the back stance domain of Minitaur
     
     %% first make a copy of the robot model
@@ -9,7 +9,7 @@ function domain = FrontStance(model, load_path)
     %handle object.
     domain = copy(model);
     % set the name of the new copy
-    domain.setName('FrontStance');
+    domain.setName('03Stance');
     
     % Extract state variables
     q = domain.States.x;
@@ -166,19 +166,19 @@ function domain = FrontStance(model, load_path)
     
         %% Add contact
     % left foot point contact
-    [foot2, fric_coef] = sys.frames.Foot2(model);
+    [foot3, fric_coef] = sys.frames.Foot3(model);
     
-    p_foot2 = getCartesianPosition(domain, foot2);
+    p_foot3 = getCartesianPosition(domain, foot3);
     
-    constr = [p_foot2(1);p_foot2(2);p_foot2(3)];
-    hol = HolonomicConstraint(domain, constr, 'Foot2',...
-        'ConstrLabel',{{'Foot2X','Foot2Y','Foot2Z'}},...
+    constr = [p_foot3(1);p_foot3(2);p_foot3(3)];
+    hol = HolonomicConstraint(domain, constr, 'Foot3',...
+        'ConstrLabel',{{'Foot3X','Foot3Y','Foot3Z'}},...
         'DerivativeOrder',2);
     domain = addHolonomicConstraint(domain,hol);
     %     domain = addContact(domain,left_foot,fric_coef, geom, load_path);
     if ~isempty(fric_coef)
         
-        f = domain.Inputs.ConstraintWrench.fFoot2;
+        f = domain.Inputs.ConstraintWrench.fFoot3;
         % get the friction cone constraint
         %         [friction_cone, fc_label, auxdata] = getFrictionCone(left_foot, f, fric_coef);
         mu = SymVariable('mu');
@@ -192,7 +192,7 @@ function domain = FrontStance(model, load_path)
  
         
         % create a symbolic function object
-        friction_cone = SymFunction(['u_friction_cone_', foot2.Name],...
+        friction_cone = SymFunction(['u_friction_cone_', foot3.Name],...
             constr,{f},{[mu;gamma]});
         
         % create the label text
@@ -207,7 +207,7 @@ function domain = FrontStance(model, load_path)
         auxdata = [fric_coef.mu; fric_coef.gamma];
         % create an unilateral constraint object
         fc_cstr = UnilateralConstraint(domain, friction_cone,...
-            ['fc' foot2.Name], 'fFoot2', ...
+            ['fc' foot3.Name], 'fFoot3', ...
             'ConstrLabel',{fc_label(:)'},...
             'AuxData',auxdata);
         % add as a set of unilateral constraints
@@ -217,7 +217,7 @@ function domain = FrontStance(model, load_path)
     
     %% Add event
     % rear foot normal force = f(3)
-    nf_nsf = UnilateralConstraint(domain,f(3),'Foot2NormalForce','fFoot2');
+    nf_nsf = UnilateralConstraint(domain,f(3),'Foot0NormalForce','fFoot0');
     domain = addEvent(domain, nf_nsf);
     
         %% Add events

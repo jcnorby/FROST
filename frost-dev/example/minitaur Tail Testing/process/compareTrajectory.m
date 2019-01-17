@@ -42,7 +42,7 @@ addpath C:\Users\Joe\Documents\MATLAB\Add-Ons\Functions\'Joe Functions'\
 % gait.df = 1/(0.95*V)*(gait.inputs.u*Ra/(kt*R*Rineff) + kt*R*gait.states.dx(tailMotIndex, :)');
 
 
-dataPath = 'LOG00877.txt';
+dataPath = 'decentNoTailRun3m.txt';
 mData = processMData(dataPath);
 %
 % tFinalData = mData.t(end);

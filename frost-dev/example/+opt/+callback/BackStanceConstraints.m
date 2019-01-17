@@ -22,7 +22,7 @@ function BackStanceConstraints(nlp, bounds, varargin)
     opt.constraint.non_penetration(nlp, bounds, swingfeet);
     opt.constraint.joint_limits(nlp, bounds);
 %     opt.constraint.motor_model(nlp, bounds);
-    opt.constraint.distance_traveled(nlp, bounds);
+%     opt.constraint.distance_traveled(nlp, bounds);
 %     opt.constraint.average_velocity(nlp, bounds);
     opt.constraint.symmetry(nlp, bounds);
     
