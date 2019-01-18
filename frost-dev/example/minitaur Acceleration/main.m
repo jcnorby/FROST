@@ -1,7 +1,5 @@
 % Main script
 
-SHOULD BE READY TO COMPILE
-
 %% Setting up path
 clear; close all; clc;
 restoredefaultpath; matlabrc;
@@ -79,14 +77,14 @@ nlp = opt.LoadProblem(robot, bounds, load_path);
 toc
 %% Compile stuff if needed
 
-% compileObjective(nlp,[],export_path);
-% compileConstraint(nlp,[],export_path);
-% compileConstraint(nlp,{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
+compileObjective(nlp,[],[],export_path);
+% compileConstraint(nlp,[],[],export_path);
+% compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,{'trackState'},export_path);
 
 % % Save expression 
-% load_path   = 'gen/sym';
-% robot.saveExpression(load_path); % run this after loaded the optimization problem
+load_path   = 'gen/sym';
+robot.saveExpression(load_path); % run this after loaded the optimization problem
 
 %% update bounds
 % opt.updateVariableBounds(nlp, bounds);
@@ -102,7 +100,7 @@ toc
 % info = temp.info;
 
 % temp = load('local/stand_low.mat');
-temp = load('local/current_gait.mat');
+temp = load('local/initialAccel.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -117,10 +115,10 @@ gait = temp.gait;
 % opt.updateInitCondition(nlp,gait);
 %% solve
 % [gait, sol, info] = opt.solve(nlp);
-[gait, sol, info] = opt.solve(nlp, sol);
-% [gait, sol, info] = opt.solve(nlp, sol, info);
+% [gait, sol, info] = opt.solve(nlp, sol);
+[gait, sol, info] = opt.solve(nlp, sol, info);
 %% save
-% save('local/current_gait.mat','nlp','gait','sol','info','bounds');
+save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 
 %% animation
 anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
@@ -129,8 +127,9 @@ tol = 1e-3;
 checkConstraints(nlp,sol,tol,'local/constr_check.txt'); % 
 checkVariables(nlp,sol,tol,'local/var_check.txt'); % 
 
-checkCosts(nlp,sol,'local/cost_check.txt') % 
+cost = checkCosts(nlp,sol,'local/cost_check.txt') % 
 
+finalVelocity = gait(end).states.dx(1,end)
 
-
+% save('local/initialAccel.mat','nlp','gait','sol','info','bounds', 'finalVelocity');
 

@@ -16,7 +16,7 @@ feet_height_fun = SymFunction(['nonPenetration_', nlp.Name], feet_height, {x});
 
 if strcmp(nlp.Name, 'FrontStance') || strcmp(nlp.Name, 'BackStance') || strcmp(nlp.Name, 'Stance')
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
-        0,0,'Nonlinear');
+        0,10,'Nonlinear');
 
 else
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 3:nlp.NumNode-2, ...
