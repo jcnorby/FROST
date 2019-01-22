@@ -35,7 +35,7 @@
 *.s
 *.cc
 *.mexa64
-*.mexw64
+# *.mexw64
 &.mexmaci64
 *.o
 *.hh

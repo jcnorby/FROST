@@ -16,7 +16,7 @@ function finalForwardVelocityMinEnergy(nlp, sys)
     
         u = domain.Inputs.Control.u;
         u2r = sum(tovector(0.1*norm(u).^2));
-        u2r_fun = SymFunction(['zero_' sys.Gamma.Nodes.Name{i}],u2r,{u});
+        u2r_fun = SymFunction(['finalForwardVelocityMinEnergy_' sys.Gamma.Nodes.Name{i}],u2r,{u});
         rs_phase = getPhaseIndex(nlp,sys.Gamma.Nodes.Name{i});
         addRunningCost(nlp.Phase(rs_phase),u2r_fun,{'u'});
         

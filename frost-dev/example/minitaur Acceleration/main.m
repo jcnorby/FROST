@@ -73,8 +73,8 @@ gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 opt.updateInitCondition(nlp,gait);
 %% solve
 % [gait, sol, info] = opt.solve(nlp);
-% [gait, sol, info] = opt.solve(nlp, sol);
-[gait, sol, info] = opt.solve(nlp, sol, info);
+[gait, sol, info] = opt.solve(nlp, sol);
+% [gait, sol, info] = opt.solve(nlp, sol, info);
 %% save
 save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 
