@@ -48,9 +48,13 @@ classdef AbstractAnimator < handle
     properties (Access = private)
         x_all;
         t_all;
+
+        grf;
+%         feetPos;
         
         text;
         ground;
+        h;
     end
     
     properties (Access = public)
@@ -99,7 +103,11 @@ classdef AbstractAnimator < handle
             else
                 terrain = varargin{1};
             end
+            
             obj.ground = surf(terrain.Tx,terrain.Ty,terrain.Tz,'FaceColor',[0.5 0.8 0.5]); hold on;
+            
+            
+            
         end
         
         function playing = get.isPlaying(obj)
@@ -217,6 +225,8 @@ classdef AbstractAnimator < handle
         
         function Draw(obj, t, x)
             
+            
+            
             obj.display.update(x);
             
             [center, radius, ~] = GetCenter(obj, t, x);
@@ -226,6 +236,25 @@ classdef AbstractAnimator < handle
 %             obj.text.FontWeight = 'Bold';
 %             obj.text.Color = [0,0,0];
             %             set(obj.text);
+
+%             if length(x) >=22 && ~isempty(obj.h)
+%                 [x,i] = GetData(obj, t);
+%                 feetPos = computeFeetPos(x(1:22));
+%                 obj.h.XData = [feetPos(1,1),feetPos(2,1), feetPos(3,1), feetPos(4,1)];
+%                 obj.h.YData = [feetPos(1,2),feetPos(2,2), feetPos(3,2), feetPos(4,2)];
+%                 obj.h.ZData = [feetPos(1,3),feetPos(2,3), feetPos(3,3), feetPos(4,3)];
+%                 
+%                 scaling = 0.01;
+%                 obj.h.UData = scaling*[obj.grf.fFoot0(1,i), obj.grf.fFoot1(1,i), obj.grf.fFoot2(1,i), obj.grf.fFoot3(1,i)];
+%                 obj.h.VData = scaling*[obj.grf.fFoot0(2,i), obj.grf.fFoot1(2,i), obj.grf.fFoot2(2,i), obj.grf.fFoot3(2,i)];
+%                 obj.h.WData = scaling*[obj.grf.fFoot0(3,i), obj.grf.fFoot1(3,i), obj.grf.fFoot2(3,i), obj.grf.fFoot3(3,i)];
+%             end
+
+            drawGRFs(obj, t, x)
+            
+            ax = gca;
+            ax.SortMethod = 'childorder';
+                      
             drawnow;
             
         end
@@ -277,6 +306,33 @@ classdef AbstractAnimator < handle
             
             
         end
+        
+        
+
+        function loadGRFs(obj, grfInputs)
+            obj.grf = grfInputs;
+%             obj.feetPos = feetPosInputs;
+        end
+        
+        function createGRFQuiver(obj)
+            obj.h = quiver3([],[],[],[],[],[], 0, 'r', 'lineWidth', 2); hold on;
+        end
+        
+        function drawGRFs(obj, t, x)
+            if length(x) >=22 && ~isempty(obj.h)
+                [x,i] = GetData(obj, t);
+                feetPos = computeFeetPos(x(1:22));
+                obj.h.XData = [feetPos(1,1),feetPos(2,1), feetPos(3,1), feetPos(4,1)];
+                obj.h.YData = [feetPos(1,2),feetPos(2,2), feetPos(3,2), feetPos(4,2)];
+                obj.h.ZData = [feetPos(1,3),feetPos(2,3), feetPos(3,3), feetPos(4,3)];
+                
+                scaling = 0.01;
+                obj.h.UData = scaling*[obj.grf.fFoot0(1,i), obj.grf.fFoot1(1,i), obj.grf.fFoot2(1,i), obj.grf.fFoot3(1,i)];
+                obj.h.VData = scaling*[obj.grf.fFoot0(2,i), obj.grf.fFoot1(2,i), obj.grf.fFoot2(2,i), obj.grf.fFoot3(2,i)];
+                obj.h.WData = scaling*[obj.grf.fFoot0(3,i), obj.grf.fFoot1(3,i), obj.grf.fFoot2(3,i), obj.grf.fFoot3(3,i)];
+            end
+        end
+        
     end
     
     events

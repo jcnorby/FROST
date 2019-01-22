@@ -3,7 +3,7 @@ function reflected_inertia_const(nlp, bounds)
 
 % return;
 domain = nlp.Plant;
-uRIL = domain.Inputs.External.uReflectedInertiaLoad;
+ruRIL = domain.Inputs.External.uReflectedInertiaLoad;
 uRIB = domain.Inputs.External.uReflectedInertiaBody;
 ddx = domain.States.ddx;
 Jm = domain.Links(domain.getLinkIndices('tail_rotor')).Inertia(2,2);

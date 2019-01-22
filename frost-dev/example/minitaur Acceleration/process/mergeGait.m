@@ -1,4 +1,4 @@
-function new_gait = mergeGait(gait, obj)
+function new_gait = mergeGait(gait)
 
 tspan = [];
 
@@ -14,10 +14,10 @@ for j = 1:length(inputnames)
     inputs.(inputnames{j}) = [];
 end
 
-for i = 1:length(obj.Phase)
-    if obj.Phase(i).NumNode > 1
+for i = 1:length(gait)
+    if ~isempty(gait(i).tspan)
         
-        N = obj.Phase(i).NumNode;
+        N = length(gait(i).tspan);
         tspan = [tspan gait(i).tspan];
 
         for j = 1:length(statenames)

@@ -23,7 +23,7 @@ opt.constraint.symmetry(nlp, bounds);
 % opt.constraint.ground_speed_matching(nlp, bounds);
 
 if any(strcmp(fieldnames(domain.Params), 'r'))
-    opt.constraint.reflected_inertia_const(nlp, bounds);
+%     opt.constraint.reflected_inertia_const(nlp, bounds);
 end
 
 %%%%%%  IF INSTANTANEOUS SWITCH, USE THIS (OTHERWISE DON'T)

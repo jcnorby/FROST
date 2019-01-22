@@ -34,6 +34,7 @@ classdef Display < handle
             addParameter(p, 'UseExported', false);
             addParameter(p, 'ExportPath', '');
             addParameter(p, 'SkipExporting', false);
+
             parse(p, varargin{:});
             
             obj.axs.DataAspectRatio = [1 1 1];

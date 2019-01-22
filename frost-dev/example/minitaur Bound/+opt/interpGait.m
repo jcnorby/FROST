@@ -1,13 +1,11 @@
-function new_gait = interpGait(nlp, gait)
+function new_gait = interpGait(gait, numNodes)
 
 
 
-for i = 1:length(nlp.Phase)
-    domain = nlp.Phase(i);
-    numNodes = domain.NumNode;
+for i = 1:length(gait)
     
     if numNodes >1
-        gait = logger(ceil(i/2)).gait;
+%         gait = logger(ceil(i/2)).gait;
         tinitial = 0;
         tfinal = gait.tspan(end) - gait.tspan(1);
         new_gait(i).tspan = linspace(tinitial, tfinal, numNodes);

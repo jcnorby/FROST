@@ -16,6 +16,7 @@ function StanceConstraints(nlp, bounds, varargin)
     opt.constraint.init_state(nlp, bounds);
 %     opt.constraint.final_state(nlp, bounds);
 %     opt.constraint.periodicity(nlp, bounds);
+%     opt.constraint.symmetry(nlp, bounds);
     opt.constraint.motor_model(nlp, bounds);
     opt.constraint.joint_limits(nlp, bounds);
     opt.constraint.non_penetration(nlp, bounds, [Foot0, Foot1, Foot2, Foot3]);

@@ -36,7 +36,7 @@ robot = RobotLinks(urdf, base);
 % Add 4-bar holonomic constraint
 q = robot.States.x;
 
-fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseRotY'); q('BaseRotZ')];
+% fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseRotY'); q('BaseRotZ')];
 
 % fixedbase_constr = HolonomicConstraint(robot, fb, 'Fixedbase',...
 %     'ConstrLabel',{{'fbx','fby','fbz','fbr','fbp','fby'}},...
@@ -83,6 +83,9 @@ fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseR
 %     d = SymVariable('d');
 %     robot = addParam(robot, 'd', d);
 
+    tfinal = SymVariable('tfinal');
+    robot = addParam(robot, 'tfinal', tfinal);
+
     
     if robot.numState > 22
         R = SymVariable('r');
@@ -108,17 +111,23 @@ fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseR
 %     qDes = SymVariable('qDes');
 %     robot = addParam(robot, 'qDes', qDes);
 
-% Generate leg lacobian
+% Generate leg Jacobian
 % posFoot0 = getCartesianPosition(robot, sys.frames.Foot0(robot));
 % posFoot1 = getCartesianPosition(robot, sys.frames.Foot1(robot));
 % posFoot2 = getCartesianPosition(robot, sys.frames.Foot2(robot));
 % posFoot3 = getCartesianPosition(robot, sys.frames.Foot3(robot));
+% 
+% posFeet = [posFoot0;posFoot1;posFoot2;posFoot3];
+% posFeetfun = SymFunction('computeFeetPos', posFeet, robot.States.x)
+% export(posFeetfun, 'process');
+
+
 % J_posFoot0 = jacobian(posFoot0, robot.States.x);
 % J_posFoot1 = jacobian(posFoot1, robot.States.x);
 % J_posFoot2 = jacobian(posFoot2, robot.States.x);
 % J_posFoot3 = jacobian(posFoot3, robot.States.x);
 % J = [J_posFoot0;J_posFoot1;J_posFoot2;J_posFoot3];
-%
+% 
 % Jfun = SymFunction('computeJacobian', J, robot.States.x)
 % footVels = Jfun*robot.States.dx;
 % footVelsFun = SymFunction('computeFeetVelocity', footVels, {robot.States.x,robot.States.dx})

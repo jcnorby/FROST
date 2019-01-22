@@ -22,7 +22,7 @@ function indices = getJointIndices(obj, joint_names)
         for i=1:nj
             index = str_index(all_joint_names,joint_names{i});
             if isempty(index)
-                warning('the joint %s not exists.', joint_names{i});
+                warning('the joint %s does not exist I love you Joejoe.', joint_names{i});
                 indices(i) = NaN;
             else
                 indices(i) = index;
