@@ -1,16 +1,24 @@
 function final_state(nlp, bounds)
 % constraints for step length and step width
 
-domain = nlp.Plant;
+domain = nlp.Phase(end).Plant;
 
 x = domain.States.x;
 dx = domain.States.dx;
 
-    finalPos = x('BasePosX') - 0.1;
+%     finalPos = x('BasePosX') - 0.1;
 
 %     finalPos = x('BasePosZ') - 0.6;
 %     finalPitch = [x('BaseRotX');x('BaseRotY');x('BaseRotZ')];
 
+    finalVel = [dx('motor_front_leftL_joint')
+        dx('motor_front_leftR_joint')
+        dx('knee_front_leftL_link')
+        dx('knee_front_leftR_link')
+        dx('motor_front_rightL_joint')
+        dx('motor_front_rightR_joint')
+        dx('knee_front_rightL_link')
+        dx('knee_front_rightR_link')];
 
 % finalPos = [x('motor_front_leftL_joint') - pi/2 
 %         x('motor_front_leftR_joint') - pi/2
@@ -47,7 +55,6 @@ dx = domain.States.dx;
 %         x('knee_back_rightL_link') - 1.0472
 %         x('knee_back_rightR_link') - 1.0472]; 
 %     finalVel = [dx('motor_front_leftL_joint')
-%         dx('motor_front_leftL_joint')
 %         dx('motor_front_leftR_joint')
 %         dx('knee_front_leftL_link')
 %         dx('knee_front_leftR_link')
@@ -64,14 +71,17 @@ dx = domain.States.dx;
 %         dx('knee_back_rightL_link')
 %         dx('knee_back_rightR_link')];
     
+    if(~exist('finalPos','var'))
+        finalPos = [];
+    end
     if(~exist('finalVel','var'))
         finalVel = [];
     end
     finalState = [finalPos; finalVel];
 
 finalState_fun = SymFunction('finalState', finalState, {x, dx});
-addNodeConstraint(nlp, finalState_fun, {'x', 'dx'}, 'last',  ...
-    0,10,'Linear');
+addNodeConstraint(nlp.Phase(end), finalState_fun, {'x', 'dx'}, 'last',  ...
+    0,0,'Linear');
 
 % finalPitch_fun = SymFunction('finalPitch', finalPitch, {x, dx});
 % addNodeConstraint(nlp, finalPitch_fun, {'x', 'dx'}, 'last',  ...

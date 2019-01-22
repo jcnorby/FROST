@@ -55,6 +55,7 @@ classdef AbstractAnimator < handle
         text;
         ground;
         h;
+        quiverGRF;
     end
     
     properties (Access = public)
@@ -250,11 +251,16 @@ classdef AbstractAnimator < handle
 %                 obj.h.WData = scaling*[obj.grf.fFoot0(3,i), obj.grf.fFoot1(3,i), obj.grf.fFoot2(3,i), obj.grf.fFoot3(3,i)];
 %             end
 
-            drawGRFs(obj, t, x)
+            drawGRFs(obj, t, x);
             
             ax = gca;
-            ax.SortMethod = 'childorder';
-                      
+            
+            if obj.pov == frost.Animator.AnimatorPointOfView.North
+                ax.SortMethod = 'childorder';
+            else
+                ax.SortMethod = 'depth';
+            end
+            
             drawnow;
             
         end
@@ -310,26 +316,33 @@ classdef AbstractAnimator < handle
         
 
         function loadGRFs(obj, grfInputs)
-            obj.grf = grfInputs;
+            obj.grf = struct2cell(grfInputs);
 %             obj.feetPos = feetPosInputs;
         end
         
         function createGRFQuiver(obj)
-            obj.h = quiver3([],[],[],[],[],[], 0, 'r', 'lineWidth', 2); hold on;
+            for i = 1:4
+%                 view(obj.axs, 0, 0);
+                obj.quiverGRF{i} = quiver3([0],[0],[0],[0],[1],[1], 0, 'r', 'lineWidth', 2); hold on;
+            end
+            
         end
         
         function drawGRFs(obj, t, x)
-            if length(x) >=22 && ~isempty(obj.h)
+            if length(x) >=22 && ~isempty(obj.quiverGRF)
                 [x,i] = GetData(obj, t);
                 feetPos = computeFeetPos(x(1:22));
-                obj.h.XData = [feetPos(1,1),feetPos(2,1), feetPos(3,1), feetPos(4,1)];
-                obj.h.YData = [feetPos(1,2),feetPos(2,2), feetPos(3,2), feetPos(4,2)];
-                obj.h.ZData = [feetPos(1,3),feetPos(2,3), feetPos(3,3), feetPos(4,3)];
                 
                 scaling = 0.01;
-                obj.h.UData = scaling*[obj.grf.fFoot0(1,i), obj.grf.fFoot1(1,i), obj.grf.fFoot2(1,i), obj.grf.fFoot3(1,i)];
-                obj.h.VData = scaling*[obj.grf.fFoot0(2,i), obj.grf.fFoot1(2,i), obj.grf.fFoot2(2,i), obj.grf.fFoot3(2,i)];
-                obj.h.WData = scaling*[obj.grf.fFoot0(3,i), obj.grf.fFoot1(3,i), obj.grf.fFoot2(3,i), obj.grf.fFoot3(3,i)];
+                for leg = 1:4
+                    obj.quiverGRF{leg}.XData = feetPos(leg,1);
+                    obj.quiverGRF{leg}.YData = feetPos(leg,2);
+                    obj.quiverGRF{leg}.ZData = feetPos(leg,3);
+                    
+                    obj.quiverGRF{leg}.UData = scaling*obj.grf{leg+1}(1,i);
+                    obj.quiverGRF{leg}.VData = scaling*obj.grf{leg+1}(2,i);
+                    obj.quiverGRF{leg}.WData = scaling*obj.grf{leg+1}(3,i);
+                end
             end
         end
         

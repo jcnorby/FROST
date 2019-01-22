@@ -14,8 +14,8 @@ utils.init_path(export_path);
 
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
+% urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
 delay_set = true;
 %% load robot model
 tic
@@ -56,7 +56,8 @@ robot.saveExpression(load_path); % run this after loaded the optimization proble
 % sol = temp.sol;
 % info = temp.info;
 
-temp = load('local/initialAccel.mat');
+temp = load('local/current_gait.mat');
+% temp = load('local/initialAccel.mat');
 % temp = load('local/initialAccelWithTailBackOffset.mat');
 
 % bounds = temp.bounds;
@@ -98,7 +99,7 @@ finalVelocity = gait(end).states.dx(1,end)
 % save('local/initialAccelWithTailBackOffset.mat','nlp','gait','sol','info','bounds', 'finalVelocity');
 
 %% Use to record after animation has finished
-% myVideo = VideoWriter('initialAccel', 'Uncompressed AVI');
+% myVideo = VideoWriter('maxVelocityBrakeLegs', 'Uncompressed AVI');
 % % myVideo.Quality = 100;
 % open(myVideo);
 % writeVideo(myVideo,anim.anim.M);
