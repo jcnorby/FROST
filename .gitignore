@@ -33,12 +33,12 @@
 ## build directories
 *.ii
 *.s
-*.cc
-*.mexa64
+# *.cc
+# *.mexa64
 # *.mexw64
 &.mexmaci64
 *.o
-*.hh
+# *.hh
 ## temp files from adigator
 #.DS_Store
 
