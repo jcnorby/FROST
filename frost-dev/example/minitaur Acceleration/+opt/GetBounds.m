@@ -77,8 +77,8 @@ if isnan(getJointIndices(model, 'tail_joint'))
     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque;
     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque;
 else
-    model_bounds.params.r.lb = 1;
-    model_bounds.params.r.ub = 50;
+    model_bounds.params.r.lb = 0.1; % 0.1
+    model_bounds.params.r.ub = 50; % 50
     
 %     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];
 %     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];

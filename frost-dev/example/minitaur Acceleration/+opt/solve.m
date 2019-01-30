@@ -6,8 +6,8 @@ function [new_gait, sol, info, total_time] = solve(nlp, x0, info)
     solver.Options.ipopt.bound_frac = 1e-8;
     solver.Options.ipopt.bound_push = 1e-8;
     % Possible parameter changes to solver
-    solver.Options.ipopt.tol = 1e-3;
-    solver.Options.ipopt.dual_inf_tol = 1e-3;
+    solver.Options.ipopt.tol = 1e-4; % 1e-3
+    solver.Options.ipopt.dual_inf_tol = 1e-4; % 1e-3
     solver.Options.ipopt.constr_viol_tol = 1e-4;
     solver.Options.ipopt.compl_inf_tol = 1e-4;
     solver.Options.ipopt.max_iter = 1500;

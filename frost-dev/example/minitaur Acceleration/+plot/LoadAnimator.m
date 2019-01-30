@@ -25,7 +25,7 @@ function [conGUI] = LoadAnimator(robot, gait, varargin)
     anim.loadGRFs(mergedGait.inputs);
 
     anim.isLooping = false;
-    anim.speed = 0.2;
+    anim.speed = 0.1;
     anim.pov = frost.Animator.AnimatorPointOfView.North;
     anim.Animate(true);
     conGUI = frost.Animator.AnimatorControls();

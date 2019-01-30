@@ -16,7 +16,7 @@
 *.pdf
 
 ## video files
-*.avi
+# *.avi
 *.mp4
 ## build files
 *.aux

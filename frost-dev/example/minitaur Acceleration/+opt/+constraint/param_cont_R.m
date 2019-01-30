@@ -21,3 +21,4 @@ if any(strcmp(fieldnames(nlp.Phase(1).OptVarTable), 'r'))
     end
 
 end
+

@@ -14,6 +14,9 @@ if nargin < 3
     delay_set = false;
 end
 
+global bAerodynamic
+global bTail
+
 base = get_base_dofs('floating');
 
 limits = [base.Limit];
@@ -87,19 +90,29 @@ q = robot.States.x;
     robot = addParam(robot, 'tfinal', tfinal);
 
     
-    if robot.numState > 22
+%     if robot.numState > 22
+    if bTail
         R = SymVariable('r');
         robot = addParam(robot, 'r', R);
         
         uRIL = SymVariable('uril');
         gVec = zeros(robot.numState, 1);
         gVec(robot.getJointIndices('tail_joint')) = 1;
-%         robot = addInput(robot, 'External','uReflectedInertiaLoad', uRIL, gVec);
+        robot = addInput(robot, 'External','uReflectedInertiaLoad', uRIL, gVec);
         
         uRIB = SymVariable('urib');
         gVec = zeros(robot.numState, 1);
         gVec(robot.getJointIndices('BaseRotY')) = 1;
-%         robot = addInput(robot, 'External','uReflectedInertiaBody', uRIB, gVec);
+        robot = addInput(robot, 'External','uReflectedInertiaBody', uRIB, gVec);
+    end
+    
+    if bAerodynamic
+        fDrag = SymVariable('fDrag');
+        
+        jac = getBodyJacobian(robot, sys.frames.TailMass(robot), [0,0,0]);
+        gVec = jac'*[1;0;0;0;0;0];
+        
+        robot = addInput(robot, 'External','fDrag', fDrag, gVec);
     end
 
 %     kp = SymVariable('kp');
