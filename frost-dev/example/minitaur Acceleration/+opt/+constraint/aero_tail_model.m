@@ -9,7 +9,7 @@ dx = domain.States.ddx;
 
 Cd = 2.3;
 % Cd = 0;
-L = 1;
+L = 0.6;
 h = 0.4;
 w = 0.18;
 A = h*w;

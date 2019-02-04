@@ -27,12 +27,13 @@ global bTail
 bAerodynamic = true;
 bTail = true;
 
-trialName = 'avgAccelerationBrakeLegsWithAeroAndInertialTailMinVel';
+trialName = 'avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVel';
 %% initialize model settings
 cur = utils.get_root_path();
 % urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
+% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamic.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealistic.urdf');
 
 delay_set = true;
 %% load robot model
@@ -56,15 +57,15 @@ toc
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-compileConstraint(nlp,[],{'fDragModel'},export_path);
+% compileConstraint(nlp,[],{'fDragModel'},export_path);
 % compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
 % compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
 % compileConstraint(nlp,[],{'minFinalForwardVel'},export_path);
 
 
 % % Save expression 
-load_path   = 'gen/sym';
-robot.saveExpression(load_path); % run this after loaded the optimization problem
+% load_path   = 'gen/sym';
+% robot.saveExpression(load_path); % run this after loaded the optimization problem
 
 %% Update Initial Condition
 
@@ -74,15 +75,17 @@ robot.saveExpression(load_path); % run this after loaded the optimization proble
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
 % temp = load('local/maxVelocityBrakeLegs.mat');
-% temp = load('local/maxVelocityBrakeLegsWithTailBackOffset.mat');
-% temp = load('local/maxVelocityBrakeLegsWithAeroTailBackOffset.mat');
+% temp = load('local/maxVelocityBrakeLegsWithTail.mat');
+% temp = load('local/maxVelocityBrakeLegsWithAeroTail.mat');
 
 % temp = load('local/avgAccelerationBrakeLegs.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithTailBackOffset.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithAeroTailBackOffset.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithTail.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithAeroTail.mat');
 
-temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
+temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
