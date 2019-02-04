@@ -1,5 +1,5 @@
 function [nlp] = updateInitCondition(nlp, init_params)
-    for i = 1:length(nlp.Phase)
+    for i = 1:min([length(nlp.Phase), length(init_params)])
         fields = fieldnames(init_params(i).states);
         for j = 1:numel(fields)
             if ~any(ismember(nlp.Phase(i).OptVarTable.Properties.VariableNames, fields{j}))

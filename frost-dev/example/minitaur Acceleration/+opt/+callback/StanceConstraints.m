@@ -30,8 +30,8 @@ function StanceConstraints(nlp, bounds, varargin)
     %     opt.constraint.no_slip(nlp, bounds, Foot0, Foot1, Foot2, Foot3);
     %     opt.constraint.complementarity(nlp, bounds, Foot0, Foot1, Foot2, Foot3)
     
-    if bAerodynamic
-        opt.constraint.aero_tail_model(nlp, bounds);
-    end
+
+    opt.constraint.aero_tail_model(nlp, bounds);
+
 
 end

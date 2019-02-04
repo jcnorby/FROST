@@ -89,12 +89,17 @@ extvel = 0.5*[dx('motor_front_leftR_joint') + dx('motor_front_leftL_joint')
     dx('motor_front_rightL_joint') + dx('motor_front_rightR_joint')];
 
 ang_fun = SymFunction('jointAngFinalState', [angle; angvel; extvel], {x, dx});
-addNodeConstraint(nlp.Phase(end), ang_fun, {'x', 'dx'}, 'last', ...
-    [-pi,-pi,-pi,-pi,0,0],[0,0,0,0,10,10],'Linear');
+% addNodeConstraint(nlp.Phase(end), ang_fun, {'x', 'dx'}, 'last', ...
+%     [-pi,-pi,-pi,-pi,0,0],[0,0,0,0,10,10],'Linear');
 
-% finalState_fun = SymFunction('finalState', finalState, {x, dx});
-% addNodeConstraint(nlp.Phase(end), finalState_fun, {'x', 'dx'}, 'last',  ...
-%     0,0,'Linear');
+finalState_fun = SymFunction('finalState', finalState, {x, dx});
+addNodeConstraint(nlp.Phase(end), finalState_fun, {'x', 'dx'}, 'last',  ...
+    0,0,'Linear');
+
+minFinalForwardVel = [dx('BasePosX')];
+minFinalForwardVel_fun = SymFunction('minFinalForwardVel', minFinalForwardVel, {dx});
+addNodeConstraint(nlp.Phase(end), minFinalForwardVel_fun, {'dx'}, 'last',  ...
+    1,10,'Linear');
 
 % finalPitch_fun = SymFunction('finalPitch', finalPitch, {x, dx});
 % addNodeConstraint(nlp, finalPitch_fun, {'x', 'dx'}, 'last',  ...

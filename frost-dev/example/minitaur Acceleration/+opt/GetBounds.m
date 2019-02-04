@@ -150,6 +150,16 @@ bounds.FrontLiftOff.states.xn = model_bounds.states.x;
 bounds.FrontLiftOff.states.dx = model_bounds.states.dx;
 bounds.FrontLiftOff.states.dxn = model_bounds.states.dx;
 
+
+
+bounds.Flight = model_bounds;
+
+bounds.BackLiftOff = model_bounds;
+bounds.BackLiftOff.states.x = model_bounds.states.x;
+bounds.BackLiftOff.states.xn = model_bounds.states.x;
+bounds.BackLiftOff.states.dx = model_bounds.states.dx;
+bounds.BackLiftOff.states.dxn = model_bounds.states.dx;
+
 % model_bounds.inputs.ConstraintWrench.u.lb = -model_bounds.constrBounds.stallTorque;
 % model_bounds.inputs.ConstraintWrench.u.ub = model_bounds.constrBounds.stallTorque;
 

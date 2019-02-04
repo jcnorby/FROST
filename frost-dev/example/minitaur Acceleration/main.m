@@ -24,14 +24,14 @@ utils.init_path(export_path);
 global bAerodynamic
 global bTail
 
-bAerodynamic = false;
-bTail = false;
+bAerodynamic = true;
+bTail = true;
 
-trialName = 'maxVelocityForwardLegs2';
+trialName = 'avgAccelerationBrakeLegsWithAeroAndInertialTailMinVel';
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
+% urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamic.urdf');
 
 delay_set = true;
@@ -51,26 +51,27 @@ nlp = opt.LoadProblem(robot, bounds, load_path);
 toc
 %% Compile stuff if needed
 
-compileObjective(nlp,[],[],export_path);
+% compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'fDragModel'},export_path);
+compileConstraint(nlp,[],{'fDragModel'},export_path);
 % compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
-compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
+% compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
+% compileConstraint(nlp,[],{'minFinalForwardVel'},export_path);
 
 
 % % Save expression 
-% load_path   = 'gen/sym';
-% robot.saveExpression(load_path); % run this after loaded the optimization problem
+load_path   = 'gen/sym';
+robot.saveExpression(load_path); % run this after loaded the optimization problem
 
 %% Update Initial Condition
 
 % temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 
-temp = load('local/avgAccelerationForwardLegs.mat');
+% temp = load('local/avgAccelerationForwardLegs.mat');
 
 % temp = load('local/maxVelocityBrakeLegs.mat');
 % temp = load('local/maxVelocityBrakeLegsWithTailBackOffset.mat');
@@ -79,6 +80,9 @@ temp = load('local/avgAccelerationForwardLegs.mat');
 % temp = load('local/avgAccelerationBrakeLegs.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithTailBackOffset.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailBackOffset.mat');
+
+temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -91,8 +95,8 @@ gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 
 opt.updateInitCondition(nlp,gait);
 %% solve
-% [gait, sol, info] = opt.solve(nlp);
-[gait, sol, info] = opt.solve(nlp, sol);
+[gait, sol, info] = opt.solve(nlp);
+% [gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 %% save
 save('local/current_gait.mat','nlp','gait','sol','info','bounds');

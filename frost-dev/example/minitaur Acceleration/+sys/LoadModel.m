@@ -106,7 +106,7 @@ q = robot.States.x;
         robot = addInput(robot, 'External','uReflectedInertiaBody', uRIB, gVec);
     end
     
-    if bAerodynamic
+    if bTail
         fDrag = SymVariable('fDrag');
         
         jac = getBodyJacobian(robot, sys.frames.TailMass(robot), [0,0,0]);
