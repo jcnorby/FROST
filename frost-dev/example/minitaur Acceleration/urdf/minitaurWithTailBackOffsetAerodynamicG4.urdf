@@ -582,7 +582,7 @@
     <joint name="tail_joint"/>
     <actuator name="tail_motor"/>
     <motorInertia>0.000072</motorInertia>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>4</mechanicalReduction>
   </transmission>
 
   <link name="tail_mount">
@@ -614,9 +614,9 @@
 
     <link name="tail_shaft">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.3"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
       <geometry>
-        <cylinder length="0.60" radius="0.01"/>
+        <cylinder length="1.00" radius="0.01"/>
       </geometry>
       <material name="grey">
         <color rgba="0.65 0.65 0.75 1"/>
@@ -628,9 +628,9 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.047"/>
-      <inertia ixx="0.00000001375" ixy="0.0" ixz="0.0" iyy="0.0014" iyz="0.0" izz="0.000000056083"/>
-      <origin rpy="0 0 0" xyz="0 0 0.3"/>
+      <mass value="0.057"/>
+      <inertia ixx="0.00000001375" ixy="0.0" ixz="0.0" iyy="0.0047" iyz="0.0" izz="0.000000056083"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
     </inertial>
   </link>
   <joint name="tail_shaft_joint" type="fixed">
@@ -641,7 +641,7 @@
   
   <link name="tail_link">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.40"/>
+      <origin rpy="0 0 0" xyz="0 0 0.80"/>
       <geometry>
         <cylinder length="0.05" radius="0.025"/>
       </geometry>
@@ -655,9 +655,9 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.033"/>
+      <mass value="0.043"/>
       <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000004577" iyz="0.0" izz="0.0000056083"/>
-      <origin rpy="0 0 0" xyz="0 0 0.40"/>
+      <origin rpy="0 0 0" xyz="0 0 0.80"/>
     </inertial>
   </link>
   <joint name="tail_mass_joint" type="fixed">

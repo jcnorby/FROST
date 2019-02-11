@@ -601,7 +601,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.453"/>
+      <mass value="0.634"/>
       <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.0000288" iyz="0.0" izz="0.0000056083"/>
       <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     </inertial>
@@ -614,9 +614,9 @@
 
     <link name="tail_shaft">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.3"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
       <geometry>
-        <cylinder length="0.60" radius="0.01"/>
+        <cylinder length="1.00" radius="0.01"/>
       </geometry>
       <material name="grey">
         <color rgba="0.65 0.65 0.75 1"/>
@@ -629,8 +629,8 @@
     </collision>
     <inertial>
       <mass value="0.057"/>
-      <inertia ixx="0.00000001375" ixy="0.0" ixz="0.0" iyy="0.0032" iyz="0.0" izz="0.000000056083"/>
-      <origin rpy="0 0 0" xyz="0 0 0.3"/>
+      <inertia ixx="0.00000001375" ixy="0.0" ixz="0.0" iyy="0.0047" iyz="0.0" izz="0.000000056083"/>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
     </inertial>
   </link>
   <joint name="tail_shaft_joint" type="fixed">

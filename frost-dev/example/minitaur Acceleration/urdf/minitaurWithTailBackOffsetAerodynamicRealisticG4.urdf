@@ -582,7 +582,7 @@
     <joint name="tail_joint"/>
     <actuator name="tail_motor"/>
     <motorInertia>0.000072</motorInertia>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>4</mechanicalReduction>
   </transmission>
 
   <link name="tail_mount">

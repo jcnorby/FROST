@@ -22,7 +22,7 @@ function StanceConstraints(nlp, bounds, varargin)
     opt.constraint.init_state(nlp, bounds);
 %     opt.constraint.final_state(nlp, bounds);
 %     opt.constraint.periodicity(nlp, bounds);
-%     opt.constraint.symmetry(nlp, bounds);
+    opt.constraint.symmetry(nlp, bounds);
     opt.constraint.motor_model(nlp, bounds);
     opt.constraint.joint_limits(nlp, bounds);
     opt.constraint.non_penetration(nlp, bounds, [Foot0, Foot1, Foot2, Foot3]);
@@ -33,5 +33,10 @@ function StanceConstraints(nlp, bounds, varargin)
 
     opt.constraint.aero_tail_model(nlp, bounds);
 
-
+    normalForces = [domain.Inputs.ConstraintWrench.fFoot0(3);domain.Inputs.ConstraintWrench.fFoot1(3);domain.Inputs.ConstraintWrench.fFoot2(3);domain.Inputs.ConstraintWrench.fFoot3(3)];
+    normal_forces_fun = SymFunction(['minNormalForces_', nlp.Name], normalForces, {domain.Inputs.ConstraintWrench.fFoot0,domain.Inputs.ConstraintWrench.fFoot1,domain.Inputs.ConstraintWrench.fFoot2,domain.Inputs.ConstraintWrench.fFoot3});
+    
+    addNodeConstraint(nlp, normal_forces_fun, {'fFoot0','fFoot1','fFoot2','fFoot3'}, 1:nlp.NumNode-2, ...
+        5, inf,'Linear');
+    
 end

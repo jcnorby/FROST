@@ -24,16 +24,18 @@ utils.init_path(export_path);
 global bAerodynamic
 global bTail
 
-bAerodynamic = true;
+bAerodynamic = false;
 bTail = true;
 
-trialName = 'avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVel';
+trialName = 'avgAccelerationBrakeLegsWithTailMinVelG4MinGRF';
 %% initialize model settings
 cur = utils.get_root_path();
 % urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateNoG.urdf');
+urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateG4.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamic.urdf');
-urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealistic.urdf');
+% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicG4.urdf');
+% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealistic.urdf');
+% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealisticG4.urdf');
 
 delay_set = true;
 %% load robot model
@@ -54,14 +56,14 @@ toc
 
 % compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
-% compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
+compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,[],{'fDragModel'},export_path);
 % compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
 % compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
 % compileConstraint(nlp,[],{'minFinalForwardVel'},export_path);
-
+% compileConstraint(nlp,[],{'minNormalForces_Stance'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -85,7 +87,13 @@ toc
 % temp = load('local/avgAccelerationBrakeLegsMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
-temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
+
+temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVelG4.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVelG4.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVelG4.mat');
+
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -109,7 +117,7 @@ save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 % anim = plot.LoadAnimator(robot, loopedGait,'SkipExporting',true);
 
 % smoothGait = opt.interpGait(gait, 100);
-% plotGait = mergeGait(smoothGait);
+fullgait = mergeGait(gait);
 anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
 %% you can check the violation of constraints/variables and the value of each cost function by calling the following functions.
 tol = 1e-3;

@@ -25,7 +25,7 @@ kneelb = 0;
 kneeub = pi;
 
 taillb = -pi/2; % -pi/2
-tailub = -pi/2; % pi/2
+tailub = pi/2; % pi/2
 
 if model.numState == 22
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
@@ -80,9 +80,14 @@ if isnan(getJointIndices(model, 'tail_joint'))
     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque;
     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque;
 else
-    model_bounds.params.r.lb = 5; % 0.1
-    model_bounds.params.r.ub = 5; % 50
     
+    if model.Joints(getJointIndices(model, 'tail_joint')).Actuator.Ratio ~= 1
+        model_bounds.params.r.lb = 1; % 0.1
+        model_bounds.params.r.ub = 1; % 50
+    else
+        model_bounds.params.r.lb = 0.1;
+        model_bounds.params.r.ub = 50;
+    end
 %     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];
 %     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];
     

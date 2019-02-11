@@ -90,20 +90,23 @@ q = robot.States.x;
     robot = addParam(robot, 'tfinal', tfinal);
 
     
-%     if robot.numState > 22
+    %     if robot.numState > 22
     if bTail
+        
         R = SymVariable('r');
         robot = addParam(robot, 'r', R);
         
-        uRIL = SymVariable('uril');
-        gVec = zeros(robot.numState, 1);
-        gVec(robot.getJointIndices('tail_joint')) = 1;
-        robot = addInput(robot, 'External','uReflectedInertiaLoad', uRIL, gVec);
-        
-        uRIB = SymVariable('urib');
-        gVec = zeros(robot.numState, 1);
-        gVec(robot.getJointIndices('BaseRotY')) = 1;
-        robot = addInput(robot, 'External','uReflectedInertiaBody', uRIB, gVec);
+        if robot.Joints(getJointIndices(robot, 'tail_joint')).Actuator.Ratio == 1
+            uRIL = SymVariable('uril');
+            gVec = zeros(robot.numState, 1);
+            gVec(robot.getJointIndices('tail_joint')) = 1;
+            robot = addInput(robot, 'External','uReflectedInertiaLoad', uRIL, gVec);
+            
+            uRIB = SymVariable('urib');
+            gVec = zeros(robot.numState, 1);
+            gVec(robot.getJointIndices('BaseRotY')) = 1;
+            robot = addInput(robot, 'External','uReflectedInertiaBody', uRIB, gVec);
+        end
     end
     
     if bTail

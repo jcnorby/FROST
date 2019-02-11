@@ -39,9 +39,9 @@ end
 % end
 
 motorsPos = B*u - kt*((V - kt*dx)/Ra);
-tailPos = B*u./(R*Rineff) - kt*((V - R*kt.*dx)/Ra);
+% tailPos = B*u./(R*Rineff) - kt*((V - R*kt.*dx)/Ra);
 motorsNeg = -B*u + kt*((- V - kt*dx)/Ra);
-tailNeg = -B*u./(R*Rineff) + kt*((- V - R*kt.*dx)/Ra);
+% tailNeg = -B*u./(R*Rineff) + kt*((- V - R*kt.*dx)/Ra);
 
 motorsPos = B*u - kt*((V - kt*dx)/Ra);
 motorsNeg = -B*u + kt*((- V - kt*dx)/Ra);
@@ -55,7 +55,7 @@ if isnan(getJointIndices(domain, 'tail_joint'))
 else
     Rurdf = domain.Joints(getJointIndices(domain, 'tail_joint')).Actuator.Ratio;
     
-    tailPos = B*u./(R*Rurdf*Rineff) - kt*((V - R*Rurdf*kt.*dx)/Ra);
+    tailPos = B*u./(R*Rurdf*Rineff) - kt*((V - R*Rurdf*kt.*dx)/Ra); 
     tailNeg = -B*u./(R*Rurdf*Rineff) + kt*((- V - R*Rurdf*kt.*dx)/Ra);
 
     motorModelPos = [motorsPos([7,8,11,12,15,16,19,20]); tailPos(23)];

@@ -1,6 +1,6 @@
 function exportTrajectory(fullgait)
 R = 1;
-Rurdf = 50;
+Rurdf = 4;
 Rineff = 0.8;
 kt = 0.0954;
 Ra = 0.23;
