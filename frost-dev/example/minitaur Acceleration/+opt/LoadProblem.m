@@ -53,6 +53,7 @@ end
 %     opt.cost.zero(nlp, system);
 % opt.cost.finalForwardVelocity(nlp, system);
 opt.cost.avgAcceleration(nlp, system);
+% opt.cost.avgAccelerationSquared(nlp, system);
 % opt.cost.finalForwardVelocityMinEnergy(nlp, system);
 %     opt.cost.Torque(nlp, robot);
 %     opt.cost.Height(nlp, robot);

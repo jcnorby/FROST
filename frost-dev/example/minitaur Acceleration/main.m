@@ -21,17 +21,42 @@ export_path = 'gen/opt';
 load_path   = [];
 utils.init_path(export_path);
 
+trialName = 'avgAccelerationBrakeLegsMinVelMinGRFMu05';
+
 global bAerodynamic
 global bTail
+global bInactive
 
 bAerodynamic = false;
-bTail = true;
+bTail = false;
+bInactive = false;
 
-trialName = 'avgAccelerationBrakeLegsWithTailMinVelG4MinGRF';
+if contains(trialName, 'Tail')
+    bTail = true;
+end
+if contains(trialName, 'Aero')
+    bAerodynamic = true;
+end
+if contains(trialName, 'Inactive')
+    bInactive = true;
+end
 %% initialize model settings
 cur = utils.get_root_path();
+if bTail
+    if bAerodynamic
+        if contains(trialName, 'Realistic')
+            urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealisticG4.urdf');
+        else
+            urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicG4.urdf');
+        end
+    else
+        urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateG4.urdf');
+    end
+else
+    urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
+end
 % urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateG4.urdf');
+% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateG4.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamic.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicG4.urdf');
 % urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealistic.urdf');
@@ -56,7 +81,7 @@ toc
 
 % compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
-compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
+% compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,[],{'fDragModel'},export_path);
@@ -73,23 +98,22 @@ compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 
 % temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
-
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
 % temp = load('local/maxVelocityBrakeLegs.mat');
 % temp = load('local/maxVelocityBrakeLegsWithTail.mat');
 % temp = load('local/maxVelocityBrakeLegsWithAeroTail.mat');
 
-% temp = load('local/avgAccelerationBrakeLegs.mat');
+temp = load('local/avgAccelerationBrakeLegs.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithTail.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTail.mat');
 
-% temp = load('local/avgAccelerationBrakeLegsMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu06.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
 
-temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVelG4.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVelG4.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVelG4.mat');

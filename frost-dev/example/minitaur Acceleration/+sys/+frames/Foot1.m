@@ -9,6 +9,6 @@ function [foot, fric_coef] = Foot1(robot)
         'Type','PointContactWithFriction'...
         );
     
-    fric_coef.mu = 0.3;
+    fric_coef.mu = 0.5;
     fric_coef.gamma = 100;
 end

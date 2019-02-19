@@ -13,7 +13,7 @@ if bTail
     % Cd = 0;
     L = 1;
     h = 0.4;
-    L = nlp.Plant.Links(getLinkIndices(nlp.Plant, 'tail_link')).Offset(3) + h/2
+    L = nlp.Plant.Links(getLinkIndices(nlp.Plant, 'tail_link')).Offset(3) + h/2;
     w = 0.18;
     A = h*w;
     rho = 1.225;
@@ -26,6 +26,8 @@ if bTail
     else
         force = 0;
     end
+    
+    force
     
     model_func = SymFunction('fDragModel',fDrag - force,{fDrag,dx});
     addNodeConstraint(nlp, model_func, {'fDrag', 'dx'}, 'all', ...

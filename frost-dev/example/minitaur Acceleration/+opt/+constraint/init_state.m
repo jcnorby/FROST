@@ -35,6 +35,12 @@ function init_state(nlp, bounds)
         x('knee_back_rightL_link') - acos(1/2)
         x('knee_back_rightR_link') - acos(1/2)];
     
+%     motor = pi/2;
+%     knee = acos(1/2);
+%     test = [0;0;sind(60)*0.24;0;0;0;motor;motor;knee;knee;motor;motor;knee;knee;motor;motor;knee;knee;motor;motor;knee;knee;0;0;0;0]
+%     ddq = zeros(26,1)
+%     ddq(1) = 1;
+    
     initVel = dx;
 
     initState = SymFunction('initState', [initPos; initVel], {x,dx});

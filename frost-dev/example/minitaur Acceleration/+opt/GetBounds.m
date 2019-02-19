@@ -1,6 +1,6 @@
 function bounds = GetBounds(model, vel, T)
 
-
+global bInactive
 if nargin < 2
     vel = [0.0,0];
 end
@@ -25,7 +25,11 @@ kneelb = 0;
 kneeub = pi;
 
 taillb = -pi/2; % -pi/2
-tailub = pi/2; % pi/2
+if bInactive
+    tailub = -pi/2; % pi/2
+else
+    tailub = pi/2;
+end
 
 if model.numState == 22
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
@@ -98,7 +102,7 @@ end
 % Joint min/max
 model_bounds.constrBounds.jointAng.lb = -pi/2;
 model_bounds.constrBounds.jointAng.ub = pi/2;
-model_bounds.constrBounds.jointExt.lb = 0.3;
+model_bounds.constrBounds.jointExt.lb = 0.4;
 model_bounds.constrBounds.jointExt.ub = pi - model_bounds.constrBounds.jointExt.lb;
 
 % Distance travelled

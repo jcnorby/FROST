@@ -37,6 +37,6 @@ function StanceConstraints(nlp, bounds, varargin)
     normal_forces_fun = SymFunction(['minNormalForces_', nlp.Name], normalForces, {domain.Inputs.ConstraintWrench.fFoot0,domain.Inputs.ConstraintWrench.fFoot1,domain.Inputs.ConstraintWrench.fFoot2,domain.Inputs.ConstraintWrench.fFoot3});
     
     addNodeConstraint(nlp, normal_forces_fun, {'fFoot0','fFoot1','fFoot2','fFoot3'}, 1:nlp.NumNode-2, ...
-        5, inf,'Linear');
+        8, inf,'Linear');
     
 end
