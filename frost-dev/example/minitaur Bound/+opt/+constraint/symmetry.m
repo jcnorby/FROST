@@ -1,6 +1,6 @@
 function symmetry(nlp, bounds)
     % constraints for impact velocities
-    return;
+%     return;
     
     domain = nlp.Plant;
     x = domain.States.x;

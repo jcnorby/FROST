@@ -146,44 +146,58 @@ model_bounds.params.qDes.ub = model_bounds.states.x.ub(end);
 %% construct the boundary values for each domain
 bounds = struct();
 
-bounds.Stance03 = model_bounds;
+bounds.FrontStance = model_bounds;
+bounds.BackStance = model_bounds;
+
+% bounds.Stance03 = model_bounds;
 %     bounds.FrontStance.params.pFoot0.lb = zeros(3,1);
 %     bounds.FrontStance.params.pFoot0.ub = zeros(3,1);
 %     bounds.FrontStance.params.pFoot2.lb = zeros(3,1);
 %     bounds.FrontStance.params.pFoot2.ub = zeros(3,1);
 
-bounds.Stance12 = model_bounds;
+% bounds.Stance12 = model_bounds;
 %     bounds.BackStance.params.pFoot1.lb = zeros(3,1);
 %     bounds.BackStance.params.pFoot1.ub = zeros(3,1);
 %     bounds.BackStance.params.pFoot3.lb = zeros(3,1);
 %     bounds.BackStance.params.pFoot3.ub = zeros(3,1);
 
-bounds.Impact03 = model_bounds;
-bounds.Impact03.states.x = model_bounds.states.x;
-bounds.Impact03.states.xn = model_bounds.states.x;
-bounds.Impact03.states.dx = model_bounds.states.dx;
-bounds.Impact03.states.dxn = model_bounds.states.dx;
+% bounds.Impact03 = model_bounds;
+% bounds.Impact03.states.x = model_bounds.states.x;
+% bounds.Impact03.states.xn = model_bounds.states.x;
+% bounds.Impact03.states.dx = model_bounds.states.dx;
+% bounds.Impact03.states.dxn = model_bounds.states.dx;
+
+bounds.FrontImpact = model_bounds;
+bounds.FrontImpact.states.x = model_bounds.states.x;
+bounds.FrontImpact.states.xn = model_bounds.states.x;
+bounds.FrontImpact.states.dx = model_bounds.states.dx;
+bounds.FrontImpact.states.dxn = model_bounds.states.dx;
+
+bounds.FrontLiftOff = model_bounds;
+bounds.FrontLiftOff.states.x = model_bounds.states.x;
+bounds.FrontLiftOff.states.xn = model_bounds.states.x;
+bounds.FrontLiftOff.states.dx = model_bounds.states.dx;
+bounds.FrontLiftOff.states.dxn = model_bounds.states.dx;
 
 
-% bounds.FrontLiftOff = model_bounds;
-% bounds.FrontLiftOff.states.x = model_bounds.states.x;
-% bounds.FrontLiftOff.states.xn = model_bounds.states.x;
-% bounds.FrontLiftOff.states.dx = model_bounds.states.dx;
-% bounds.FrontLiftOff.states.dxn = model_bounds.states.dx;
+% bounds.Impact12 = model_bounds;
+% bounds.Impact12.states.x = model_bounds.states.x;
+% bounds.Impact12.states.xn = model_bounds.states.x;
+% bounds.Impact12.states.dx = model_bounds.states.dx;
+% bounds.Impact12.states.dxn = model_bounds.states.dx;
+
+bounds.BackImpact = model_bounds;
+bounds.BackImpact.states.x = model_bounds.states.x;
+bounds.BackImpact.states.xn = model_bounds.states.x;
+bounds.BackImpact.states.dx = model_bounds.states.dx;
+bounds.BackImpact.states.dxn = model_bounds.states.dx;
 
 
-bounds.Impact12 = model_bounds;
-bounds.Impact12.states.x = model_bounds.states.x;
-bounds.Impact12.states.xn = model_bounds.states.x;
-bounds.Impact12.states.dx = model_bounds.states.dx;
-bounds.Impact12.states.dxn = model_bounds.states.dx;
-
-
-% bounds.BackLiftOff = model_bounds;
-% bounds.BackLiftOff.states.x = model_bounds.states.x;
-% bounds.BackLiftOff.states.xn = model_bounds.states.x;
-% bounds.BackLiftOff.states.dx = model_bounds.states.dx;
-% bounds.BackLiftOff.states.dxn = model_bounds.states.dx;
+bounds.BackLiftOff = model_bounds;
+bounds.BackLiftOff.states.x = model_bounds.states.x;
+bounds.BackLiftOff.states.xn = model_bounds.states.x;
+bounds.BackLiftOff.states.dx = model_bounds.states.dx;
+bounds.BackLiftOff.states.dxn = model_bounds.states.dx;
 
 
 end

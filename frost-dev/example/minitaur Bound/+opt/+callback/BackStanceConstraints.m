@@ -20,7 +20,7 @@ opt.constraint.distance_traveled(nlp, bounds);
 opt.constraint.zero_order_hold(nlp,bounds)
 %     opt.constraint.average_velocity(nlp, bounds);
 opt.constraint.symmetry(nlp, bounds);
-opt.constraint.ground_speed_matching(nlp, bounds);
+% opt.constraint.ground_speed_matching(nlp, bounds);
 
 if any(strcmp(fieldnames(domain.Params), 'r'))
     opt.constraint.reflected_inertia_const(nlp, bounds);
@@ -28,11 +28,11 @@ end
 
 %%%%%%  IF INSTANTANEOUS SWITCH, USE THIS (OTHERWISE DON'T)
 
-normalForces = [domain.Inputs.ConstraintWrench.fFoot1(3);domain.Inputs.ConstraintWrench.fFoot3(3)];
-normal_forces_fun = SymFunction(['normalForces_', nlp.Name], normalForces, {domain.Inputs.ConstraintWrench.fFoot1,domain.Inputs.ConstraintWrench.fFoot3});
-
-addNodeConstraint(nlp, normal_forces_fun, {'fFoot1', 'fFoot3'}, 'last', ...
-    0, 0,'Linear');
+% normalForces = [domain.Inputs.ConstraintWrench.fFoot1(3);domain.Inputs.ConstraintWrench.fFoot3(3)];
+% normal_forces_fun = SymFunction(['normalForces_', nlp.Name], normalForces, {domain.Inputs.ConstraintWrench.fFoot1,domain.Inputs.ConstraintWrench.fFoot3});
+% 
+% addNodeConstraint(nlp, normal_forces_fun, {'fFoot1', 'fFoot3'}, 'last', ...
+%     0, 0,'Linear');
 
 %%%%%%
 

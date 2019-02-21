@@ -1,7 +1,7 @@
 function loopedGait = createLoopedGait(gait)
 
 nPhases = length(gait);
-nLoops = 10;
+nLoops = 4;
 
 loopedGait = gait;
 

@@ -42,7 +42,8 @@ addpath C:\Users\Joe\Documents\MATLAB\Add-Ons\Functions\'Joe Functions'\
 % gait.df = 1/(0.95*V)*(gait.inputs.u*Ra/(kt*R*Rineff) + kt*R*gait.states.dx(tailMotIndex, :)');
 
 
-dataPath = 'LOG00877.txt';
+dataPath = 'LOG00872.txt';
+dataPath = 'avgAcceleration2BrakeLegsMinVelMinGRFMu06.txt';
 mData = processMData(dataPath);
 %
 % tFinalData = mData.t(end);
@@ -74,8 +75,9 @@ mData = processMData(dataPath);
 %% NLP vs data
 
 tailMotIndex = [];
-% temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
-temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
+temp = load('local/avgAcceleration2BrakeLegsMinVelMinGRFMu06.mat');
+% temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
+% temp = load('local/energyOptimalBoundAccurateNew.mat');
 nlp = temp.nlp;
 sol = temp.sol;
 gait = temp.gait;
@@ -109,11 +111,13 @@ for motor = 0:length(motorIndex)-1
     if motor == 0 || motor == 2
         ylabel('Motor Pos (rad)')
     end
-    axis([mData.t(1) mData.t(end) 0 3])
+%     axis([mData.t(1) mData.t(end) 0 3])
+    axis([3 mData.t(end) 0 2])
     if motor == 2 || motor == 3 || motor == 6 || motor == 7
         xlabel('Time (s)')
     end
     
+%     % 4 phase bound
 %     for j = 0:nLoops-1
 %         if any(motor == frontMotors)
 %             highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
@@ -121,6 +125,8 @@ for motor = 0:length(motorIndex)-1
 %             highlight(gait(7).tspan(1) + tFinal*j, gait(7).tspan(end) + tFinal*j, [0 1 0], 0.25)
 %         end
 %     end
+    
+    % 2 phase bound
     for j = 0:nLoops-1
         if any(motor ~= frontMotors)
             highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)

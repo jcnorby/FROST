@@ -16,5 +16,5 @@ plant.rigidImpactConstraint(nlp, src, tar, bounds, varargin{:});
 % 
 % constraint_func = SymFunction(['smooth_',nlp.Name], dx-dxn, {dx, dxn});
 % addNodeConstraint(nlp, constraint_func, {'dx','dxn'}, 'all', lb, ub, 'linear');
-opt.constraint.minimize_impact(nlp, bounds)
+% opt.constraint.minimize_impact(nlp, bounds)
 end

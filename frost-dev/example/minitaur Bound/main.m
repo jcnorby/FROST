@@ -21,7 +21,7 @@ utils.init_path(export_path);
 
 %% initialize model settings
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','minitaurWithTailFrontOffsetAccurate.urdf');
+urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
 delay_set = true;
 %% load robot model
 tic
@@ -52,11 +52,20 @@ bounds = opt.GetBounds(robot);
 % save('local/simbound.mat','logger');
 
 % load problem
-nlp = opt.LoadProblem(system, bounds, load_path);
+% nlp = opt.LoadProblem(system, bounds, load_path);
 toc
 % gait = opt.getInitGait(nlp, bounds);
 
 %% Compile stuff if needed
+
+temp = load('local/energyOptimalBoundAccurateNew.mat');
+
+bounds = temp.bounds;
+nlp = temp.nlp;
+% robot = temp.robot;
+sol = temp.sol;
+info = temp.info;
+gait = temp.gait;
 
 % compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
@@ -79,13 +88,16 @@ toc
 
 %% Load initial gait
 
+
+temp = load('local/energyOptimalBoundAccurateNew.mat');
+
 % temp = load('local/energyOptimalTrotInstantaneousSwitchClearance.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch360Lighter.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch250Lighter.mat');
 % temp = load('local/current_gait.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitch300LighterGSM.mat');
 % temp = load('local/energyOptimalBoundWithTailBackOffsetInstantaneousSwitchGSMClearance.mat');
-temp = load('local/energyOptimalTrotWithTailBackOffsetInstantaneousSwitchClearance.mat');
+% temp = load('local/energyOptimalTrotWithTailBackOffsetInstantaneousSwitchClearance.mat');
 
 
 
@@ -153,7 +165,7 @@ rad2deg(max(fullgait.states.x(23,:)) - min(fullgait.states.x(23,:)))
 % plot.plotOptTorques(robot,nlp,gait);
 
 %% Use to record after animation has finished
-% myVideo = VideoWriter('energyOptimalBoundWithTailBackOffsetRAccurate', 'MPEG-4');
+% myVideo = VideoWriter('energyOptimalBoundOG', 'MPEG-4');
 % myVideo.Quality = 100;
 % open(myVideo);
 % writeVideo(myVideo,anim.anim.M);
