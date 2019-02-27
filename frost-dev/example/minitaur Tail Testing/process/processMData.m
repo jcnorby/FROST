@@ -3,7 +3,7 @@ function mData = processMData(path)
 mData = open_log(path);
 
 % Reformat user params
-N = length(mData.UP);
+N = size(mData.UP,1);
 for i = 1:N
     mData.params(i,1) = typecast(uint8(mData.UP(i,1:4)), 'single');
     mData.params(i,2) = typecast(uint8(mData.UP(i,5:8)), 'single');

@@ -42,8 +42,9 @@ addpath C:\Users\Joe\Documents\MATLAB\Add-Ons\Functions\'Joe Functions'\
 % gait.df = 1/(0.95*V)*(gait.inputs.u*Ra/(kt*R*Rineff) + kt*R*gait.states.dx(tailMotIndex, :)');
 
 
-dataPath = 'LOG00872.txt';
-dataPath = 'avgAcceleration2BrakeLegsMinVelMinGRFMu06.txt';
+% dataPath = 'LOG00872.txt';
+% dataPath = 'avgAccelerationBrakeLegsMinVelMinGRFMu05.txt';
+dataPath = 'avgAcceleration2BrakeLegsWithTailMinVelG4MinGRFMu05.txt';
 mData = processMData(dataPath);
 %
 % tFinalData = mData.t(end);
@@ -74,8 +75,10 @@ mData = processMData(dataPath);
 
 %% NLP vs data
 
-tailMotIndex = [];
-temp = load('local/avgAcceleration2BrakeLegsMinVelMinGRFMu06.mat');
+tailMotIndex = [23];
+% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu05.mat');
+temp = load('local/avgAcceleration2BrakeLegsWithTailMinVelG4MinGRFMu05.mat');
+
 % temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
 % temp = load('local/energyOptimalBoundAccurateNew.mat');
 nlp = temp.nlp;
@@ -111,8 +114,8 @@ for motor = 0:length(motorIndex)-1
     if motor == 0 || motor == 2
         ylabel('Motor Pos (rad)')
     end
-%     axis([mData.t(1) mData.t(end) 0 3])
-    axis([3 mData.t(end) 0 2])
+    axis([mData.t(1) mData.t(end) 0 3])
+%     axis([3 mData.t(end) 0 2])
     if motor == 2 || motor == 3 || motor == 6 || motor == 7
         xlabel('Time (s)')
     end
@@ -130,8 +133,10 @@ for motor = 0:length(motorIndex)-1
     for j = 0:nLoops-1
         if any(motor ~= frontMotors)
             highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-        else
             highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
+        else
+            highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
+%             highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
         end
     end
 end
@@ -166,9 +171,10 @@ end
 
 if ~isempty(tailMotIndex)
     figure(3)
-    plot(mData.t, mData.pos(:,9),'Color', actcolor);
+    plot(mData.t, mData.torq(:,1),'Color', actcolor);
     hold on
     plot(loopedgait.tspan, loopedgait.states.x(tailMotIndex,:), 'Color', refcolor)
+    axis([mData.t(1) mData.t(end) -1 2])
     title('Tail Motor');
     ylabel('Motor Pos (rad)')
     for j = 0:nLoops-1
@@ -178,12 +184,3 @@ if ~isempty(tailMotIndex)
         highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
     end
 end
-
-figure(4)
-subplot(1,2,1)
-plot(mData.t, mData.voltage, 'b', mData.t, mData.current, 'r')
-legend('voltage', 'current', 'location', 'northeast')
-hold on
-subplot(1,2,2)
-plot(mData.t, mData.power_int, 'k',mData.t, mData.logging,  'k:')
-legend('power_int', 'location', 'northeast')
