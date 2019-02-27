@@ -16,12 +16,13 @@ frost_path  = '../../';
 addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
-
+%Hi Joe
+%Yo
 export_path = 'gen/opt';
 load_path   = [];
 utils.init_path(export_path);
 
-trialName = 'avgAccelerationBrakeLegsMinVelMinGRFMu05';
+trialName = 'maxDistanceBrakeLegsWithTailG4MinGRFMu05';
 
 global bAerodynamic
 global bTail
@@ -83,12 +84,12 @@ toc
 % compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
-% compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
+compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,[],{'fDragModel'},export_path);
 % compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
 % compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
 % compileConstraint(nlp,[],{'minFinalForwardVel'},export_path);
-% compileConstraint(nlp,[],{'minNormalForces_Stance'},export_path);
+compileConstraint(nlp,[],{'zeroRotation'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -104,12 +105,14 @@ toc
 % temp = load('local/maxVelocityBrakeLegsWithTail.mat');
 % temp = load('local/maxVelocityBrakeLegsWithAeroTail.mat');
 
-temp = load('local/avgAccelerationBrakeLegs.mat');
+% temp = load('local/avgAccelerationBrakeLegs.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithTail.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTail.mat');
 
 % temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu06.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu05.mat');
+
+temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
 
@@ -117,6 +120,7 @@ temp = load('local/avgAccelerationBrakeLegs.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVelG4.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVelG4.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVelG4.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4MinGRFMu05.mat');
 
 
 % bounds = temp.bounds;
@@ -153,11 +157,16 @@ cost = checkCosts(nlp,sol,'local/cost_check.txt'); %
 finalVelocity = gait(end).states.dx(1,end)
 avgAcceleration = gait(end).states.dx(1,end)/gait(end).tspan(end)
 
-save('local/current_gait.mat','nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity');
+g = -9.81;
+yFinal = sind(60)*0.24;
+tTD = (-fullgait.states.dx(3,end) - sqrt(fullgait.states.dx(3,end).^2 - 4*(g/2)*(fullgait.states.x(3,end) - yFinal)))/g;
+Distance = fullgait.states.x(1,end) + fullgait.states.dx(1,end)*tTD
+
+save('local/current_gait.mat','nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity', 'Distance');
 
 reply = input(['Save as trial name ', trialName, '? Y/N: '],'s');
 if strcmp(reply, 'y')
-    save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity')
+    save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity', 'Distance')
     disp('Saved');
 end
 % save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity');

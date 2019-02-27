@@ -1,4 +1,4 @@
-function finalForwardVelocity(nlp, sys)
+function maxDistance(nlp, sys)
     
     i = length(sys.Gamma.Nodes.Domain);
     domain = sys.Gamma.Nodes.Domain{i};

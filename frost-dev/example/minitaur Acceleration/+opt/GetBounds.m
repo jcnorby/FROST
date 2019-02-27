@@ -8,7 +8,7 @@ end
 if nargin < 3
     T = 0.5;
 end
-T = 1;
+T = 0.5;
 tmin = 0.001;
 
 %     tmin = 0;

@@ -4,7 +4,7 @@ function motor_model(nlp, bounds)
 kt = 0.0954;
 Ra = 0.220;
 V = 12;
-stallTorque = 3;
+stallTorque = 2.5;
 
 domain = nlp.Plant;
 u = domain.Inputs.Control.u;
