@@ -15,9 +15,10 @@ if ispc
 else
     d = dir([pwd, '/process/mocap', '/*.csv']);
 end
-numTrial = length(d);
+totTrial = length(d); % number of total trials
+numTrial = totTrial/2; % number of trials for each morphology
 
-for trial = 1:numTrial
+for trial = 1:totTrial
     %     if bTail
     %         mocapData = csvread('mocap/WithTailAccel2_001.csv', 7, 0);
     %         indexVec = (65:95)';
@@ -73,66 +74,48 @@ for trial = 1:numTrial
     
     xAll = -mocapData(:, 9);
     xAll = xAll - xAll(1);
-    x = xAll(indexVec);
-    x = x - x(1);
+    tticks = xAll(indexVec);
+    tticks = tticks - tticks(1);
     
     %     figure(1)
     %     plot(t, x)
     
     dxAll = diff(xAll)./diff(tAll);
-    dx = dxAll(indexVec);
-    
     smoothDxAll = smooth(dxAll);
-    dxFinal = smoothDxAll(indexVec(end));
-    tFinal = tAll(indexVec(end)) - tAll(indexVec(1));
+    dx = smoothDxAll(indexVec);
+    
+    dxFinal = dx(end);
+    tFinal = t(end);
     accel(trial) = dxFinal/tFinal;
+    
+    tLog{trial} = t;
+    dxLog{trial} = dx;
         
     
-    figure(floor((trial-1)/5)+1)
-    subplot(3,2,mod(trial-1,5)+1)
-    plot(tAll(1:end-1), dxAll, 'k:', tAll(1:end-1), smooth(dxAll),'r')
-    legend('Data', 'Filtered')
-    xlabel('Time (s)')
-    ylabel('Forward Velocity (m/s)')
-    title([titleString, sprintf('%.2f', accel(trial)), ' $\frac{m}{s^2}$.'])
-    axis([0 2 0 2])
-    vline(tAll(indexVec(1)), 'k--', 'Start')
-    vline(tAll(indexVec(end)), 'k--', 'End')
-    grid on
-    
-    figure(floor((trial-1)/5)+3)
-    subplot(3,2,mod(trial-1,5)+1)
-    plot(t, dx, 'k:', t, smooth(dx),'r')
-    legend('Data', 'Filtered',  'location', 'northwest')
-    xlabel('Time (s)')
-    ylabel('Forward Velocity (m/s)')
-    title([titleString, sprintf('%.2f', accel(trial)), ' $\frac{m}{s^2}$.'])
-    axis([0 0.3 0 2])
-    vline(t(1), 'k--', 'Start')
-    vline(t(end), 'k--', 'End')
-    grid on
-    
-%     figure(1)
-%     subplot(1,2,bTail+1)
+%     figure(floor((trial-1)/5)+1)
+%     subplot(3,2,mod(trial-1,5)+1)
 %     plot(tAll(1:end-1), dxAll, 'k:', tAll(1:end-1), smooth(dxAll),'r')
 %     legend('Data', 'Filtered')
 %     xlabel('Time (s)')
 %     ylabel('Forward Velocity (m/s)')
-%     title([titleString, sprintf('%.2f', accel), ' $\frac{m}{s^2}$.'])
+%     title([titleString, sprintf('%.2f', accel(trial)), ' $\frac{m}{s^2}$.'])
 %     axis([0 2 0 2])
 %     vline(tAll(indexVec(1)), 'k--', 'Start')
 %     vline(tAll(indexVec(end)), 'k--', 'End')
 %     grid on
 %     
-%     figure(2)
-%     subplot(1,2,bTail+1)
+%     figure(floor((trial-1)/5)+3)
+%     subplot(3,2,mod(trial-1,5)+1)
 %     plot(t, dx, 'k:', t, smooth(dx),'r')
-%     legend('Data', 'Filtered', 'Location', 'Northwest')
+%     legend('Data', 'Filtered',  'location', 'northwest')
 %     xlabel('Time (s)')
 %     ylabel('Forward Velocity (m/s)')
-%     title([titleString, sprintf('%.2f', accel), ' $\frac{m}{s^2}$.'])
+%     title([titleString, sprintf('%.2f', accel(trial)), ' $\frac{m}{s^2}$.'])
 %     axis([0 0.3 0 2])
+%     vline(t(1), 'k--', 'Start')
+%     vline(t(end), 'k--', 'End')
 %     grid on
+    
 end
     
 noTailAccel = accel(1:5);
@@ -149,10 +132,33 @@ improvement = (avgTailAccel/avgNoTailAccel - 1)*100
 
 mu = avgNoTailAccel;     % Population mean
 sigma = stdNoTailAccel;  % Population standard deviation
-n = 5;    % Sample size
+n = numTrial;    % Sample size
 
 xbar = avgTailAccel;  % Sample mean
 s = stdTailAccel;      % Sample standard deviation
 t = (xbar - mu)/(s/sqrt(n));
 p = 1-tcdf(t,n-1) % Probability of larger t-statistic
 
+tmin = 0;tmax = 0.3; vmin = 0; vmax = 2;
+tticks_a = linspace(tmin, tmax, 500);
+vticks_a = linspace(vmin, vmax, 500);
+[tticks, vticks] = meshgrid(tticks_a, vticks_a);
+accelContourData = vticks./tticks;
+
+figure(5)
+for trial = 1:numTrial
+    
+    plot(tLog{trial}, dxLog{trial}, ':', 'color', cmuColor('gray'), 'linewidth', 2)
+    xlabel('Time (s)')
+    ylabel('Forward Velocity (m/s)')
+    axis([tmin tmax vmin vmax])
+    hold on
+    
+    plot(tLog{trial+numTrial}, dxLog{trial+numTrial}, 'color', cmuColor, 'linewidth', 2)
+    xlabel('Time (s)')
+    axis([tmin tmax vmin vmax])
+    [~,accelContours] = contour(tticks, vticks, accelContourData,4:1:8, 'k--', 'ShowText', 'on'); 
+    hold on
+    legend('No Tail', 'With Tail', 'Acceleration $(\frac{m}{s^2})$', 'Location', 'Northwest')
+    hold on
+end
