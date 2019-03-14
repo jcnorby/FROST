@@ -73,7 +73,7 @@ nlp = opt.LoadProblem(robot, bounds, load_path);
 toc
 %% Compile stuff if needed
 
-% compileObjective(nlp,[],[],export_path);
+compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);

@@ -32,9 +32,10 @@ function init_state(nlp, bounds)
 %         x('knee_back_rightL_link') - acos(1/2)
 %         x('knee_back_rightR_link') - acos(1/2)];
     
-    initVel = [dx('BasePosX') - 1.5
-        dx('BasePosZ')
+    initVel = [dx('BasePosX') - 0
+        dx('BasePosZ');
         dx('BaseRotY')]; 
+    
 %         dx('motor_front_leftL_joint')
 %         dx('motor_front_leftR_joint')
 %         dx('knee_front_leftL_link')
