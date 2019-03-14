@@ -11,7 +11,7 @@ classdef TrajectoryOptimization < NonlinearProgram
     %
     % Redistribution and use in source and binary forms, with or without
     % modification, are permitted only in compliance with the BSD 3-Clause 
-    % license, see
+    % license, see 
     % http://www.opensource.org/licenses/bsd-license.php
     
     %% Public properties

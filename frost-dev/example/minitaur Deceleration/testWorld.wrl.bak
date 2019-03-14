@@ -1,0 +1,370 @@
+#VRML V2.0 utf8
+
+DEF URDF_minitaur_Transform Transform {
+  children [
+    DEF link_base_chassis_link_1 Transform {
+      children Shape {
+        appearance Appearance {
+          material Material {
+            diffuseColor 0 0 0
+          }
+        }
+        geometry Box {
+          size 0.226 0.07 0.16
+        }
+      }
+    }
+    DEF joint_motor_front_leftL_joint Transform {
+      translation 0.2 0 -0.1
+      rotation 0 1 -0 3.14159
+      children DEF axis_motor_front_leftL_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_front_leftL_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_front_leftL_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_front_leftL_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_front_leftL_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_front_leftR_joint Transform {
+      translation 0.2 0 -0.1
+      rotation 1 0 -0 0
+      children DEF axis_motor_front_leftR_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_front_leftR_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_front_leftR_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_front_leftR_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_front_leftR_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_back_leftL_joint Transform {
+      translation -0.2 0 -0.1
+      rotation 0 1 -0 3.14159
+      children DEF axis_motor_back_leftL_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_back_leftL_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_back_leftL_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_back_leftL_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_back_leftL_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_back_leftR_joint Transform {
+      translation -0.2 0 -0.1
+      rotation 1 0 -0 0
+      children DEF axis_motor_back_leftR_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_back_leftR_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_back_leftR_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_back_leftR_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_back_leftR_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_front_rightL_joint Transform {
+      translation 0.2 0 0.1
+      rotation 1 0 -0 0
+      children DEF axis_motor_front_rightL_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_front_rightL_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_front_rightL_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_front_rightL_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_front_rightL_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_front_rightR_joint Transform {
+      translation 0.2 0 0.1
+      rotation 0 1 -0 3.14159
+      children DEF axis_motor_front_rightR_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_front_rightR_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_front_rightR_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_front_rightR_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_front_rightR_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_back_rightL_joint Transform {
+      translation -0.2 0 0.1
+      rotation 1 0 -0 0
+      children DEF axis_motor_back_rightL_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_back_rightL_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_back_rightL_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_back_rightL_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_back_rightL_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+    DEF joint_motor_back_rightR_joint Transform {
+      translation -0.2 0 0.1
+      rotation 0 1 -0 3.14159
+      children DEF axis_motor_back_rightR_joint Transform {
+        rotation 0 0 -1 0
+        children [
+          DEF link_upper_leg_back_rightR_link_1 Transform {
+            translation 0 0.05 -0
+            rotation 1 0 -0 0
+            children Shape {
+              appearance Appearance {
+                material Material {
+                  diffuseColor 0.65 0.65 0.75
+                }
+              }
+              geometry Box {
+                size 0.01 0.11 0.01
+              }
+            }
+          }
+          DEF joint_knee_back_rightR_link Transform {
+            translation 0 0.1 -0
+            rotation 1 0 -0 3.14159
+            children DEF axis_knee_back_rightR_link Transform {
+              rotation 0 0 -1 0
+              children DEF link_lower_leg_back_rightR_link_1 Transform {
+                translation 0 0.1 -0
+                rotation 1 0 -0 0
+                children Shape {
+                  appearance Appearance {
+                    material Material {
+                      diffuseColor 0.65 0.65 0.75
+                    }
+                  }
+                  geometry Box {
+                    size 0.01 0.2 0.01
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

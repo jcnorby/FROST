@@ -1,6 +1,6 @@
 close all; clc; clear;
 if ispc
-    if strcmp(pwd,'C:\Users\Joe\Documents\FROST\frost-dev\example\minitaur Tail Testing\process')
+    if strcmp(pwd,'C:\Users\Joe\Documents\FROST\frost-dev\example\minitaur Tail Testing\process') || strcmp(pwd,'C:\Users\Joe Desktop\Documents\FROST\frost-dev\example\minitaur Tail Testing\process')
         cd ..\
     end
 else
@@ -8,7 +8,7 @@ else
         cd ../
     end
 end
-set(groot,'defaultfigureposition',[200 250 1200 600])
+set(groot,'defaultfigureposition',[200 250 800 500])
 
 if ispc
     d = dir([pwd, '\process\mocap', '\*.csv']); % Determine the number of .csv files in the mocap folder
@@ -148,17 +148,26 @@ accelContourData = vticks./tticks;
 figure(5)
 for trial = 1:numTrial
     
-    plot(tLog{trial}, dxLog{trial}, ':', 'color', cmuColor('gray'), 'linewidth', 2)
+    plot(tLog{trial}, dxLog{trial}, 'color', cmuColor('dark-gray'), 'linewidth', 2)
     xlabel('Time (s)')
     ylabel('Forward Velocity (m/s)')
     axis([tmin tmax vmin vmax])
     hold on
     
-    plot(tLog{trial+numTrial}, dxLog{trial+numTrial}, 'color', cmuColor, 'linewidth', 2)
+    plot(tLog{trial+numTrial}, dxLog{trial+numTrial}, 'color', cmuColor('red-web'), 'linewidth', 2)
     xlabel('Time (s)')
     axis([tmin tmax vmin vmax])
     [~,accelContours] = contour(tticks, vticks, accelContourData,4:1:8, 'k--', 'ShowText', 'on'); 
     hold on
-    legend('No Tail', 'With Tail', 'Acceleration $(\frac{m}{s^2})$', 'Location', 'Northwest')
-    hold on
 end
+for trial = 1:numTrial
+    
+    plot(tLog{trial}(end), dxLog{trial}(end), 'o', 'MarkerFaceColor', cmuColor('dark-gray'), 'MarkerSize', 10,'MarkerEdgeColor','k'); hold on;
+    plot(tLog{trial+numTrial}(end), dxLog{trial+numTrial}(end), 'o', 'MarkerFaceColor', cmuColor('red-web'), 'MarkerSize', 10,'MarkerEdgeColor','k'); hold on;
+    
+    legend('No Tail', 'With Tail', 'Acceleration $(\frac{m}{s^2})$', 'Location', 'Northwest')
+end
+
+cropWhiteSpace;
+
+

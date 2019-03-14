@@ -35,7 +35,7 @@ if model.numState == 22
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub];
     
-    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100];
+    model_bounds.states.dx.lb = [-4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100];
     model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
 elseif  model.numState == 23
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -pi/2];
@@ -50,7 +50,7 @@ elseif model.numState == 25
 %     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -0.005;0;0];
 %     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; 0.005;0;0];    
     
-    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0];
+    model_bounds.states.dx.lb = [-4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0];
     model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0];
 elseif model.numState == 26
     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; taillb;0;0;0];
@@ -59,7 +59,7 @@ elseif model.numState == 26
 %     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -0.005;0;0];
 %     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; 0.005;0;0];    
     
-    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0;0];
+    model_bounds.states.dx.lb = [-4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0;0];
     model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0;0];
 end
         

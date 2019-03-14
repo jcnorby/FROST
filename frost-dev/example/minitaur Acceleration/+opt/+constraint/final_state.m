@@ -114,8 +114,10 @@ tTD = (-dx('BasePosZ') - sqrt(dx('BasePosZ').^2 - 4*(g/2)*(x('BasePosZ') - yFina
 thetaTD = x('BaseRotY') + dx('BaseRotY')*tTD;
 
 zeroRotation_fun = SymFunction('zeroRotation', thetaTD, {x,dx});
+% addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+%     0,0,'Linear');
 addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
-    -15/180*pi,-15/180*pi,'Linear');
+    15/180*pi,15/180*pi,'Linear');
 
 end
 

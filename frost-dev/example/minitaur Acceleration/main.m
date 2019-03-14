@@ -16,8 +16,8 @@ frost_path  = '../../';
 addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
-%Hi Joe
-%Yo
+
+
 export_path = 'gen/opt';
 load_path   = [];
 utils.init_path(export_path);
@@ -84,12 +84,12 @@ toc
 % compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
-compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
+% compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,[],{'fDragModel'},export_path);
 % compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
 % compileConstraint(nlp,[],{'jointAngFinalState'},export_path);
 % compileConstraint(nlp,[],{'minFinalForwardVel'},export_path);
-compileConstraint(nlp,[],{'zeroRotation'},export_path);
+% compileConstraint(nlp,[],{'zeroRotation'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -98,7 +98,7 @@ compileConstraint(nlp,[],{'zeroRotation'},export_path);
 %% Update Initial Condition
 
 % temp = load('local/current_gait.mat');
-% temp = load(['local/', trialName,'.mat']);
+temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
 % temp = load('local/maxVelocityBrakeLegs.mat');
@@ -112,7 +112,7 @@ compileConstraint(nlp,[],{'zeroRotation'},export_path);
 % temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu06.mat');
 % temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu05.mat');
 
-temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
+% temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
 % temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
 

@@ -7,8 +7,8 @@ if nargin < 3
 end
 
 % Define grid resolution
-num_grid.Stance = 10;
-num_grid.BackStance = 10;
+num_grid.Stance = 15;
+num_grid.BackStance = 15;
 
 options = {'EqualityConstraintBoundary', 1e-4,...
     'DistributeTimeVariable', false,...
