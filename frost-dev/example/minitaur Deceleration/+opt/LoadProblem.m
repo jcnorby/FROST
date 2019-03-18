@@ -63,13 +63,8 @@ else
 end
 
 % % Select a cost function
-    opt.cost.zero(nlp, system);
-% opt.cost.finalForwardVelocity(nlp, system);
-% opt.cost.avgDeceleration(nlp, system);
-% opt.cost.maxDistance(nlp, system);
-% opt.cost.finalForwardVelocityMinEnergy(nlp, system);
-%     opt.cost.Torque(nlp, robot);
-%     opt.cost.Height(nlp, robot);
+%     opt.cost.zero(nlp, system);
+opt.cost.avgDeceleration(nlp, system);
 
 % Remove constraint that requires gaits to start at t=0
 for i = 1:length(nlp.Phase)

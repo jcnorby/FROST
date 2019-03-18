@@ -15,7 +15,7 @@ export_path = 'gen/opt';
 load_path   = [];
 utils.init_path(export_path);
 
-trialName = 'maxDecelerationMinGRFMu05';
+trialName = 'maxDecelerationMu05Vel15';
 
 global bAerodynamic
 global bTail
@@ -49,22 +49,12 @@ if bTail
 else
     urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
 end
-% urdf = fullfile(cur,'urdf','minitaurAccurate.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAccurateG4.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamic.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicG4.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealistic.urdf');
-% urdf = fullfile(cur,'urdf','minitaurWithTailBackOffsetAerodynamicRealisticG4.urdf');
 
 delay_set = true;
 %% load robot model
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
 % exo_disp = plot.LoadRobotDisplay(robot);
-
-% load hybrid system
-% system = sys.LoadSystem(robot, load_path);
-% system.compile(export_path);
 
 bounds = opt.GetBounds(robot);
 
@@ -73,16 +63,13 @@ nlp = opt.LoadProblem(robot, bounds, load_path);
 toc
 %% Compile stuff if needed
 
-compileObjective(nlp,[],[],export_path);
+% compileObjective(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'fDragModel'},export_path);
-% compileConstraint(nlp,[],{'uRIL','uRIB'},export_path);
 compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
-compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
-
+% compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -90,31 +77,11 @@ compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance
 
 %% Update Initial Condition
 
-% temp = load('local/current_gait.mat');
-temp = load(['local/', trialName,'.mat']);
+temp = load('local/current_gait.mat');
+% temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxVelocityBrakeLegs.mat');
-% temp = load('local/maxVelocityBrakeLegsWithTail.mat');
-% temp = load('local/maxVelocityBrakeLegsWithAeroTail.mat');
-
-% temp = load('local/avgAccelerationBrakeLegs.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithTail.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithAeroTail.mat');
-
-% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu06.mat');
-% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu05.mat');
-
-% temp = load('local/avgAccelerationBrakeLegsWithTailMinVel.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVel.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVel.mat');
-
-% temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithAeroTailMinVelG4.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithRealisticAeroTailMinVelG4.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithRealisticInactiveAeroTailMinVelG4.mat');
-% temp = load('local/avgAccelerationBrakeLegsWithTailMinVelG4MinGRFMu05.mat');
-
+% temp = load('local/maxDecelerationMinGRFMu05.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -147,40 +114,53 @@ checkVariables(nlp,sol,tol,'local/var_check.txt'); %
 
 cost = checkCosts(nlp,sol,'local/cost_check.txt'); % 
 
-initialVelocity = gait(1).states.dx(1,1);
-avgDeceleration = gait(1).states.dx(1,1)/gait(end).tspan(end)
+results = struct;
+results.initialVelocity = gait(1).states.dx(1,1);
+results.avgDeceleration = gait(1).states.dx(1,1)/gait(end).tspan(end)
 
-save('local/current_gait.mat','nlp','gait','sol','info','bounds', 'avgDeceleration','initialVelocity');
+%% Save Results
 
-reply = input(['Save as trial name ', trialName, '? Y/N: '],'s');
-if strcmp(reply, 'y')
-    save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgDeceleration','initialVelocity')
-    disp('Saved');
-end
-% save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgAcceleration','finalVelocity');
+saveResults(trialName, nlp, gait, sol, info, bounds,results, anim)
 
-% save('local/initialAccel.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/initialAccelWithTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/avgAccelerationBrakeLegsWithTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-
-% save('local/maxVelocityBrakeLegs.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/maxVelocityBrakeLegsWithTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/maxVelocityBrakeLegsWithAeroTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-
-% save('local/avgAccelerationBrakeLegs.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/avgAccelerationBrakeLegsWithTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-% save('local/avgAccelerationBrakeLegsWithAeroTailBackOffset.mat','nlp','gait','sol','info','bounds', 'avgAcceleration', 'finalVelocity');
-
-%% Use to record after animation has finished
-% % myVideo = VideoWriter('videos/maxVelocityBrakeLegsWithTailBackOffset');
-reply = input(['Save video? Don''t forget to resize and play video first. Y/N: '],'s');
-if strcmp(reply, 'y')
-    myVideo = VideoWriter(['videos/', trialName]);
-    open(myVideo);
-    writeVideo(myVideo,anim.anim.M);
-    close(myVideo);
-    
-    disp('Saved');
-end
-
+% % Save most recent gait (always do this)
+% save('local/current_gait.mat','nlp','gait','sol','info','bounds', 'avgDeceleration','initialVelocity');
+% 
+% % If gait was good and trialName is accurate, save the gait locally with
+% % the naming convention in trialName
+% reply = input(['Save as trial name ', trialName, '? y/n: '],'s');
+% if strcmp(reply, 'y')
+%     save(['local/', trialName,'.mat'],'nlp','gait','sol','info','bounds', 'avgDeceleration','initialVelocity')
+%     disp('Saved');
+% end
+% 
+% % Prompt user to save the video of the gait locally as an AVI - note that
+% % for all video saves, the data in anim.anim.M isn't populated until the
+% % video has played
+% reply = input(['Save video locally? Don''t forget to play video first. y/n: '],'s');
+% if strcmp(reply, 'y')
+%     myVideo = VideoWriter(['videos/', trialName]);
+%     myVideo.FileFormat = 'mp4';
+%     open(myVideo);
+%     writeVideo(myVideo,anim.anim.M);
+%     close(myVideo);
+%     
+%     disp('Saved locally');
+% end
+% 
+% % Prompt user if the gait, video, and corresponding minitaur code should be
+% % saved to Box (or whatever folder is specified in cloud_path)
+% cloud_path = 'C:\Users\Joe Desktop\Box\Robomechanics Lab Shared Files\Minitaur Opt\';
+% if exist(cloud_path, 'dir')
+%     reply = input(['Save everything to Box? y/n: '],'s');
+%     if strcmp(reply, 'y')
+%         myVideoBox = VideoWriter([cloud_path,'FROST Videos\', trialName], 'MPEG-4');
+%         open(myVideoBox);
+%         writeVideo(myVideoBox,anim.anim.M);
+%         close(myVideoBox);
+%         
+%         save([cloud_path,'FROST Gaits\', trialName, '.mat'],'nlp','gait','sol','info','bounds', 'avgDeceleration','initialVelocity')
+%         exportTrajectory(fullgait, [cloud_path, 'Minitaur Code\'], ['minitaurCode_', trialName]);
+%         disp('Saved to Box');
+%     end
+% end
 
