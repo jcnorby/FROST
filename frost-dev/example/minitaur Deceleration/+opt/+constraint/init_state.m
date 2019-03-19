@@ -32,9 +32,12 @@ function init_state(nlp, bounds)
 %         x('knee_back_rightL_link') - acos(1/2)
 %         x('knee_back_rightR_link') - acos(1/2)];
     
-    initVel = [dx('BasePosX') - 1.5
-        dx('BasePosZ');
-        dx('BaseRotY')]; 
+%     initVel = [dx('BasePosX') - 1.5
+%         dx('BasePosZ');
+%         dx('BaseRotY')]; 
+
+initVel = [dx('BasePosZ');
+    dx('BaseRotY')];
     
 %         dx('motor_front_leftL_joint')
 %         dx('motor_front_leftR_joint')
@@ -59,10 +62,10 @@ function init_state(nlp, bounds)
     addNodeConstraint(nlp, initState, {'x','dx'}, 'first',  ...
         0,0,'Linear');
     
-%     minInitialForwardVel = [dx('BasePosX')];
-%     minInitialForwardVel_fun = SymFunction('minInitialForwardVel', minInitialForwardVel, {dx});
-%     addNodeConstraint(nlp, minInitialForwardVel_fun, {'dx'}, 'first',  ...
-%         1.5,15,'Linear');
+    minInitialForwardVel = [dx('BasePosX')];
+    minInitialForwardVel_fun = SymFunction('minInitialForwardVel', minInitialForwardVel, {dx});
+    addNodeConstraint(nlp, minInitialForwardVel_fun, {'dx'}, 'first',  ...
+        1.5,1.5,'Linear');
     
     
 end

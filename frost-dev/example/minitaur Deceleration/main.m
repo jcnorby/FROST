@@ -3,7 +3,7 @@
 %% Set up path
 clear; close all; clc;
 
-set(groot,'defaultfigureposition',[400 250 900 750])
+% set(groot,'defaultfigureposition',[400 250 900 750])
 
 restoredefaultpath; matlabrc;
 frost_path  = '../../';
@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationMu05Vel15';
+trialName = 'maxDecelerationWithTailMu05Vel15';
 
 global bAerodynamic
 global bTail
@@ -73,8 +73,9 @@ toc
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
+% compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
 % compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
+% compileConstraint(nlp,[],{'fDragModel'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -86,7 +87,7 @@ temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxDecelerationMinGRFMu05.mat');
+% temp = load('local/maxDecelerationMu05MinVel15.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -97,11 +98,12 @@ gait = temp.gait;
 gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 % cost = temp.cost;
 
+% gait = opt.addTailToGait(gait);
 opt.updateInitCondition(nlp,gait);
 
 %% Solve
-% [gait, sol, info] = opt.solve(nlp);
-[gait, sol, info] = opt.solve(nlp, sol);
+[gait, sol, info] = opt.solve(nlp);
+% [gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% Save immediately in case of errors later in script

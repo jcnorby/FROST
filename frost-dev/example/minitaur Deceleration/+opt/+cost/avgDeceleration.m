@@ -7,7 +7,7 @@ function avgDeceleration(nlp, sys)
     
     tfinal = domain.Params.tfinal;
     
-    deceleration = dx(1)/(tfinal + 1e-6);
+    deceleration = dx('BasePosX')/(tfinal + 1e-6);
     finalForwardVelocity_fun = SymFunction('avgDeceleration',10-deceleration,{dx, tfinal});
     addNodeCost(nlp.Phase(1),finalForwardVelocity_fun,{'dx', 'tfinal'}, 'first');
   

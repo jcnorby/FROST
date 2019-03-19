@@ -1,5 +1,5 @@
 function StanceConstraints(nlp, bounds, varargin)
-global bAerodynamic;
+global bTail;
 
 ip = inputParser;
 ip.addParameter('LoadPath',[],@ischar);
@@ -24,7 +24,7 @@ opt.constraint.motor_model(nlp, bounds);
 opt.constraint.joint_limits(nlp, bounds);
 opt.constraint.non_penetration(nlp, bounds, swingfeet);
 
-if bAerodynamic
+if bTail
     opt.constraint.aero_tail_model(nlp, bounds);
 end
 
