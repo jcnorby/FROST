@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationWithTailMu05Vel15';
+trialName = 'maxDecelerationWithAeroTailMu05MinVel16';
 
 global bAerodynamic
 global bTail
@@ -87,7 +87,7 @@ temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxDecelerationMu05MinVel15.mat');
+% temp = load('local/maxDecelerationWithTailMu05MinVel15.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -102,8 +102,8 @@ gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 opt.updateInitCondition(nlp,gait);
 
 %% Solve
-[gait, sol, info] = opt.solve(nlp);
-% [gait, sol, info] = opt.solve(nlp, sol);
+% [gait, sol, info] = opt.solve(nlp);
+[gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% Save immediately in case of errors later in script
@@ -113,6 +113,7 @@ save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 % loopedGait = plot.createLoopedGait(gait);
 % anim = plot.LoadAnimator(robot, loopedGait,'SkipExporting',true);
 
+fullgait = mergeGait(gait);
 anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
 
 %% Check variables, constraints, and cost function, and calculate gait parameters
