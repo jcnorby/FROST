@@ -10,6 +10,15 @@ end
 
 inputnames = {'u','fFoot0','fFoot1','fFoot2','fFoot3'};
 inputsize = [9,3,3,3,3];
+% slidingPhases = [];
+% for i = 1:length(gait)
+%     if isfield(gait(i).inputs, 'fFoot0X')
+%         slidingPhases = [slidingPhases, i];
+%         inputnames = {inputnames{:},'fFoot0X','fFoot1X','fFoot2X','fFoot3X'};
+%         inputsize = [9,3,3,3,3,1,1,1,1];
+%     end
+% end
+
 for j = 1:length(inputnames)
     inputs.(inputnames{j}) = [];
 end

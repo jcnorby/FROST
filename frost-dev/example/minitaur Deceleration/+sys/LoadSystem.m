@@ -5,57 +5,88 @@ if nargin < 2
     load_path = [];
 end
 
-joint_control = JointPD('simplePD');
-
-system = HybridSystem('minitaur');
-system = addVertex(system, 'TailTest', 'Domain', model,'Control', joint_control);
-
+% No Sliding
+%
+% % Define domains
+% flight = sys.domains.Flight(model, load_path);
+% flight.UserNlpConstraint = @opt.callback.FlightToFrontConstraints;
 % 
 % frontStance = sys.domains.FrontStance(model, load_path);
 % frontStance.UserNlpConstraint = @opt.callback.FrontStanceConstraints;
-% backStance = sys.domains.BackStance(model, load_path);
-% backStance.UserNlpConstraint = @opt.callback.BackStanceConstraints;
 % 
-% flightToFront = sys.domains.Flight(model, load_path);
-% flightToFront.UserNlpConstraint = @opt.callback.FlightToFrontConstraints;
-% flightToBack = sys.domains.Flight(model, load_path);
-% flightToBack.UserNlpConstraint = @opt.callback.FlightToBackConstraints;
+% % stanceSliding = sys.domains.DoubleStanceSliding(model, load_path);
+% % stanceSliding.UserNlpConstraint = @opt.callback.StanceSlidingConstraints;
 % 
+% stance = sys.domains.DoubleStance(model, load_path);
+% stance.UserNlpConstraint = @opt.callback.StanceConstraints;
+% 
+% % Define transitions
 % frontImpact = RigidImpact('FrontImpact', frontStance, 'Foot0Height'); % To frontStance
 % frontImpact.addImpactConstraint(struct2array(frontStance.HolonomicConstraints), load_path);
 % frontImpact.UserNlpConstraint = @opt.callback.FrontImpactConstraints;
 % 
-% backImpact = RigidImpact('BackImpact', backStance, 'Foot1Height'); % To backStance
-% backImpact.addImpactConstraint(struct2array(backStance.HolonomicConstraints), load_path);
+% backImpact = RigidImpact('BackImpact', stance, 'Foot1Height'); % To backStance
+% backImpact.addImpactConstraint(struct2array(stance.HolonomicConstraints), load_path);
 % backImpact.UserNlpConstraint = @opt.callback.BackImpactConstraints;
 % 
-% frontLiftOff = RigidImpact('FrontLiftOff', flightToBack, 'Foot2NormalForce'); % front liftoff, to flightToBack
-% frontLiftOff.addImpactConstraint(struct2array(flightToBack.HolonomicConstraints), load_path);
-% backLiftOff = RigidImpact('BackLiftOff', flightToFront, 'Foot3NormalForce'); % back liftoff, to flightToFront
-% backLiftOff.addImpactConstraint(struct2array(flightToFront.HolonomicConstraints), load_path);
+% % impact = RigidImpact('Impact', stanceSliding, 'Foot0Height'); % To frontStance
+% % impact.addImpactConstraint(struct2array(stanceSliding.HolonomicConstraints), load_path);
+% % impact.UserNlpConstraint = @opt.callback.ImpactConstraints;
 % 
+% % This does nothing for optimization, just for simulation
 % joint_control = JointPD('simplePD');
 % 
 % system = HybridSystem('minitaur');
-% system = addVertex(system, 'FlightToFront', 'Domain', flightToFront,'Control', joint_control);
+% system = addVertex(system, 'Flight', 'Domain', flight,'Control', joint_control);
 % system = addVertex(system, 'FrontStance', 'Domain', frontStance,'Control', joint_control);
-% system = addVertex(system, 'FlightToBack', 'Domain', flightToBack,'Control', joint_control);
-% system = addVertex(system, 'BackStance', 'Domain', backStance,'Control', joint_control);
+% system = addVertex(system, 'Stance', 'Domain', stance,'Control', joint_control);
 % 
-% srcs = {'FlightToFront'
-%     'FrontStance'
-%     'FlightToBack'
-%     'BackStance'};
 % 
-% tars = {'FrontStance'
-%     'FlightToBack'
-%     'BackStance'
-%     'FlightToFront'};
+% srcs = {'Flight','FrontStance'};
+% tars = {'FrontStance', 'Stance'};
 % 
 % system = addEdge(system, srcs, tars);
 % system = setEdgeProperties(system, srcs, tars, ...
-%     'Guard', {frontImpact, frontLiftOff, backImpact, backLiftOff});
+%     'Guard', {frontImpact, backImpact});
 
+
+% With Sliding
+
+% Define domains
+flight = sys.domains.Flight(model, load_path);
+flight.UserNlpConstraint = @opt.callback.FlightToFrontConstraints;
+
+slidingStance = sys.domains.SlidingStance(model, load_path);
+slidingStance.UserNlpConstraint = @opt.callback.SlidingStanceConstraints;
+
+stance = sys.domains.DoubleStance(model, load_path);
+stance.UserNlpConstraint = @opt.callback.StanceConstraints;
+
+% Define transitions
+
+impact1 = RigidImpact('Impact1', slidingStance, 'Foot0Height'); % To frontStance
+impact1.addImpactConstraint(struct2array(slidingStance.HolonomicConstraints), load_path);
+impact1.UserNlpConstraint = @opt.callback.Impact1Constraints;
+
+impact2 = RigidImpact('Impact2', stance, 'Foot0Vel'); % To frontStance
+impact2.addImpactConstraint(struct2array(stance.HolonomicConstraints), load_path);
+impact2.UserNlpConstraint = @opt.callback.Impact2Constraints;
+
+% This does nothing for optimization, just for simulation
+joint_control = JointPD('simplePD');
+
+system = HybridSystem('minitaur');
+system = addVertex(system, 'Flight', 'Domain', flight,'Control', joint_control);
+system = addVertex(system, 'SlidingStance', 'Domain', slidingStance,'Control', joint_control);
+system = addVertex(system, 'Stance', 'Domain', stance,'Control', joint_control);
+
+
+srcs = {'Flight','SlidingStance'};
+tars = {'SlidingStance', 'Stance'};
+
+system = addEdge(system, srcs, tars);
+system = setEdgeProperties(system, srcs, tars, ...
+    'Guard', {impact1, impact2});
 
 end
 

@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationWithAeroTailMu05MinVel16';
+trialName = 'maxDecelerationSlidingMu05Vel15';
 
 global bAerodynamic
 global bTail
@@ -60,10 +60,11 @@ tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
 % exo_disp = plot.LoadRobotDisplay(robot);
 
-bounds = opt.GetBounds(robot);
+system = sys.LoadSystem(robot, load_path);
 
+bounds = opt.GetBounds(robot);
 % load problem
-nlp = opt.LoadProblem(robot, bounds, load_path);
+nlp = opt.LoadProblem(system, bounds, load_path);
 toc
 
 %% Compile stuff if needed
@@ -73,7 +74,8 @@ toc
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
+% compileConstraint(nlp,[],{'FeetVelSlidingStance'},export_path);
+compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
 % compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
 % compileConstraint(nlp,[],{'fDragModel'},export_path);
 
@@ -87,7 +89,7 @@ temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxDecelerationWithTailMu05MinVel15.mat');
+% temp = load('local/maxDecelerationSlidingWithTailMu05Vel15.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -106,8 +108,20 @@ opt.updateInitCondition(nlp,gait);
 [gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 
+
 %% Save immediately in case of errors later in script
 save('local/current_gait.mat','nlp','gait','sol','info','bounds');
+
+for i = 1:length(gait)
+    if isfield(gait(i).inputs, 'fFoot0X')
+        gait(i).inputs.fFoot0 = [gait(i).inputs.fFoot0X'; gait(i).inputs.fFoot0];
+        gait(i).inputs.fFoot1 = [gait(i).inputs.fFoot1X'; gait(i).inputs.fFoot1];
+        gait(i).inputs.fFoot2 = [gait(i).inputs.fFoot2X'; gait(i).inputs.fFoot2];
+        gait(i).inputs.fFoot3 = [gait(i).inputs.fFoot3X'; gait(i).inputs.fFoot3];
+        
+        gait(i).inputs = rmfield(gait(i).inputs, ['fFoot0X';'fFoot1X';'fFoot2X';'fFoot3X']);
+    end
+end
 
 %% Animate (must play video before any saving)
 % loopedGait = plot.createLoopedGait(gait);

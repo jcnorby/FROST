@@ -14,7 +14,7 @@ p_feet = getCartesianPosition(domain, feet);
 feet_height = p_feet(:,3);
 feet_height_fun = SymFunction(['nonPenetration_', nlp.Name], feet_height, {x});
 
-if strcmp(nlp.Name, 'FrontStance') || strcmp(nlp.Name, 'BackStance') || strcmp(nlp.Name, 'Stance')
+if strcmp(nlp.Name, 'FrontStance') || strcmp(nlp.Name, 'BackStance') || strcmp(nlp.Name, 'Stance')|| strcmp(nlp.Name, 'SlidingStance')
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
         0,10,'Nonlinear');
 
@@ -26,9 +26,15 @@ else
 %         [bounds.constrBounds.footHeight.lb;bounds.constrBounds.footHeight.lb;0;0], ...
 %         [bounds.constrBounds.footHeight.ub;bounds.constrBounds.footHeight.ub;0;0],'Nonlinear');
     
+% front feet hit the ground
+%     addNodeConstraint(nlp, feet_height_fun, {'x'}, nlp.NumNode, ...
+%         [0;0;0;0], ...
+%         [0;0;10;10],'Nonlinear');
+    
+% If both feet hit the ground
     addNodeConstraint(nlp, feet_height_fun, {'x'}, nlp.NumNode, ...
         [0;0;0;0], ...
-        [0;0;10;10],'Nonlinear');
+        [0;0;0;0],'Nonlinear');
     
 end
 

@@ -66,7 +66,7 @@ initVel = [dx('BasePosZ');
     minInitialForwardVel = [dx('BasePosX')];
     minInitialForwardVel_fun = SymFunction('minInitialForwardVel', minInitialForwardVel, {dx});
     addNodeConstraint(nlp, minInitialForwardVel_fun, {'dx'}, 'first',  ...
-        1.6,15,'Linear');
+        2,15,'Linear');
     
     
 end
