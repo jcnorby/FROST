@@ -16,7 +16,7 @@ tmin = 0.001;
 %% first get the model specific boundary values
 model_bounds = model.getLimits(); % x, dx, ddx, u
 
-model_bounds.constrBounds.stallTorque = 3;
+model_bounds.constrBounds.stallTorque = 10;
 
 % state constraints
 motorlb = -pi;

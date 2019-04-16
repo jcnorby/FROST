@@ -1,6 +1,6 @@
 function motor_model(nlp, bounds)
 %     constraints for motor torque
-
+return;
 kt = 0.0954;
 Ra = 0.220;
 V = 12;

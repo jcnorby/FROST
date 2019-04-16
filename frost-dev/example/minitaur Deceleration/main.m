@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationSlidingMu05Vel15';
+trialName = 'maxDecelerationSlidingMu05MinVel25';
 
 global bAerodynamic
 global bTail
