@@ -1,8 +1,9 @@
-function exportTrajectory(fullgait, filepath, filename)
+function exportTrajectory(fullgait, filepath, filename, trialName)
 
 if nargin <= 1
     filepath = 'traj\';
     filename = 'traj';
+    trialName = [];
 end
 
 fullpath = [filepath, filename, '.txt'];
@@ -24,23 +25,27 @@ if length(fullgait.states.x(:,1)) == 22
     df = (1/V)*(torqueToCurrentFunction(fullgait.inputs.u)*Ra + kt.*fullgait.states.dx(motorIndex, :));
     
     traj = fopen(fullpath,'w');
-    fprintf(traj, 'float times[TIMESTEPS] = {%f,', fullgait.tspan(1));
+    
+    if ~isempty(trialName)
+        fprintf(traj, '// %s\n', trialName);
+    end
+    fprintf(traj, 'float times_brake[TIMESTEPS] = {%f,', fullgait.tspan(1));
     fprintf(traj, '%f,', fullgait.tspan(2:end-1));
     fprintf(traj, '%f};\n', fullgait.tspan(end));
     
-    fprintf(traj, 'float pos[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 1));
+    fprintf(traj, 'float pos_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.states.x(motorIndex, end));
     
-    fprintf(traj, 'float vel[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 1));
+    fprintf(traj, 'float vel_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.states.dx(motorIndex, end));
     
-    fprintf(traj, 'float u[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 1));
+    fprintf(traj, 'float u_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.inputs.u(:, end));
     
-    fprintf(traj, 'float dfVec[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 1));
+    fprintf(traj, 'float dfVec_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f}};\n', df(:, end));   
     fclose(traj);
@@ -94,23 +99,26 @@ else
 %     dpitch = fopen('traj/trajDPitch.txt','w');
     
     traj = fopen(fullpath,'w');
-    fprintf(traj, 'float times[TIMESTEPS] = {%f,', fullgait.tspan(1));
+    if ~isempty(trialName)
+        fprintf(traj, '// %s\n', trialName);
+    end
+    fprintf(traj, 'float times_brake[TIMESTEPS] = {%f,', fullgait.tspan(1));
     fprintf(traj, '%f,', fullgait.tspan(2:end-1));
     fprintf(traj, '%f};\n', fullgait.tspan(end));
     
-    fprintf(traj, 'float pos[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 1));
+    fprintf(traj, 'float pos_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.x(motorIndex, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.states.x(motorIndex, end));
     
-    fprintf(traj, 'float vel[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 1));
+    fprintf(traj, 'float vel_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.states.dx(motorIndex, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.states.dx(motorIndex, end));
     
-    fprintf(traj, 'float u[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 1)./[1;1;1;1;1;1;1;1;(R*Rineff)]);
+    fprintf(traj, 'float u_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 1)./[1;1;1;1;1;1;1;1;(R*Rineff)]);
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f},', fullgait.inputs.u(:, 2:end-1)./[1;1;1;1;1;1;1;1;(R*Rineff)]);
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f}};\n', fullgait.inputs.u(:, end)./[1;1;1;1;1;1;1;1;(R*Rineff)]);
     
-    fprintf(traj, 'float dfVec[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 1));
+    fprintf(traj, 'float dfVec_brake[TIMESTEPS][MOTORS] = {{%f,%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f},', df(:, 2:end-1));
     fprintf(traj, '{%f,%f,%f,%f,%f,%f,%f,%f,%f}};\n', df(:, end));   
     fclose(traj);   

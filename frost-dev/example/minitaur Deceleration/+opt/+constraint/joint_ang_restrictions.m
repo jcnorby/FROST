@@ -73,7 +73,7 @@ end
 
 ang_fun = SymFunction(['jointAngMinimum_', nlp.Name], joint_ang_constr, {dx});
 addNodeConstraint(nlp, ang_fun, {'dx'}, 'all', ...
-    -25,25, 'Linear'); % -2.5,2.5, 'Linear');
+    -45,45, 'Linear'); % -2.5,2.5, 'Linear');
 
 
 end

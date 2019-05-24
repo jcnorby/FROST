@@ -5,7 +5,7 @@ clear; close all; clc;
 
 % set(groot,'defaultfigureposition',[400 250 900 750])
 
-restoredefaultpath; matlabrc;
+matlabrc;
 frost_path  = '../../';
 addpath(frost_path);
 frost_addpath;
@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationSlidingMu05MinVel25';
+trialName = 'maxDecelerationSlidingMu05FromBound';
 
 global bAerodynamic
 global bTail
@@ -89,7 +89,7 @@ temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxDecelerationSlidingWithTailMu05Vel15.mat');
+% temp = load('local/stableBoundMu03Vel125Mintime0125MinAng08.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -105,8 +105,8 @@ opt.updateInitCondition(nlp,gait);
 
 %% Solve
 % [gait, sol, info] = opt.solve(nlp);
-[gait, sol, info] = opt.solve(nlp, sol);
-% [gait, sol, info] = opt.solve(nlp, sol, info);
+% [gait, sol, info] = opt.solve(nlp, sol);
+[gait, sol, info] = opt.solve(nlp, sol, info);
 
 
 %% Save immediately in case of errors later in script
@@ -131,7 +131,7 @@ fullgait = mergeGait(gait);
 anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
 
 %% Check variables, constraints, and cost function, and calculate gait parameters
-tol = 1e-3;
+tol = 1e-4;
 checkConstraints(nlp,sol,tol,'local/constr_check.txt'); % 
 checkVariables(nlp,sol,tol,'local/var_check.txt'); % 
 

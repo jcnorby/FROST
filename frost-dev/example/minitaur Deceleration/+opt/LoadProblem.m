@@ -27,8 +27,8 @@ else
 end
 
 % % Select a cost function
-    opt.cost.zero(nlp, system);
-% opt.cost.avgDeceleration(nlp, system);
+%     opt.cost.zero(nlp, system);
+opt.cost.avgDeceleration(nlp, system);
 
 % Remove constraint that requires gaits to start at t=0
 for i = 1:length(nlp.Phase)

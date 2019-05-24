@@ -1,73 +1,51 @@
 function init_state(nlp, bounds)
-    % constraints for step length and step width
-    
-    domain = nlp.Plant;
+% constraints for step length and step width
+global bTail;
+domain = nlp.Plant;
 
-    x = domain.States.x;
-    dx = domain.States.dx;
-    
-%     initPos = [x('BasePosX')
-%         x('BasePosY')
-%         x('BaseRotZ')];
-%     
-%     initVel = dx('BasePosZ');
-    
-    initPos = [x('BasePosX')
-        x('BasePosZ') - 0.3
-        x('BaseRotY')];
-%         x('motor_front_leftL_joint') - pi/2 
-%         x('motor_front_leftR_joint') - pi/2
-%         x('knee_front_leftL_link') - acos(1/2)
-%         x('knee_front_leftR_link') - acos(1/2)
-%         x('motor_back_leftL_joint') - pi/2
-%         x('motor_back_leftR_joint') - pi/2
-%         x('knee_back_leftL_link') - acos(1/2)
-%         x('knee_back_leftR_link') - acos(1/2)
-%         x('motor_front_rightL_joint') - pi/2
-%         x('motor_front_rightR_joint') - pi/2
-%         x('knee_front_rightL_link') - acos(1/2)
-%         x('knee_front_rightR_link') - acos(1/2)
-%         x('motor_back_rightL_joint') - pi/2
-%         x('motor_back_rightR_joint') - pi/2
-%         x('knee_back_rightL_link') - acos(1/2)
-%         x('knee_back_rightR_link') - acos(1/2)];
-    
-%     initVel = [dx('BasePosX') - 1.5
-%         dx('BasePosZ');
-%         dx('BaseRotY')]; 
+x = domain.States.x;
+dx = domain.States.dx;
 
-initVel = [dx('BasePosZ');
-    dx('BaseRotY')
-    dx('tail_joint')];
-    
-%         dx('motor_front_leftL_joint')
-%         dx('motor_front_leftR_joint')
-%         dx('knee_front_leftL_link')
-%         dx('knee_front_leftR_link')
-%         dx('motor_back_leftL_joint')
-%         dx('motor_back_leftR_joint')
-%         dx('knee_back_leftL_link')
-%         dx('knee_back_leftR_link')
-%         dx('motor_front_rightL_joint')
-%         dx('motor_front_rightR_joint')
-%         dx('knee_front_rightL_link')
-%         dx('knee_front_rightR_link')
-%         dx('motor_back_rightL_joint')
-%         dx('motor_back_rightR_joint')
-%         dx('knee_back_rightL_link')
-%         dx('knee_back_rightR_link')];
-    
+% if bTail
+%     temp = load('local/stableBoundWithAeroTailInactiveMu03Vel125Mintime0125MinAng08.mat');
+% else
+%     temp = load('local/stableBoundMu03Vel125Mintime011MinAng08.mat');
+% end
+
+temp = load('local/stableBoundWithAeroTailInactiveMu03Vel125Mintime0125MinAng08.mat');
+
+gait = temp.gait;
+[x_traj,dx_traj, ~] = apexState(gait);
+
+x_traj(1) = 0;
+initPos = x - x_traj(1:domain.numState);
+initVel = dx - dx_traj(1:domain.numState);
+
+
+% initPos = [x('BasePosX')
+%     x('BasePosZ') - 0.3
+%     x('BaseRotY')];
+%
+% initVel = [dx('BasePosX') - 1.5
+%     dx('BasePosZ');
+%     dx('BaseRotY')];
+
+
 %     initVel = [];
 
-    initState = SymFunction('initState', [initPos; initVel], {x,dx});
-    addNodeConstraint(nlp, initState, {'x','dx'}, 'first',  ...
-        0,0,'Linear');
-    
-    minInitialForwardVel = [dx('BasePosX')];
-    minInitialForwardVel_fun = SymFunction('minInitialForwardVel', minInitialForwardVel, {dx});
-    addNodeConstraint(nlp, minInitialForwardVel_fun, {'dx'}, 'first',  ...
-        2.5,15,'Linear');
-    
-    
+bound = 1e-3*ones(length([initPos; initVel]),1);
+bound(7:length(initPos)) = 1e-2;
+bound(7:end) = 1e-2;
+
+initState = SymFunction('initState', [initPos; initVel], {x,dx});
+addNodeConstraint(nlp, initState, {'x','dx'}, 'first',  ...
+    -bound,bound,'Linear');
+
+%     minInitialForwardVel = [dx('BasePosX')];
+%     minInitialForwardVel_fun = SymFunction('minInitialForwardVel', minInitialForwardVel, {dx});
+%     addNodeConstraint(nlp, minInitialForwardVel_fun, {'dx'}, 'first',  ...
+%         2.5,15,'Linear');
+
+
 end
 

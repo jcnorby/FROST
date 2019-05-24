@@ -1,0 +1,53 @@
+function non_penetration(nlp, bounds, feet)
+% constraints for foot clearance
+
+domain = nlp.Plant;
+x = domain.States.x;
+
+%     p_foot0 = getCartesianPosition(domain, Foot0);
+%     p_foot1 = getCartesianPosition(domain, Foot1);
+%     p_foot2 = getCartesianPosition(domain, Foot2);
+%     p_foot3 = getCartesianPosition(domain, Foot3);
+%     feet_height = [p_foot0(3);p_foot1(3);p_foot2(3);p_foot3(3)];
+
+middleNode = floor(nlp.NumNode/2);
+retraction = 0.00;
+
+p_feet = getCartesianPosition(domain, feet);
+feet_height = p_feet(:,3);
+feet_height_fun = SymFunction(['nonPenetration_', nlp.Name], feet_height, {x});
+
+if strcmp(nlp.Name, 'FrontStance')
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'except-last', ...
+        [0;0], ...
+        [10;10],'Nonlinear');
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, middleNode-2:middleNode+2, ...
+        [retraction;retraction], ...
+        [10;10],'Nonlinear');
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'last', ...
+        [0;0], ...
+        [0;0],'Nonlinear');
+    
+elseif strcmp(nlp.Name, 'BackStance')
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'first', ...
+        [0;0], ...
+        [0;0],'Nonlinear');
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'except-first', ...
+        [0;0], ...
+        [10;10],'Nonlinear');
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, middleNode-2:middleNode+2, ...
+        [retraction;retraction], ...
+        [10;10],'Nonlinear');
+    
+elseif strcmp(nlp.Name, 'Flight')
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'except-last', ...
+        [0;0;0;0], ...
+        [10;10;10;10],'Nonlinear');
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'last', ...
+        [0;0;0;0], ...
+        [0;0;10;10],'Nonlinear');
+    
+end
+
+end
+
