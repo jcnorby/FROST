@@ -13,17 +13,17 @@ if size(data,2) > 40
     d_term = data(:,52:60);
     imu_pos = data(:,62:64);
     imu_vel = data(:,65:67);
-    mode = data(:,68);
+    beh_mode = data(:,68);
     disp('Including ff + p + d')
 else
     imu_pos = data(:,32:34);
     imu_vel = data(:,35:37);
-    mode = data(:,38);
+    beh_mode = data(:,38);
     disp('No ff + p + d')
 end
 
 
-idx = find(mode ~= 0);
+idx = find(beh_mode ~= 0);
 [C,IA,IC] = unique(t, 'last');
 
 idx = intersect(idx,IA);
@@ -36,13 +36,12 @@ idx = intersect(idx,IA);
 % imu_vel = smoothdata(imu_vel,1,'movmean',win);
 t = t(idx,:);
 t = t - t(1);
-t = t;
 pos = pos(idx,:);
 vel = vel(idx,:);
 cmd = cmd(idx,:);
 imu_pos = imu_pos(idx,:);
 imu_vel = imu_vel(idx,:);
-
+beh_mode = beh_mode(idx,:);
 
 data_out.t = t;
 data_out.pos = pos;
@@ -50,6 +49,7 @@ data_out.vel = vel;
 data_out.cmd = cmd;
 data_out.imu_pos = imu_pos;
 data_out.imu_vel = imu_vel;
+data_out.mode = beh_mode;
 
 if size(data,2) > 40
     ff = ff(idx,:);
@@ -57,7 +57,7 @@ if size(data,2) > 40
     d_term = d_term(idx,:);
     
     for i = 2:length(ff)
-        if any(ff(i,:) == 0)
+        if any(ff(i,1:end-1) == 0)
             ff(i,:) = ff(i-1,:);
         end
     end

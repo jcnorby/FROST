@@ -1,86 +1,55 @@
-% close all; clc; clear;
-% set(0, 'DefaultAxesFontSize', 18);
-% set(0,'DefaultAxesXGrid','on','DefaultAxesYGrid','on')
-% set(0, 'DefaultLineMarkerSize', 10)
-
 close all; clc; clear;
-if strcmp(pwd,'C:\Users\Joe\Documents\FROST\frost-dev\example\minitaur Tail Testing\process')
+if (strcmp(pwd,'C:\Users\Joe\Documents\FROST\frost-dev\example\minitaur Tail Testing\process') || ...
+        strcmp(pwd,'C:\Users\Joe Desktop\Documents\FROST\frost-dev\example\minitaur Tail Testing\process'))
     cd ..
 end
-set(0, 'DefaultAxesFontSize', 24);
-set(0, 'DefaultLineMarkerSize', 10);
-set(0,'defaultfigurecolor',[1 1 1]);
-set(0,'DefaultAxesXGrid','off','DefaultAxesYGrid','off')
-set(groot,'defaulttextinterpreter','latex');
-set(groot, 'defaultAxesTickLabelInterpreter','latex');
-set(groot, 'defaultLegendInterpreter','latex');
 
-restoredefaultpath; matlabrc;
+matlabrc; startup;
 frost_path  = '../../';
 
 addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
-addpath C:\Users\Joe\Documents\MATLAB\Add-Ons\Functions\'Joe Functions'\
+
+trialName = 'maxAccelerationWithAeroTailMu05Vel15MinGRF08';
 
 %% sim vs data (or opt vs just tail data)
 
-% temp = load('process/tailTest.mat');
-% gait = temp.gait;
+cloud_path = 'C:\Users\Joe Desktop\Box\Robomechanics Lab Shared Files\Minitaur Opt\';
+data_path = [cloud_path,'Hardware Data Logs\fullData_', trialName, '.csv'];
+if exist(cloud_path, 'dir')
+    mData = processMData_ethernet(data_path);
+else
+    error('JN - No cloud path detected, must specify path or change pointer to data location.')
+end
 
-% temp = load('local/energyOptimalBoundWithTailBackOffsetRAccurateReflectedNew.mat');
-% nlp = temp.nlp;
-% sol = temp.sol;
-% gait = temp.gait;
-%
-% R = 45.39;
-% Rineff = 0.8;
-% kt = 0.0954;
-% Ra = 0.22;
-% V = 15;
-% % gait = mergeGait(gait, nlp);
-% gait.df = 1/(0.95*V)*(gait.inputs.u*Ra/(kt*R*Rineff) + kt*R*gait.states.dx(tailMotIndex, :)');
-
-
-% dataPath = 'LOG00872.txt';
-% dataPath = 'avgAccelerationBrakeLegsMinVelMinGRFMu05.txt';
-dataPath = 'avgAcceleration2BrakeLegsWithTailMinVelG4MinGRFMu05.txt';
-mData = processMData(dataPath);
-%
-% tFinalData = mData.t(end);
-%
-% tFinal = gait.tspan(end);
-% nLoops = ceil(tFinalData/tFinal);
-% loopedgait = gait;
-% for i = 1:nLoops-1
-%     loopedgait.tspan = [loopedgait.tspan, gait.tspan + loopedgait.tspan(end)];
-%     loopedgait.states.x = [loopedgait.states.x, gait.states.x];
-%     loopedgait.states.dx = [loopedgait.states.dx, gait.states.dx];
-%     loopedgait.states.ddx = [loopedgait.states.ddx, gait.states.ddx];
-%     loopedgait.df = [loopedgait.df; gait.df];
-% end
-%
-% plot(loopedgait.tspan, loopedgait.states.x(tailMotIndex,:));
-% hold on
-% % plot(mData.t, mData.params(:,2));
-% plot(mData.t, mData.pos(:,1));
-% hold on
-% plot(mData.t, mData.params(:, 3:6))
-% hold on
-% plot(loopedgait.tspan, loopedgait.df)
-% legend('traj', 'tail pos', 'uPos', 'uVel', 'df', 'open loop', 'df ref')
-%
-%
-% return;
+% Truncate all data except during mode == 2, which corresponds to the
+% acceleration, then save back into the mData struct
+idx = find(mData.mode == 2);
+temp = struct2cell(mData);
+temp_fieldnames = fieldnames(mData);
+for i = 1:length(temp)
+    temp{i} = temp{i}(idx,:);
+end
+mData = cell2struct(temp, temp_fieldnames, 1);
+mData.t = mData.t - mData.t(1);
 
 %% NLP vs data
 
-tailMotIndex = [23];
-% temp = load('local/avgAccelerationBrakeLegsMinVelMinGRFMu05.mat');
-temp = load('local/avgAcceleration2BrakeLegsWithTailMinVelG4MinGRFMu05.mat');
+if contains(trialName, 'Tail')
+    tailMotIndex = [23];
+else
+    tailMotIndex = [];
+end
 
-% temp = load('local/energyOptimalBoundInstantaneousSwitchGSMClearance.mat');
-% temp = load('local/energyOptimalBoundAccurateNew.mat');
+gait_path = [cloud_path,'FROST Gaits\', trialName, '.mat'];
+if exist(cloud_path, 'dir')
+    temp = load(gait_path);
+else
+    error('No cloud path detected, must specify path or change pointer to gait location.')
+end
+
+
 nlp = temp.nlp;
 sol = temp.sol;
 gait = temp.gait;
@@ -89,98 +58,121 @@ fullgait = mergeGait(gait, nlp);
 % fullgait.tspan = fullgait.tspan*tFactor;
 tFinalData = mData.t(end);
 tFinal = fullgait.tspan(end);
-nLoops = ceil(tFinalData/tFinal);
-loopedgait = fullgait;
-for i = 1:nLoops-1
-    loopedgait.tspan = [loopedgait.tspan, fullgait.tspan + loopedgait.tspan(end)];
-    loopedgait.states.x = [loopedgait.states.x, fullgait.states.x];
-end
-
-
 
 motorIndex = [7,8,11,12,15,16,19,20];
 subplotIndex = [1,2,5,6,3,4,7,8];
 frontMotors = [0 1 4 5];
 refcolor = [0 0 0];
-actcolor = [1 0 0];
+actcolor = cmuColor('red-web');
 
-f1 = figure(1)
+pos_fig = figure;
 for motor = 0:length(motorIndex)-1
     subplot(2,4, subplotIndex(motor+1))
-    plot(mData.t, mData.pos(:,motor+1),'Color', actcolor);
+    axis([mData.t(1) mData.t(end) 0 2.5])
+    
+    act_data = plot(mData.t, mData.pos(:,motor+1),'Color', actcolor);
     hold on
-    plot(loopedgait.tspan, loopedgait.states.x(motorIndex(motor+1),:), 'Color', refcolor)
+    sim_data = plot(fullgait.tspan, fullgait.states.x(motorIndex(motor+1),:), 'Color', refcolor);
     title(['M', num2str(motor)]);
     if motor == 0 || motor == 2
         ylabel('Motor Pos (rad)')
     end
-    axis([mData.t(1) mData.t(end) 0 3])
-%     axis([3 mData.t(end) 0 2])
     if motor == 2 || motor == 3 || motor == 6 || motor == 7
         xlabel('Time (s)')
     end
     
-%     % 4 phase bound
-%     for j = 0:nLoops-1
-%         if any(motor == frontMotors)
-%             highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%         else
-%             highlight(gait(7).tspan(1) + tFinal*j, gait(7).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%         end
-%     end
-    
-    % 2 phase bound
-    for j = 0:nLoops-1
-        if any(motor ~= frontMotors)
-            highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-            highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
-        else
-            highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%             highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
+    if motor == 7
+        legend([sim_data;act_data], 'Simulation', 'Actual', 'FontSize', 12)
+    end
+end
+
+% Plot rpy data
+rpy_fig = figure;
+subplot(1,2,1)
+plot(mData.t, 180/pi*mData.imu_pos(:,1),'Color', actcolor);
+hold on
+plot(fullgait.tspan, 180/pi*fullgait.states.x(4,:), 'Color', refcolor)
+title('Roll')
+xlabel('Time (s)')
+ylabel('Orientation (degrees)')
+axis([0 mData.t(end) -20 20])
+
+subplot(1,2,2)
+act_data = plot(mData.t, 180/pi*mData.imu_pos(:,2),'Color', actcolor);
+hold on
+sim_data = plot(fullgait.tspan, 180/pi*fullgait.states.x(5,:), 'Color', refcolor);
+title('Pitch')
+xlabel('Time (s)')
+axis([0 mData.t(end) -20 20])
+legend([sim_data;act_data], 'Simulation', 'Actual', 'Location', 'Northeast')
+
+% Plot tail position
+if ~isempty(tailMotIndex)
+    tail_fig = figure;
+    act_data = plot(mData.t, mData.pos(:,9),'Color', actcolor);
+    hold on
+    sim_data = plot(fullgait.tspan, fullgait.states.x(tailMotIndex,:), 'Color', refcolor);
+    legend([sim_data;act_data], 'Simulation', 'Actual', 'Location', 'Northeast')
+    title('Tail Motor');
+    ylabel('Motor Pos (rad)')
+end
+
+% Plot command components if feedforward component is available
+cmd_comp_fig = figure;
+if isfield(mData, 'ff')
+    for motor = 0:length(motorIndex)-1
+        subplot(2,4, subplotIndex(motor+1))
+        
+        
+        ff_data = plot(mData.t, mData.ff(:,motor+1),'Color', cmuColor('red-web'), 'LineWidth', 1); hold on;
+        p_term_data = plot(mData.t, mData.p_term(:,motor+1),'Color', cmuColor('blue'), 'LineWidth', 1); hold on;
+        d_term_data = plot(mData.t, mData.d_term(:,motor+1),'Color', cmuColor('green'), 'LineWidth', 1);
+        axis([mData.t(1) mData.t(end) -1 1]);
+        
+        if motor == 5
+            legend([ff_data;p_term_data;d_term_data], 'Feedforward', 'P Term', 'D Term', 'FontSize', 10, 'Location', 'Southeast')
+        end
+        
+        title(['M', num2str(motor)]);
+        if motor == 0 || motor == 2
+            ylabel('Duty Factor')
+        end
+        
+        if motor == 2 || motor == 3 || motor == 6 || motor == 7
+            xlabel('Time (s)')
         end
     end
 end
-% legendflex(gca, {'Data','Reference'}, 'ref', f1, 'anchor', {'e','e'}, 'buffer', [-40 0])
 
-figure(2)
-subplot(1,2,1)
-plot(mData.t, 180/pi*mData.eul(:,1),'Color', actcolor);
-hold on
-plot(loopedgait.tspan, 180/pi*loopedgait.states.x(4,:), 'Color', refcolor)
-title('Roll')
-ylabel('degrees')
-for j = 0:nLoops-1
-%     highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%     highlight(gait(7).tspan(1) + tFinal*j, gait(7).tspan(end) + tFinal*j, [0 1 1], 0.25)
-    highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-    highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
-end
-
-subplot(1,2,2)
-plot(mData.t, 180/pi*mData.eul(:,2),'Color', actcolor);
-hold on
-plot(loopedgait.tspan, 180/pi*loopedgait.states.x(5,:), 'Color', refcolor)
-title('Pitch')
-% legend('Data', 'Reference', 'location', 'northeast')
-for j = 0:nLoops-1
-%     highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%     highlight(gait(7).tspan(1) + tFinal*j, gait(7).tspan(end) + tFinal*j, [0 1 1], 0.25)
-    highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-    highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
-end
-
-if ~isempty(tailMotIndex)
-    figure(3)
-    plot(mData.t, mData.torq(:,1),'Color', actcolor);
-    hold on
-    plot(loopedgait.tspan, loopedgait.states.x(tailMotIndex,:), 'Color', refcolor)
-    axis([mData.t(1) mData.t(end) -1 2])
-    title('Tail Motor');
-    ylabel('Motor Pos (rad)')
-    for j = 0:nLoops-1
-%         highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 0], 0.25)
-%         highlight(gait(7).tspan(1) + tFinal*j, gait(7).tspan(end) + tFinal*j, [0 1 1], 0.25)
-        highlight(gait(1).tspan(1) + tFinal*j, gait(1).tspan(end) + tFinal*j, [0 1 0], 0.25)
-        highlight(gait(3).tspan(1) + tFinal*j, gait(3).tspan(end) + tFinal*j, [0 1 1], 0.25)
+% Plot correctional inputs
+cmd_diff_fig = figure;
+if isfield(mData, 'ff')
+    for motor = 0:length(motorIndex)-1
+        subplot(2,4, subplotIndex(motor+1))
+        
+        ff_error = plot(mData.t, mData.cmd(:,motor+1) - mData.ff(:,motor+1),'Color', cmuColor('red-web'), 'LineWidth', 1); hold on;
+        axis([mData.t(1) mData.t(end) -1 1]);
+        
+        title(['M', num2str(motor)]);
+        if motor == 0 || motor == 2
+            ylabel('Feedback Control')
+        end
+        
+        if motor == 2 || motor == 3 || motor == 6 || motor == 7
+            xlabel('Time (s)')
+        end
     end
 end
+
+fig_path = [cloud_path,'Hardware Data Figures\'];
+reply = input(['Save figures to Box as ',trialName,'? y/n: '],'s');
+if strcmp(reply, 'y') && exist(cloud_path, 'dir')
+    saveas(pos_fig, [fig_path,'MotorPos_',trialName, '.png']);
+    saveas(rpy_fig, [fig_path,'RPY_',trialName, '.png']);
+    if ~isempty(tailMotIndex)
+        saveas(tail_fig, [fig_path,'TailPos_',trialName, '.png']);
+    end
+    saveas(cmd_comp_fig, [fig_path,'CmdComponents_',trialName, '.png']);
+    saveas(cmd_diff_fig, [fig_path,'CmdDifference_',trialName, '.png']);
+end
+

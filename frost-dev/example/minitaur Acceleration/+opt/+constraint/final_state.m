@@ -1,5 +1,6 @@
 function final_state(nlp, bounds)
 % constraints for step length and step width
+global bTail
 
 domain = nlp.Phase(end).Plant;
 
@@ -116,8 +117,14 @@ thetaTD = x('BaseRotY') + dx('BaseRotY')*tTD;
 zeroRotation_fun = SymFunction('zeroRotation', thetaTD, {x,dx});
 % addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
 %     0,0,'Linear');
-addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
-    15/180*pi,15/180*pi,'Linear');
+
+if bTail
+    addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+        15/180*pi,15/180*pi,'Linear');
+else
+    addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+        -15/180*pi,-15/180*pi,'Linear');
+end
 
 end
 

@@ -565,8 +565,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.0693"/>
-      <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.000072"/>
+      <mass value="0.0771"/>
+      <inertia ixx="0.00000423" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.0000423"/>
       <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     </inertial>
   </link>
@@ -574,7 +574,7 @@
     <axis xyz="0 1 0"/>
     <parent link="base_chassis_link"/>
     <child link="tail_rotor"/>
-    <origin rpy="0 0 0" xyz="-0.1 0 0.1"/>
+    <origin rpy="0 0 0" xyz="0 0 0.1"/>
     <limit effort="100" velocity="1000"/>
     <joint_properties damping="0.0" friction="0.0"/>
   </joint>
@@ -609,7 +609,7 @@
   <joint name="tail_base_joint" type="fixed">
     <parent link="base_chassis_link"/>
     <child link="tail_mount"/>
-    <origin rpy="0 0 0" xyz="-0.1 0 0.1"/>
+    <origin rpy="0 0 0" xyz="0 -0.1 0.1"/>
   </joint>
 
     <link name="tail_shaft">

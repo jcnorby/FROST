@@ -37,6 +37,8 @@ if exist(cloud_path, 'dir')
         
         save([cloud_path,'FROST Gaits\', trialName, '.mat'],'nlp','gait','sol','info','bounds', 'results')
         exportTrajectory(mergeGait(gait), [cloud_path, 'Minitaur Code\'], ['minitaurCode_', trialName], trialName);
-        disp('Saved to Box');
+        disp('Saved to cloud');
     end
+else 
+    disp('Couldn''t find cloud path, no cloud save')
 end
