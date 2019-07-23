@@ -3,17 +3,18 @@ function data_out = processMData_ethernet(data_path);
 data = csvread(data_path);
 t = data(:,1);
 t = 0.001*t;
-pos = data(:,2:10);
-vel = data(:,12:20);
-cmd = data(:,22:30);
+voltage = data(:,3);
+pos = data(:,4:12);
+vel = data(:,14:22);
+cmd = data(:,24:32);
 
 if size(data,2) > 40
-    ff = data(:,32:40);
-    p_term = data(:,42:50);
-    d_term = data(:,52:60);
-    imu_pos = data(:,62:64);
-    imu_vel = data(:,65:67);
-    beh_mode = data(:,68);
+    ff = data(:,34:42);
+    p_term = data(:,44:52);
+    d_term = data(:,54:62);
+    imu_pos = data(:,64:66);
+    imu_vel = data(:,67:69);
+    beh_mode = data(:,70);
     disp('Including ff + p + d')
 else
     imu_pos = data(:,32:34);
@@ -36,6 +37,7 @@ idx = intersect(idx,IA);
 % imu_vel = smoothdata(imu_vel,1,'movmean',win);
 t = t(idx,:);
 t = t - t(1);
+voltage = voltage(idx,:);
 pos = pos(idx,:);
 vel = vel(idx,:);
 cmd = cmd(idx,:);
@@ -44,6 +46,7 @@ imu_vel = imu_vel(idx,:);
 beh_mode = beh_mode(idx,:);
 
 data_out.t = t;
+data_out.voltage = voltage;
 data_out.pos = pos;
 data_out.vel = vel;
 data_out.cmd = cmd;

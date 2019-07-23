@@ -11,29 +11,31 @@ function init_state(nlp, bounds)
 %         x('BaseRotZ')];
 %     
 %     initVel = dx('BasePosZ');
+
+motAng = 1;
     
     initPos = [x('BasePosX')
         x('BasePosY')
-        x('BasePosZ') - sind(60)*0.24;
+%         x('BasePosZ') - sind(60)*0.24;
         x('BaseRotX')
         x('BaseRotY')
         x('BaseRotZ')
-        x('motor_front_leftL_joint') - pi/2 
-        x('motor_front_leftR_joint') - pi/2
-        x('knee_front_leftL_link') - acos(1/2)
-        x('knee_front_leftR_link') - acos(1/2)
-        x('motor_back_leftL_joint') - pi/2
-        x('motor_back_leftR_joint') - pi/2
-        x('knee_back_leftL_link') - acos(1/2)
-        x('knee_back_leftR_link') - acos(1/2)
-        x('motor_front_rightL_joint') - pi/2
-        x('motor_front_rightR_joint') - pi/2
-        x('knee_front_rightL_link') - acos(1/2)
-        x('knee_front_rightR_link') - acos(1/2)
-        x('motor_back_rightL_joint') - pi/2
-        x('motor_back_rightR_joint') - pi/2
-        x('knee_back_rightL_link') - acos(1/2)
-        x('knee_back_rightR_link') - acos(1/2)];
+        x('motor_front_leftL_joint') - motAng 
+        x('motor_front_leftR_joint') - motAng
+%         x('knee_front_leftL_link') - acos(1/2)
+%         x('knee_front_leftR_link') - acos(1/2)
+        x('motor_back_leftL_joint') - motAng
+        x('motor_back_leftR_joint') - motAng
+%         x('knee_back_leftL_link') - acos(1/2)
+%         x('knee_back_leftR_link') - acos(1/2)
+        x('motor_front_rightL_joint') - motAng
+        x('motor_front_rightR_joint') - motAng
+%         x('knee_front_rightL_link') - acos(1/2)
+%         x('knee_front_rightR_link') - acos(1/2)
+        x('motor_back_rightL_joint') - motAng
+        x('motor_back_rightR_joint') - motAng];
+%         x('knee_back_rightL_link') - acos(1/2)
+%         x('knee_back_rightR_link') - acos(1/2)];
     
 %     motor = pi/2;
 %     knee = acos(1/2);

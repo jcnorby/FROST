@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxDecelerationSlidingMu05FromBound';
+trialName = 'maxDecelerationSlidingWithAeroTailMu05FromBoundVel1WithLimits';
 
 global bAerodynamic
 global bTail
@@ -89,7 +89,7 @@ temp = load('local/current_gait.mat');
 % temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/stableBoundMu03Vel125Mintime0125MinAng08.mat');
+temp = load('local/maxDecelerationSlidingWithAeroTailMu05FromBoundVel2WithLimits.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -98,6 +98,7 @@ sol = temp.sol;
 info = temp.info;
 gait = temp.gait;
 gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
+% gait(3) = opt.interpGait(gait(3), nlp.Phase(3).NumNode);
 % cost = temp.cost;
 
 % gait = opt.addTailToGait(gait);
@@ -105,8 +106,8 @@ opt.updateInitCondition(nlp,gait);
 
 %% Solve
 % [gait, sol, info] = opt.solve(nlp);
-% [gait, sol, info] = opt.solve(nlp, sol);
-[gait, sol, info] = opt.solve(nlp, sol, info);
+[gait, sol, info] = opt.solve(nlp, sol);
+% [gait, sol, info] = opt.solve(nlp, sol, info);
 
 
 %% Save immediately in case of errors later in script

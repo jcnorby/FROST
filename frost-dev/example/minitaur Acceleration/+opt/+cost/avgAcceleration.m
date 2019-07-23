@@ -7,9 +7,9 @@ function avgAcceleration(nlp, sys)
     
     tfinal = domain.Params.tfinal;
     
-    invAccel = tfinal/(dx(1) + 1e-6);
-    finalForwardVelocity_fun = SymFunction('avgAcceleration',invAccel,{dx, tfinal});
-    addNodeCost(nlp.Phase(3),finalForwardVelocity_fun,{'dx', 'tfinal'}, 'last');
+    Accel = dx(1)/(tfinal + 1e-6);
+    avgAcceleration = SymFunction('avgAcceleration',10-Accel,{dx, tfinal});
+    addNodeCost(nlp.Phase(3),avgAcceleration,{'dx', 'tfinal'}, 'last');
   
     domains = sys.Gamma.Nodes.Domain;
     

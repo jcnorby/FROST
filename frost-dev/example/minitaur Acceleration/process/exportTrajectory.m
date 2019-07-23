@@ -13,7 +13,7 @@ Rurdf = 4;
 Rineff = 0.8;
 kt = 0.0954;
 Ra = 0.22;
-V = 12;
+V = 7;
 
 if length(fullgait.states.x(:,1)) == 22
     motorIndex = [7,8,11,12,15,16,19,20];

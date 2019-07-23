@@ -11,7 +11,7 @@ addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
 
-trialName = 'maxAccelerationWithAeroTailMu05Vel15MinGRF08';
+trialName = 'maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7';
 
 %% sim vs data (or opt vs just tail data)
 
@@ -54,7 +54,7 @@ nlp = temp.nlp;
 sol = temp.sol;
 gait = temp.gait;
 
-fullgait = mergeGait(gait, nlp);
+fullgait = mergeGait(gait);
 % fullgait.tspan = fullgait.tspan*tFactor;
 tFinalData = mData.t(end);
 tFinal = fullgait.tspan(end);
@@ -145,12 +145,32 @@ if isfield(mData, 'ff')
 end
 
 % Plot correctional inputs
+cmd_fig = figure;
+if isfield(mData, 'ff')
+    for motor = 0:length(motorIndex)-1
+        subplot(2,4, subplotIndex(motor+1))
+        
+        cmd = plot(mData.t, mData.cmd(:,motor+1),'Color', cmuColor('red-web')); hold on;
+        axis([mData.t(1) mData.t(end) -1 1]);
+        
+        title(['M', num2str(motor)]);
+        if motor == 0 || motor == 2
+            ylabel('Duty Factor')
+        end
+        
+        if motor == 2 || motor == 3 || motor == 6 || motor == 7
+            xlabel('Time (s)')
+        end
+    end
+end
+
+% Plot correctional inputs
 cmd_diff_fig = figure;
 if isfield(mData, 'ff')
     for motor = 0:length(motorIndex)-1
         subplot(2,4, subplotIndex(motor+1))
         
-        ff_error = plot(mData.t, mData.cmd(:,motor+1) - mData.ff(:,motor+1),'Color', cmuColor('red-web'), 'LineWidth', 1); hold on;
+        ff_error = plot(mData.t, mData.cmd(:,motor+1) - mData.ff(:,motor+1),'Color', cmuColor('red-web')); hold on;
         axis([mData.t(1) mData.t(end) -1 1]);
         
         title(['M', num2str(motor)]);
@@ -163,6 +183,11 @@ if isfield(mData, 'ff')
         end
     end
 end
+
+voltage_fig = figure;
+plot(mData.t, mData.voltage, 'Color', cmuColor('red-web'));
+xlabel('Time (s)')
+ylabel('Voltage (V)')
 
 fig_path = [cloud_path,'Hardware Data Figures\'];
 reply = input(['Save figures to Box as ',trialName,'? y/n: '],'s');

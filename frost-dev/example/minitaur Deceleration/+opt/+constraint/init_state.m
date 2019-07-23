@@ -12,12 +12,16 @@ dx = domain.States.dx;
 %     temp = load('local/stableBoundMu03Vel125Mintime011MinAng08.mat');
 % end
 
-temp = load('local/stableBoundWithAeroTailInactiveMu03Vel125Mintime0125MinAng08.mat');
+temp = load('local/maxDecelerationSlidingWithAeroTailMu05FromBoundVel2.mat');
 
 gait = temp.gait;
-[x_traj,dx_traj, ~] = apexState(gait);
+% [x_traj,dx_traj, ~] = apexState(gait);
+x_traj = gait(1).states.x(:,1);
+dx_traj = gait(1).states.dx(:,1);
 
 x_traj(1) = 0;
+x_traj(3) = x_traj(3);
+dx_traj(1) = 1;
 initPos = x - x_traj(1:domain.numState);
 initVel = dx - dx_traj(1:domain.numState);
 
@@ -33,9 +37,11 @@ initVel = dx - dx_traj(1:domain.numState);
 
 %     initVel = [];
 
-bound = 1e-3*ones(length([initPos; initVel]),1);
-bound(7:length(initPos)) = 1e-2;
-bound(7:end) = 1e-2;
+bound = 1e-2*ones(length([initPos; initVel]),1);
+bound(7:length(initPos)) = 3e-2;
+% bound(length(initPos)+2:end) = 3e-3;
+% bound(7:end) = 1e-3;
+bound = 0;
 
 initState = SymFunction('initState', [initPos; initVel], {x,dx});
 addNodeConstraint(nlp, initState, {'x','dx'}, 'first',  ...

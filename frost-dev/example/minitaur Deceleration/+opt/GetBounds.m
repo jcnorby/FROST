@@ -8,7 +8,7 @@ end
 if nargin < 3
     T = 0.5;
 end
-T = 1;
+T = 3;
 tmin = 0.001;
 
 %     tmin = 0;
@@ -16,7 +16,7 @@ tmin = 0.001;
 %% first get the model specific boundary values
 model_bounds = model.getLimits(); % x, dx, ddx, u
 
-model_bounds.constrBounds.stallTorque = 3;
+model_bounds.constrBounds.stallTorque = 10;
 
 % state constraints
 motorlb = -pi;
@@ -100,8 +100,8 @@ else
 end
 
 % Joint min/max
-model_bounds.constrBounds.jointAng.lb = -pi/2;
-model_bounds.constrBounds.jointAng.ub = pi/2;
+model_bounds.constrBounds.jointAng.lb = -pi/3;
+model_bounds.constrBounds.jointAng.ub = pi/3;
 model_bounds.constrBounds.jointExt.lb = 0.4;
 model_bounds.constrBounds.jointExt.ub = pi - model_bounds.constrBounds.jointExt.lb;
 
@@ -129,7 +129,7 @@ model_bounds.time.tf.ub = T;
 model_bounds.time.tf.x0 = T;
 
 model_bounds.params.tfinal.lb = 0;
-model_bounds.params.tfinal.ub = 0.5;
+model_bounds.params.tfinal.ub = T;
 
 model_bounds.params.dfinal.lb = 1e-3;
 model_bounds.params.dfinal.ub = 2;

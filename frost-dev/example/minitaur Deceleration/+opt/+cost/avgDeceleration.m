@@ -8,7 +8,7 @@ function avgDeceleration(nlp, sys)
     tfinal = domain.Params.tfinal;
     
     deceleration = dx('BasePosX')/(tfinal + 1e-6);
-    finalForwardVelocity_fun = SymFunction('avgDeceleration',10-deceleration,{dx, tfinal});
+    finalForwardVelocity_fun = SymFunction('avgDeceleration',50-deceleration,{dx, tfinal});
     addNodeCost(nlp.Phase(1),finalForwardVelocity_fun,{'dx', 'tfinal'}, 'first');
   
     domains = sys.Gamma.Nodes.Domain;

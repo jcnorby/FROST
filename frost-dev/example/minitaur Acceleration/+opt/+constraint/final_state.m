@@ -100,7 +100,7 @@ addNodeConstraint(nlp.Phase(end), finalState_fun, {'x', 'dx'}, 'last',  ...
 minFinalForwardVel = [dx('BasePosX')];
 minFinalForwardVel_fun = SymFunction('minFinalForwardVel', minFinalForwardVel, {dx});
 addNodeConstraint(nlp.Phase(end), minFinalForwardVel_fun, {'dx'}, 'last',  ...
-    1.5,10,'Linear');
+    1.3,10,'Linear');
 
 % finalPitch_fun = SymFunction('finalPitch', finalPitch, {x, dx});
 % addNodeConstraint(nlp, finalPitch_fun, {'x', 'dx'}, 'last',  ...
@@ -118,13 +118,16 @@ zeroRotation_fun = SymFunction('zeroRotation', thetaTD, {x,dx});
 % addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
 %     0,0,'Linear');
 
-if bTail
-    addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
-        15/180*pi,15/180*pi,'Linear');
-else
-    addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
-        -15/180*pi,-15/180*pi,'Linear');
-end
+% if bTail
+%     addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+%         10/180*pi,15/180*pi,'Linear');
+% else
+%     addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+%         0/180*pi,0/180*pi,'Linear');
+% end
+
+addNodeConstraint(nlp.Phase(end), zeroRotation_fun, {'x','dx'}, 'last',  ...
+        0/180*pi,0/180*pi,'Linear');
 
 end
 

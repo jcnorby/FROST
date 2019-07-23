@@ -53,7 +53,7 @@ for trial = 1:totTrial
             titleString = 'No Tail Acceleration = ';
         case 6
             indexVec = (81:103)';
-            titleString = 'With Tail Acceleration = ';
+            titleString = 'No Tail Acceleration = ';
         case 7
             indexVec = (46:69)';
             titleString = 'With Tail Acceleration = ';
@@ -64,6 +64,12 @@ for trial = 1:totTrial
             indexVec = (81:104)';
             titleString = 'With Tail Acceleration = ';
         case 10
+            indexVec = (48:71)';
+            titleString = 'With Tail Acceleration = ';
+        case 11
+            indexVec = (48:71)';
+            titleString = 'With Tail Acceleration = ';
+        case 12
             indexVec = (48:71)';
             titleString = 'With Tail Acceleration = ';
     end
@@ -118,8 +124,8 @@ for trial = 1:totTrial
     
 end
     
-noTailAccel = accel(1:5);
-tailAccel = accel(6:end);
+noTailAccel = accel(1:numTrial);
+tailAccel = accel(numTrial+1:end);
 
 avgNoTailAccel = mean(noTailAccel)
 avgTailAccel = mean(tailAccel)

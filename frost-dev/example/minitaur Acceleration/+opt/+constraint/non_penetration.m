@@ -14,10 +14,12 @@ p_feet = getCartesianPosition(domain, feet);
 feet_height = p_feet(:,3);
 feet_height_fun = SymFunction(['nonPenetration_', nlp.Name], feet_height, {x});
 
-if strcmp(nlp.Name, 'FrontStance') || strcmp(nlp.Name, 'BackStance') || strcmp(nlp.Name, 'Stance')
+if strcmp(nlp.Name, 'FrontStance') || strcmp(nlp.Name, 'BackStance')
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
         0,10,'Nonlinear');
-
+elseif strcmp(nlp.Name, 'Stance')
+    addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
+        0,0,'Nonlinear');
 else
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 2:nlp.NumNode-1, ...
         bounds.constrBounds.footHeight.lb, ...

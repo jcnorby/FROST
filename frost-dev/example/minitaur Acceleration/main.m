@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set globals accordingly
 
-trialName = 'maxAccelerationMu05Vel15MinGRF08';
+trialName = 'maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7stableland';
 
 global bAerodynamic
 global bTail
@@ -58,7 +58,7 @@ delay_set = true;
 %% Load robot model and optimization problem
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
-exo_disp = plot.LoadRobotDisplay(robot);
+% exo_disp = plot.LoadRobotDisplay(robot);
 
 bounds = opt.GetBounds(robot);
 
@@ -68,14 +68,14 @@ toc
 
 %% Compile stuff if needed
 
-compileObjective(nlp,[],[],export_path);
-compileConstraint(nlp,[],[],export_path);
+% compileObjective(nlp,[],[],export_path);
+% compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel'},export_path);
+% compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel','zeroRotation'},export_path);
 % compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
-% compileConstraint(nlp,[],{'fDragModel'},export_path);
+% compileConstraint(nlp,[],{'nonPenetration_Stance'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -84,10 +84,10 @@ compileConstraint(nlp,[],[],export_path);
 %% Update Initial Condition
 
 % temp = load('local/current_gait.mat');
-temp = load(['local/', trialName,'.mat']);
+% temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-% temp = load('local/maxAccelerationWithAeroTailMu05Vel15MinGRF08.mat');
+temp = load('local/maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -102,12 +102,12 @@ gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 opt.updateInitCondition(nlp,gait);
 
 %% Solve
-% [gait, sol, info] = opt.solve(nlp);
+[gait, sol, info] = opt.solve(nlp);
 % [gait, sol, info] = opt.solve(nlp, sol);
-[gait, sol, info] = opt.solve(nlp, sol, info);
+% [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% Save immediately in case of errors later in script
-save('local/current_gait.mat','nlp','gait','sol','info','bounds');
+ save('local/current_gait.mat','nlp','gait','sol','info','bounds');
 
 %% Animate (must play video before any saving)
 % loopedGait = plot.createLoopedGait(gait);

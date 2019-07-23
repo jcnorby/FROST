@@ -1,6 +1,9 @@
 function motor_model(nlp, bounds)
 %     constraints for motor torque
 
+% disp('motor model removed')
+% return;
+
 kt = 0.0954;
 Ra = 0.220;
 V = 12;
