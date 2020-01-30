@@ -11,12 +11,13 @@ addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
 
-trialName = 'maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7';
+trialName = 'maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7Nodes82';
 
 %% sim vs data (or opt vs just tail data)
 
 cloud_path = 'C:\Users\Joe Desktop\Box\Robomechanics Lab Shared Files\Minitaur Opt\';
-data_path = [cloud_path,'Hardware Data Logs\fullData_', trialName, '.csv'];
+% data_path = [cloud_path,'Hardware Data Logs\fullData_', trialName, '.csv'];     % Use data set corresponding to correct trajectory data
+data_path = [cloud_path,'Hardware Data Logs\fullData.csv'];  % Use current dataset 
 if exist(cloud_path, 'dir')
     mData = processMData_ethernet(data_path);
 else
@@ -55,6 +56,7 @@ sol = temp.sol;
 gait = temp.gait;
 
 fullgait = mergeGait(gait);
+
 % fullgait.tspan = fullgait.tspan*tFactor;
 tFinalData = mData.t(end);
 tFinal = fullgait.tspan(end);
@@ -83,6 +85,25 @@ for motor = 0:length(motorIndex)-1
     
     if motor == 7
         legend([sim_data;act_data], 'Simulation', 'Actual', 'FontSize', 12)
+    end
+end
+
+pos_error_fig = figure;
+for motor = 0:length(motorIndex)-1
+    subplot(2,4, subplotIndex(motor+1))
+        
+    [unique_t, ia, ic] = unique(fullgait.tspan, 'last');
+    unique_states = fullgait.states.x(motorIndex(motor+1),ia);
+    sim__state_interp = interp1(unique_t, unique_states, mData.t);
+    
+    error_data = plot(mData.t, mData.pos(:,motor+1) - sim__state_interp,'Color', actcolor);
+    axis([mData.t(1) mData.t(end) -0.2 0.2]);
+    title(['M', num2str(motor)]);
+    if motor == 0 || motor == 2
+        ylabel('Motor Error (rad)')
+    end
+    if motor == 2 || motor == 3 || motor == 6 || motor == 7
+        xlabel('Time (s)')
     end
 end
 
@@ -184,10 +205,10 @@ if isfield(mData, 'ff')
     end
 end
 
-voltage_fig = figure;
-plot(mData.t, mData.voltage, 'Color', cmuColor('red-web'));
-xlabel('Time (s)')
-ylabel('Voltage (V)')
+% voltage_fig = figure;
+% plot(mData.t, mData.voltage, 'Color', cmuColor('red-web'));
+% xlabel('Time (s)')
+% ylabel('Voltage (V)')
 
 fig_path = [cloud_path,'Hardware Data Figures\'];
 reply = input(['Save figures to Box as ',trialName,'? y/n: '],'s');

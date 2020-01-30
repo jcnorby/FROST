@@ -15,9 +15,9 @@ export_path = 'gen/opt';
 load_path   = [];
 utils.init_path(export_path);
 
-%% Declare trial and set globals accordingly
+ %% Declare trial and set globals accordingly
 
-trialName = 'maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7stableland';
+trialName = 'maxAccelerationMu05Vel13MinGRF08MaxV7';
 
 global bAerodynamic
 global bTail
@@ -75,7 +75,7 @@ toc
 % compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
 % compileConstraint(nlp,[],{'initState', 'finalState', 'minInitialForwardVel','zeroRotation'},export_path);
 % compileConstraint(nlp,[],{'jointAngMinimum_Flight', 'jointAngMinimum_FrontStance'},export_path);
-% compileConstraint(nlp,[],{'nonPenetration_Stance'},export_path);
+% compileConstraint(nlp,[],{'zeroRotation'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -84,10 +84,10 @@ toc
 %% Update Initial Condition
 
 % temp = load('local/current_gait.mat');
-% temp = load(['local/', trialName,'.mat']);
+temp = load(['local/', trialName,'.mat']);
 % temp = load('local/avgAccelerationForwardLegs.mat');
 
-temp = load('local/maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7.mat');
+% temp = load('local/maxAccelerationMu05Vel13MinGRF08MaxV7.mat');
 
 % bounds = temp.bounds;
 % nlp = temp.nlp;
@@ -95,15 +95,20 @@ temp = load('local/maxAccelerationWithAeroTailMu05Vel13MinGRF08MaxV7.mat');
 sol = temp.sol;
 info = temp.info;
 gait = temp.gait;
-gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
+for i = 1:length(gait)
+    if nlp.Phase(i).NumNode > 1
+        gait(i) = opt.interpGait(gait(i), nlp.Phase(i).NumNode);
+    end
+end
 % cost = temp.cost;
 
-% gait = opt.addTailToGait(gait);
+gait = opt.addTailToGait(gait);
 opt.updateInitCondition(nlp,gait);
 
 %% Solve
-[gait, sol, info] = opt.solve(nlp);
+% [gait, sol, info] = opt.solve(nlp);
 % [gait, sol, info] = opt.solve(nlp, sol);
+[gait, sol, info] = opt.solve(nlp, nlp.getInitialGuess('typical')+0.01);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% Save immediately in case of errors later in script
@@ -120,7 +125,6 @@ anim = plot.LoadAnimator(robot, gait,'SkipExporting',true);
 tol = 1e-3;
 checkConstraints(nlp,sol,tol,'local/constr_check.txt'); % 
 checkVariables(nlp,sol,tol,'local/var_check.txt'); % 
-
 cost = checkCosts(nlp,sol,'local/cost_check.txt'); % 
 
 results = struct;
