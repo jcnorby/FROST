@@ -1,0 +1,45 @@
+Solidworks:
+
+rotor inertia: 0.000034, 0.000034, 0.000065
+rotor mass: 0.0628
+motor package mass: 0.3579
+actual mass 0.394
+ratio: 1.104
+
+minitaur without legs mass: 4.952
+minitaur without legs inertia: 0.0624, 0.1454, 0.2022
+
+upper link mass: 0.0279
+upper link inertia: 0.0000453
+lower link (no toe) mass: 0.0335
+lower link (no toe) inertia: 0.0001422
+lower link (toe) mass: 0.04465
+lower link (toe) inertia: 0.000186
+
+motor offset length: 0.225
+motor offset width: 0.125
+
+Scale:
+
+Body Scaling factor: 6.192/4.952 = 1.25
+
+Whole robot: 7.1
+Whole robot no legs: 6.192
+Upper leg: 0.040
+lower link (no toe) mass: 0.051
+lower link (toe) mass: 0.081
+
+Changes to URDF:
+
+chassis mass: 6.192
+chassis inertia: 0.0780    0.1817    0.2527
+
+upper link mass: 0.40
+upper link inertia: 0.00006495 + 1.104*0.0000652 = 0.000137
+lower link (no toe) mass: 0.051
+lower link (no toe) inertia: 
+lower link (toe) mass: 0.081 0.0002165
+lower link (toe) inertia: 0.0003374
+lower link length (with toe): 0.24
+
+tail rotor reflected inertia = 0.0288
