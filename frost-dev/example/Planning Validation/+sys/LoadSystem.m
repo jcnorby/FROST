@@ -18,16 +18,16 @@ flightToFront.UserNlpConstraint = @opt.callback.FlightToFrontConstraints;
 % flightToBack = sys.domains.Flight(model, load_path);
 % flightToBack.UserNlpConstraint = @opt.callback.FlightToBackConstraints;
 % 
-% frontImpact = RigidImpact('FrontImpact', frontStance, 'Foot0Height'); % To frontStance
-% frontImpact.addImpactConstraint(struct2array(frontStance.HolonomicConstraints), load_path);
-% frontImpact.UserNlpConstraint = @opt.callback.FrontImpactConstraints;
+frontImpact = RigidImpact('FrontImpact', frontStance, 'Foot0Height'); % To frontStance
+frontImpact.addImpactConstraint(struct2array(frontStance.HolonomicConstraints), load_path);
+frontImpact.UserNlpConstraint = @opt.callback.FrontImpactConstraints;
 % 
 % backImpact = RigidImpact('BackImpact', backStance, 'Foot1Height'); % To backStance
 % backImpact.addImpactConstraint(struct2array(backStance.HolonomicConstraints), load_path);
 % backImpact.UserNlpConstraint = @opt.callback.BackImpactConstraints;
 % 
-% frontLiftOff = RigidImpact('FrontLiftOff', flightToBack, 'Foot2NormalForce'); % front liftoff, to flightToBack
-% frontLiftOff.addImpactConstraint(struct2array(flightToBack.HolonomicConstraints), load_path);
+frontLiftOff = RigidImpact('FrontLiftOff', flightToFront, 'Foot2NormalForce'); % front liftoff, to flightToBack
+frontLiftOff.addImpactConstraint(struct2array(flightToFront.HolonomicConstraints), load_path);
 % backLiftOff = RigidImpact('BackLiftOff', flightToFront, 'Foot3NormalForce'); % back liftoff, to flightToFront
 % backLiftOff.addImpactConstraint(struct2array(flightToFront.HolonomicConstraints), load_path);
 % 
@@ -49,16 +49,18 @@ flightToFront.UserNlpConstraint = @opt.callback.FlightToFrontConstraints;
 %     'BackStance'
 %     'FlightToFront'};
 
+joint_control = JointPD('simplePD');
+
 system = HybridSystem('vision60');
-system = addVertex(system, 'Flight', 'Domain', flightToFront,'Control', joint_control);
+system = addVertex(system, 'FlightToFront', 'Domain', flightToFront,'Control', joint_control);
 system = addVertex(system, 'FrontStance', 'Domain', frontStance,'Control', joint_control);
 
-srcs = {'FlightToFront'};
-tars = {'FrontStance'};
+srcs = {'FlightToFront', 'FrontStance'};
+tars = {'FrontStance', 'FlightToFront'};
 
 system = addEdge(system, srcs, tars);
 system = setEdgeProperties(system, srcs, tars, ...
-    'Guard', {frontImpact});
+    'Guard', {frontImpact, frontLiftOff});
 
 
 end

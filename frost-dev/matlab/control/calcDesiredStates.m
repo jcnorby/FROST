@@ -1,19 +1,24 @@
 function [qd, dqd] = calcDesiredStates(plant, t, x, obj, params);
 
-motorinfront = pi/2;
-motoroutfront = pi/2;
-motorinback = pi/2;
-motoroutback = pi/2;
+qd = zeros(12,1);
+dqd = zeros(12,1);
+qd([2,5,8,11]) = 0.5;
+qd([3,6,9,12]) = 1;
+% motorinfront = pi/2;
+% motoroutfront = pi/2;
+% motorinback = pi/2;
+% motoroutback = pi/2;
+% 
+% qd = [motoroutfront;motorinfront;motoroutback;motorinback;motorinfront;motoroutfront;motorinback;motoroutback];
+% dqd = zeros(9,1);
+% T = obj.Param.T;
+% A = obj.Param.A;
+% 
+% qd(9) = A*sin(2*pi*t/T);
+% dqd(9) = A*2*pi/T*cos(2*pi*t/T);
+% 
+% ddq = -A*(2*pi/T)^2*sin(2*pi*t/T);
 
-qd = [motoroutfront;motorinfront;motoroutback;motorinback;motorinfront;motoroutfront;motorinback;motoroutback];
-dqd = zeros(9,1);
-T = obj.Param.T;
-A = obj.Param.A;
-
-qd(9) = A*sin(2*pi*t/T);
-dqd(9) = A*2*pi/T*cos(2*pi*t/T);
-
-ddq = -A*(2*pi/T)^2*sin(2*pi*t/T);
 
 % pitch0 = x(5);
 % if t<0.08

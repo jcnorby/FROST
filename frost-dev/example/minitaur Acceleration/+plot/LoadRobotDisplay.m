@@ -33,10 +33,10 @@ base = CoordinateFrame(...
     'R',[0,0,0]...
     );
 
-    name = 'base_chassis_link';
-    offset = [0,0,0.58];
-    torso_top = frost.Animator.Rectangler(minitaur_disp.axs, robot, base, [-0.2 -0.075 -0.05],[0.2 0.075 0.05], name, opts);
-    minitaur_disp.addItem(torso_top);
+name = 'base_chassis_link';
+offset = [0,0,0.58];
+torso_top = frost.Animator.Rectangler(minitaur_disp.axs, robot, base, [-0.2 -0.075 -0.05],[0.2 0.075 0.05], name, opts);
+minitaur_disp.addItem(torso_top);
 
 
 knee_back_leftL = CoordinateFrame(...

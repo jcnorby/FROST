@@ -25,7 +25,7 @@ classdef JointPD < Controller
              
             % initialize default control parameters
             ep = 10;
-            obj.Param.kp = 40000;
+            obj.Param.kp = 400;
             obj.Param.kd = 1;
             obj.Param.T = 1;
             obj.Param.A = 0.2;
@@ -50,21 +50,23 @@ classdef JointPD < Controller
             
             
             [qd, dqd] = calcDesiredStates(plant, t, x, obj, params);
-            indexes = [7 8 11 12 15 16 19 20 23];
+%             indexes = [7 8 11 12 15 16 19 20 23]; % minitaur with tail
+            indexes = [7 8 9 11 12 13 15 16 17 19 20 21];   % Vision60
             qa = x(indexes);
-            dqa = x(indexes+25);
+%             dqa = x(indexes+25); % minitaur with tail
+            dqa = x(indexes+22);   % Vision60
             % compute error terms
             qerr = qa - qd;
             dqerr = dqa - dqd;
             
             % feedback controller
             u = - obj.Param.kp*qerr - obj.Param.kd*dqerr;
-            A = obj.Param.A;
-            T = obj.Param.T;
-            m = 0.4;
-            l = 0.5;
+%             A = obj.Param.A;
+%             T = obj.Param.T;
+%             m = 0.4;
+%             l = 0.5;
 %             u = zeros(9,1);
-            u(9) = m*l^2*(-A*(2*pi/T)^2*sin(2*pi*t/T)) + 9.81*0.4*0.5*sin(x(23)) - obj.Param.kp*qerr(9) - obj.Param.kd*dqerr(9);
+%             u(9) = m*l^2*(-A*(2*pi/T)^2*sin(2*pi*t/T)) + 9.81*0.4*0.5*sin(x(23)) - obj.Param.kp*qerr(9) - obj.Param.kd*dqerr(9);
             
             if ~isempty(logger)
                 calc = logger.calc;

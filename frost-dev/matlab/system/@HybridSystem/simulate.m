@@ -50,7 +50,7 @@ function logger = simulate(obj, t0, x0, tf, options, varargin)
         end
         
         if ~isempty(t_domain_idx) 
-            if cur_node_idx == t_domain_idx
+            if cur_node_idx == t_domain_idx+1
                 % if 'cur_node_idx' reaches the terminal node, terminate the simulation
                 break;
             end

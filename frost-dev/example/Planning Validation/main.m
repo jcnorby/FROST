@@ -17,7 +17,7 @@ utils.init_path(export_path);
 
 %% Declare trial and set select urdf
 
-trialName = 'planning_validation';
+trialName = 'planning_validation_001';
 
 cur = utils.get_root_path();
 urdf = fullfile(cur,'urdf','vision60.urdf');
@@ -27,10 +27,37 @@ delay_set = true;
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
 % exo_disp = plot.LoadRobotDisplay(robot);
+exo_disp = plot.LoadRobotDisplay(robot, 'SkipExporting', true);
+% robot.compile(export_path);
 
 system = sys.LoadSystem(robot, load_path);
+system.compile(export_path);
+% bounds = opt.GetBounds(robot);
 
-bounds = opt.GetBounds(robot);
+
+joint_control = JointPD('simplePD');
+
+x0 = zeros(22,1);
+dx0 = zeros(22,1);
+x0 = [x0; dx0];
+x0(3) = 0.5;
+t0 = 0;
+tf = 0.25;
+eventnames = [];
+sim_opts = [];
+
+logger = SimLogger(robot);
+disp('Simulating');
+tic
+logger = system.simulate(t0, x0, tf, []);
+toc
+
+% plot(logger.flow.t, logger.flow.states.x(23,:))
+% hold on
+% plot(logger.flow.t,A*sin(2*pi/T*logger.flow.t), '--r')
+anim = plot.LoadSimAnimator(robot, logger, 'SkipExporting',true);
+
+
 
 % load problem
 nlp = opt.LoadProblem(robot, bounds, load_path);

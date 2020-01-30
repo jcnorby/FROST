@@ -30,9 +30,8 @@ limits = [base.Limit];
 for i=1:6
     base(i).Limit = limits(i);
 end
+% robot = RobotLinks(urdf, base,[],'removeFixedJoints', true);
 robot = RobotLinks(urdf, base);
-
-
 
 % Add 4-bar holonomic constraint
 q = robot.States.x;
