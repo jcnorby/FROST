@@ -219,11 +219,19 @@ function domain = DoubleStance(model, load_path)
     
     %% Add front feet event
     % rear foot normal force = f(3)
+    
+    nf_nsf = UnilateralConstraint(domain,domain.Inputs.ConstraintWrench.fFoot0(3),'Foot0NormalForce','fFoot0');
+    domain = addEvent(domain, nf_nsf);
+    
     nf_nsf = UnilateralConstraint(domain,domain.Inputs.ConstraintWrench.fFoot2(3),'Foot2NormalForce','fFoot2');
     domain = addEvent(domain, nf_nsf);
     
     %% Add back feet event
     % rear foot normal force = f(3)
+    
+    nf_nsf = UnilateralConstraint(domain,domain.Inputs.ConstraintWrench.fFoot1(3),'Foot1NormalForce','fFoot1');
+    domain = addEvent(domain, nf_nsf);
+    
     nf_nsf = UnilateralConstraint(domain,domain.Inputs.ConstraintWrench.fFoot3(3),'Foot3NormalForce','fFoot3');
     domain = addEvent(domain, nf_nsf);
    

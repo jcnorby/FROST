@@ -30,22 +30,24 @@ domain = nlp.Plant;
 x = domain.States.x;
 dx = domain.States.dx;
 
-tc = 1;
-tvec = (1/tc)*linspace(nlp.Options.ConstantTimeHorizon(1),nlp.Options.ConstantTimeHorizon(2),nlp.NumNode);
+tvec = linspace(nlp.Options.ConstantTimeHorizon(1),nlp.Options.ConstantTimeHorizon(2),nlp.NumNode);
+s = [0 0 0.4000 1.0000 0 -1.0000];
+a = [6.6667, 0, 3.5233, -6.6667, 0, 9.6833, 0.3000, 0.1000]; % s = [0 0 0.4000 1.0000 0 -1.0000];
 T = tvec(end) - tvec(1);
 
-pitch_pos_des = 0.1*sin(2*pi*tvec/T);
-pitch_vel_des = 0.1*2*pi*cos(2*pi*tvec/T);
-targetx = SymVariable('targetx');
-targetdx = SymVariable('targetdx');
-state_error = [x('BaseRotY') - tomatrix(targetx);dx('BaseRotY') - targetdx];
-t_fun = SymFunction('trackState',state_error,{x,dx}, {[targetx, targetdx]});
+com_state = applyStance3D(s,a, a(7),tvec);
+com_pos_traj = com_state(1:3,:);
+com_vel_traj = com_state(4:6,:);
+com_pos = SymVariable('compos', 3);
+com_vel = SymVariable('comvel', 3);
+state_error = [x(1:3) - tomatrix(com_pos);dx(1:3) - tomatrix(com_vel)];
+t_fun = SymFunction('trackState',state_error,{x,dx}, {[com_pos; com_vel]});
 
-for i = 1:3:nlp.NumNode
+for i = 1:2:nlp.NumNode
     
     x_var = nlp.OptVarTable.x(i);
     dx_var = nlp.OptVarTable.dx(i);
-    auxdata = [pitch_pos_des(i),pitch_vel_des(i)];
+    auxdata = [com_pos_traj(:,i);com_vel_traj(:,i)];
     t_cstr = NlpFunction('Name',t_fun.Name,...
         'Dimension',length(t_fun),'lb',-1e-2, 'ub',1e-2,'Type','Linear',...
         'SymFun',t_fun,'DepVariables',[x_var;dx_var],...

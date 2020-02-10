@@ -16,6 +16,7 @@ classdef TrajectoryOptimization < NonlinearProgram
     
     %% Public properties
     properties (Access = public)
+        UserParams
     end
     
     properties (Hidden, Constant)

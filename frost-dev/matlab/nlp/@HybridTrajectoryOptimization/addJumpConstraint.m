@@ -15,26 +15,26 @@ function obj = addJumpConstraint(obj, edge, src, tar, bounds, varargin)
     
     
     
-    %% continuity of time
-    t_s = SymVariable('ts',[2,1]);
-    t_n = SymVariable('tn',[2,1]);
-    t_cont = SymFunction('tContDomain',flatten(t_s(2)-t_n(1)),{t_s,t_n});
-    
-    % create a NlpFunction for 'edge' NLP, but use the NlpVariables from
-    % 'src' and 'tar' NLPs.
-    if src.Options.DistributeTimeVariable
-        src_time_node = src.NumNode;
-    else
-        src_time_node = 1;
-    end
-    t_cstr = NlpFunction('Name','tContDomain',...
-        'Dimension',1,...
-        'lb', 0,...
-        'ub', 0,...
-        'Type','Linear',...
-        'SymFun',t_cont,...
-        'DepVariables',[src.OptVarTable.T(src_time_node);tar.OptVarTable.T(1)]);
-    edge.addConstraint('tContDomain','first',t_cstr);
+    %% continuity of time - JN COMMENTED OUT
+%     t_s = SymVariable('ts',[2,1]);
+%     t_n = SymVariable('tn',[2,1]);
+%     t_cont = SymFunction('tContDomain',flatten(t_s(2)-t_n(1)),{t_s,t_n});
+%     
+%     % create a NlpFunction for 'edge' NLP, but use the NlpVariables from
+%     % 'src' and 'tar' NLPs.
+%     if src.Options.DistributeTimeVariable
+%         src_time_node = src.NumNode;
+%     else
+%         src_time_node = 1;
+%     end
+%     t_cstr = NlpFunction('Name','tContDomain',...
+%         'Dimension',1,...
+%         'lb', 0,...
+%         'ub', 0,...
+%         'Type','Linear',...
+%         'SymFun',t_cont,...
+%         'DepVariables',[src.OptVarTable.T(src_time_node);tar.OptVarTable.T(1)]);
+%     edge.addConstraint('tContDomain','first',t_cstr);
     
     %% state continuity (src <-> edge)
     x_s = src.Plant.States.x;

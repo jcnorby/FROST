@@ -2,8 +2,8 @@ function [qd, dqd] = calcDesiredStates(plant, t, x, obj, params);
 
 qd = zeros(12,1);
 dqd = zeros(12,1);
-qd([2,5,8,11]) = 0.5;
-qd([3,6,9,12]) = 1;
+qd([2,5,8,11]) = 1;   % 0.5
+qd([3,6,9,12]) = 2;     % 1
 % motorinfront = pi/2;
 % motoroutfront = pi/2;
 % motorinback = pi/2;

@@ -333,7 +333,7 @@ classdef AbstractAnimator < handle
                 [x,i] = GetData(obj, t);
                 feetPos = computeFeetPos(x(1:22));
                 
-                scaling = 0.01;
+                scaling = 0.001;
                 for leg = 1:4
                     obj.quiverGRF{leg}.XData = feetPos(leg,1);
                     obj.quiverGRF{leg}.YData = feetPos(leg,2);

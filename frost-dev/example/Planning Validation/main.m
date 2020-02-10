@@ -10,6 +10,7 @@ frost_path  = '../../';
 addpath(frost_path);
 frost_addpath;
 addpath(genpath('process'));
+addpath(genpath('scripts'));
 
 export_path = 'gen/opt';
 load_path   = [];
@@ -17,60 +18,38 @@ utils.init_path(export_path);
 
 %% Declare trial and set select urdf
 
-trialName = 'planning_validation_001';
+trialName = 'planning_validation_test';
 
 cur = utils.get_root_path();
-urdf = fullfile(cur,'urdf','vision60.urdf');
+urdf = fullfile(cur,'urdf','cheetah.urdf');
 
 delay_set = true;
 %% Load robot model and optimization problem
 tic
 robot = sys.LoadModel(urdf, load_path, delay_set);
 % exo_disp = plot.LoadRobotDisplay(robot);
-exo_disp = plot.LoadRobotDisplay(robot, 'SkipExporting', true);
+% exo_disp = plot.LoadRobotDisplay(robot, 'SkipExporting', true);
 % robot.compile(export_path);
 
-system = sys.LoadSystem(robot, load_path);
-system.compile(export_path);
-% bounds = opt.GetBounds(robot);
-
-
-joint_control = JointPD('simplePD');
-
-x0 = zeros(22,1);
-dx0 = zeros(22,1);
-x0 = [x0; dx0];
-x0(3) = 0.5;
-t0 = 0;
-tf = 0.25;
-eventnames = [];
-sim_opts = [];
-
-logger = SimLogger(robot);
-disp('Simulating');
-tic
-logger = system.simulate(t0, x0, tf, []);
-toc
-
-% plot(logger.flow.t, logger.flow.states.x(23,:))
-% hold on
-% plot(logger.flow.t,A*sin(2*pi/T*logger.flow.t), '--r')
-anim = plot.LoadSimAnimator(robot, logger, 'SkipExporting',true);
-
-
+system = sys.LoadStanceToFlightSystem(robot, load_path);
+% system.compile(export_path);
+% logger = sys.SimulateSystem(system, robot)
 
 % load problem
-nlp = opt.LoadProblem(robot, bounds, load_path);
+bounds = opt.GetBounds(robot);
+traj = struct;
+traj.state = [0 0 0.35000 1.0000 0 -1.0000];
+traj.action = [6.6667, 0, 3.5233, -6.6667, 0, 9.6833, 0.3000, 0.1000];
+tic
+nlp = opt.LoadProblem(system, bounds, traj, load_path);
 toc
-
 %% Compile stuff if needed
 
-compileObjective(nlp,[],[],export_path);
-compileConstraint(nlp,[],[],export_path);
+% compileObjective(nlp,[],[],export_path);
+% compileConstraint(nlp,[],[],export_path);
 % compileConstraint(nlp,[],[],export_path, {'dynamics_equation'});
 % compileConstraint(nlp,[],{'dynamics_equation'},export_path);
-% compileConstraint(nlp,[],{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,[],{'nonPenetration_Stance'},export_path);
+% compileConstraint(nlp,[],{'kneeHeight', 'bodyHeight'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -78,23 +57,19 @@ compileConstraint(nlp,[],[],export_path);
 
 %% Update Initial Condition
 
-% temp = load('local/current_gait.mat');
+temp = load('local/current_gait.mat');
+% temp = load('local/planning_validation_test.mat');
 % temp = load(['local/', trialName,'.mat']);
 
-% bounds = temp.bounds;
-% nlp = temp.nlp;
-% robot = temp.robot;
-% sol = temp.sol;
-% info = temp.info;
-% gait = temp.gait;
-% gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
-% cost = temp.cost;
+sol = temp.sol;
+gait = temp.gait;
 
-opt.updateInitCondition(nlp,gait);
+% gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
+% opt.updateInitCondition(nlp,gait);
 
 %% Solve
-[gait, sol, info] = opt.solve(nlp);
-% [gait, sol, info] = opt.solve(nlp, sol);
+% [gait, sol, info] = opt.solve(nlp);
+[gait, sol, info] = opt.solve(nlp, sol);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
 
 %% Save immediately in case of errors later in script

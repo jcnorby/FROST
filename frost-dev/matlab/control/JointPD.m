@@ -25,7 +25,7 @@ classdef JointPD < Controller
              
             % initialize default control parameters
             ep = 10;
-            obj.Param.kp = 400;
+            obj.Param.kp = 100;
             obj.Param.kd = 1;
             obj.Param.T = 1;
             obj.Param.A = 0.2;

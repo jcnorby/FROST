@@ -17,7 +17,6 @@ for i = 1:length(gait)
         new_gait(i).states.ddx = interp1(gait(i).tspan, gait(i).states.ddx', tspan)';
         
         new_gait(i).inputs.u = interp1(gait(i).tspan, gait(i).inputs.u', tspan)';
-        new_gait(i).inputs.ffourBar = interp1(gait(i).tspan, gait(i).inputs.ffourBar', tspan)';
         
         if isfield(gait(i).inputs, 'fFoot0')
             new_gait(i).inputs.fFoot0 = interp1(gait(i).tspan, gait(i).inputs.fFoot0', tspan)';

@@ -23,8 +23,8 @@ limits = [base.Limit];
 %     [limits.upper] = deal(5, 10, 1.5, .5, 1, 0.5);
 %     [limits.lower] = deal(-10, 0, 0.1, 0, -pi, 0);
 %     [limits.upper] = deal(10, 0, 3, 0, pi, 0);
-[limits.lower] = deal(-10, -10, -10, -10, -10, -10);
-[limits.upper] = deal(10, 10, 10, 10, 10, 10);
+[limits.lower] = deal(-10, -10, 0, -pi, -pi, -pi);
+[limits.upper] = deal(10, 10, 10, pi, pi, pi);
 %     [limits.velocity] = deal(10, 10, 10, 10, 10, 10);
 [limits.effort] = deal(0);
 for i=1:6
@@ -33,26 +33,6 @@ end
 % robot = RobotLinks(urdf, base,[],'removeFixedJoints', true);
 robot = RobotLinks(urdf, base);
 
-% Add 4-bar holonomic constraint
-q = robot.States.x;
-
-% fb = [q('BasePosX'); q('BasePosY'); q('BasePosZ') - 0.2; q('BaseRotX'); q('BaseRotY'); q('BaseRotZ')];
-
-% fixedbase_constr = HolonomicConstraint(robot, fb, 'Fixedbase',...
-%     'ConstrLabel',{{'fbx','fby','fbz','fbr','fbp','fby'}},...
-%     'DerivativeOrder',2, 'LoadPath', load_path);
-
-% robot = addHolonomicConstraint(robot, fixedbase_constr, load_path);
-
-%
-%     d = SymVariable('d');
-%     robot = addParam(robot, 'd', d);
-
-%     tfinal = SymVariable('tfinal');
-%     robot = addParam(robot, 'tfinal', tfinal);
-
-
-
 % % Generate leg Jacobian
 % posFoot0 = getCartesianPosition(robot, sys.frames.Foot0(robot));
 % posFoot1 = getCartesianPosition(robot, sys.frames.Foot1(robot));
@@ -60,8 +40,8 @@ q = robot.States.x;
 % posFoot3 = getCartesianPosition(robot, sys.frames.Foot3(robot));
 % 
 % posFeet = [posFoot0;posFoot1;posFoot2;posFoot3];
-% noTailDOFs = SymVariable('x', [22,1]);
-% posFeetfun = SymFunction('computeFeetPos', posFeet, noTailDOFs);
+% dofs = SymVariable('x', [22,1]);
+% posFeetfun = SymFunction('computeFeetPos', posFeet, dofs);
 % export(posFeetfun, 'process');
 
 

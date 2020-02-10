@@ -26,7 +26,7 @@ end
 
 % Prompt user if the gait, video, and corresponding minitaur code should be
 % saved to Box (or whatever folder is specified in cloud_path)
-cloud_path = 'C:\Users\Joe Desktop\Box\Robomechanics Lab Shared Files\Minitaur Opt\';
+cloud_path = 'C:\Users\Joe Desktop\Box\Robomechanics Lab Shared Files\Projects\Legged Controls\Path Planning\';
 if exist(cloud_path, 'dir')
     reply = input(['Save everything to Box? y/n: '],'s');
     if strcmp(reply, 'y')
@@ -36,7 +36,7 @@ if exist(cloud_path, 'dir')
         close(myVideoBox);
         
         save([cloud_path,'FROST Gaits\', trialName, '.mat'],'nlp','gait','sol','info','bounds', 'results')
-        exportTrajectory(mergeGait(gait), [cloud_path, 'Minitaur Code\'], ['minitaurCode_', trialName], trialName);
+%         exportTrajectory(mergeGait(gait), [cloud_path, 'Minitaur Code\'], ['minitaurCode_', trialName], trialName);
         disp('Saved to cloud');
     end
 else 
