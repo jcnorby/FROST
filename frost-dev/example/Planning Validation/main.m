@@ -146,7 +146,7 @@ results = struct;
 
 figure
 plot3(fullgait.states.x(1,:), fullgait.states.x(2,:), fullgait.states.x(3,:), 'k'); hold on;
-plotStateActionPair3D(traj.state, traj.action)
+plotStateActionPair3D(traj.state, traj.action, gca)
 axis equal
 xlabel('x (m)');ylabel('y (m)');zlabel('z (m)');
 %% Save Results (locally and/or to the cloud depending on user prompt)
