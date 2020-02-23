@@ -20,13 +20,13 @@ model_bounds = model.getLimits(); % x, dx, ddx, u
 % model_bounds.states.dx.lb = [-4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100];
 % model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
 
+stallTorque = 250;
+model_bounds.inputs.Control.u.lb = -stallTorque;
+model_bounds.inputs.Control.u.ub = stallTorque;
+
 % fixed joint constraint wrench
 model_bounds.inputs.ConstraintWrench.ffourBar.lb = -1000;
 model_bounds.inputs.ConstraintWrench.ffourBar.ub = 1000;
-
-% fixed joint constraints
-model_bounds.params.pfourBar.lb = zeros(8,1);
-model_bounds.params.pfourBar.ub = zeros(8,1);
 
 % Distance travelled
 model_bounds.constrBounds.averageVelocity.lb = 0;

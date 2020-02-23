@@ -11,7 +11,17 @@ Foot1 = sys.frames.Foot1(domain);
 Foot2 = sys.frames.Foot2(domain);
 Foot3 = sys.frames.Foot3(domain);
 
-%     opt.constraint.zero_order_hold(nlp, bounds);
+% removeConstraint(nlp,'dh_Foot0_DoubleStance');
+% removeConstraint(nlp,'dh_Foot1_DoubleStance');
+% removeConstraint(nlp,'dh_Foot2_DoubleStance');
+% removeConstraint(nlp,'dh_Foot3_DoubleStance');
+
+% removeConstraint(nlp,'ddh_Foot0_DoubleStance');
+% removeConstraint(nlp,'ddh_Foot1_DoubleStance');
+% removeConstraint(nlp,'ddh_Foot2_DoubleStance');
+% removeConstraint(nlp,'ddh_Foot3_DoubleStance');
+% removeConstraint(nlp,'intXdot');
+
 
 opt.constraint.motor_model(nlp, bounds);
 opt.constraint.foot_height(nlp, [Foot0, Foot1, Foot2, Foot3], 'stance');

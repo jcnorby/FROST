@@ -27,18 +27,18 @@ system = HybridSystem('vision60');
 system = addVertex(system, 'Stance', 'Domain', stance,'Control', joint_control);
 system = addVertex(system, 'Flight', 'Domain', flight,'Control', joint_control);
 
-srcs = {'Stance', 'Flight'};
-tars = {'Flight', 'Stance'};
-
-system = addEdge(system, srcs, tars);
-system = setEdgeProperties(system, srcs, tars, ...
-    'Guard', {liftoff, impact});
-% srcs = {'Stance'};
-% tars = {'Flight'};
+% srcs = {'Stance', 'Flight'};
+% tars = {'Flight', 'Stance'};
 % 
 % system = addEdge(system, srcs, tars);
 % system = setEdgeProperties(system, srcs, tars, ...
-%     'Guard', {liftoff});
+%     'Guard', {liftoff, impact});
+srcs = {'Stance'};
+tars = {'Flight'};
+
+system = addEdge(system, srcs, tars);
+system = setEdgeProperties(system, srcs, tars, ...
+    'Guard', {liftoff});
 
 end
 

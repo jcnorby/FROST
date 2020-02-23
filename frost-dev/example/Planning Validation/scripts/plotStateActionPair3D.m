@@ -8,14 +8,12 @@ dy0 = s(5);
 dz0 = s(6);
 
 t_f = a(8);
-a(8) = [];
 t_s = a(7);
-a(7) = [];
 
 N = 21;
 for i = 1:N
 %     s_stance(:,i) = applyStance3D(s_flight(:,end), a, t_s*(i-1)/(N-1));
-    s_stance(:,i) = applyStance3D(s, a, t_s, t_s*(i-1)/(N-1));
+    s_stance(:,i) = applyStance3D(s, a, t_s*(i-1)/(N-1));
 end
 
 for i = 1:N

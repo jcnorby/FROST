@@ -26,7 +26,7 @@ function [conGUI] = LoadAnimator(robot, gait, varargin)
 
     anim.isLooping = false;
     anim.speed = 0.1;
-    anim.pov = frost.Animator.AnimatorPointOfView.North;
+    anim.pov = frost.Animator.AnimatorPointOfView.Free;
     anim.Animate(true);
     conGUI = frost.Animator.AnimatorControls();
     conGUI.anim = anim;

@@ -4,11 +4,17 @@ function foot_height(nlp, feet, phase)
 % Grab the symbolic variables for the states
 domain = nlp.Plant;
 x = domain.States.x;
+dx = domain.States.dx;
 
 % Compute the function for the foot height
 p_feet = getCartesianPosition(domain, feet);
 feet_height = p_feet(:,3);
 feet_height_fun = SymFunction(['footHeight_', nlp.Name], feet_height, {x});
+
+J = jacobian(p_feet(:), x);
+Jfun = SymFunction('computeJacobian', J, x);
+footVels = Jfun*dx;
+footVelsFun = SymFunction(['footVelocity_', nlp.Name], footVels, {x,dx});
 
 
 % Add foot height constraints with applied nodes and bounds based on the
@@ -17,6 +23,8 @@ ub = inf;
 if strcmp(phase, 'stance')
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
         0,0,'Nonlinear');
+%     addNodeConstraint(nlp, footVelsFun, {'x', 'dx'}, 'first', ...
+%         0,0,'Nonlinear');
 elseif strcmp(phase, 'swing')
     addNodeConstraint(nlp, feet_height_fun, {'x'}, 'all', ...
         0,ub,'Nonlinear');

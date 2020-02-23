@@ -1,4 +1,4 @@
-function s_new = applyStance3D(s, a, t_s, varargin)
+function s_new = applyStance3D(s, a, varargin)
 
 
 a_x0 = a(1);
@@ -7,8 +7,9 @@ a_z0 = a(3);
 a_x1 = a(4);
 a_y1 = a(5);
 a_z1 = a(6);
+t_s = a(7);
 
-if (nargin <= 3)
+if (nargin <= 2)
     t = t_s;
 else
     t = varargin{1};
