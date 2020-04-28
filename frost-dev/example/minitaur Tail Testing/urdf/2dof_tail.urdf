@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<robot name="minitaur" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="base_chassis_link">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.51"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+       <box size="0.5 0.5 0.5"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+
+
+  <link name="tail_link_1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0" radius="0.0"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.65 0.65 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.0" radius="0.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.0693"/>
+      <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.000072"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  <joint name="tail_joint_1" type="continuous">
+    <axis xyz="1 0 0"/>
+    <parent link="base_chassis_link"/>
+    <child link="tail_link_1"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <limit effort="100" velocity="1000"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="tail_trans_1" type="pr2_mechanism_model/SimpleTransmission">
+    <joint name="tail_joint_1"/>
+    <actuator name="tail_motor_1"/>
+    <mechanicalReduction>1</mechanicalReduction>
+  </transmission>
+
+  <link name="tail_link_2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.02"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.65 0.65 0.75 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="1.0" radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.0693"/>
+      <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.000072"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  <joint name="tail_joint_2" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="tail_link_1"/>
+    <child link="tail_link_2"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <limit effort="100" velocity="1000"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  <transmission name="tail_trans_2" type="pr2_mechanism_model/SimpleTransmission">
+    <joint name="tail_joint_2"/>
+    <actuator name="tail_motor_2"/>
+    <mechanicalReduction>1</mechanicalReduction>
+  </transmission>
+ 
+</robot>
+
