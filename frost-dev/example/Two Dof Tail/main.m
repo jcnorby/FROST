@@ -31,7 +31,7 @@ toc
 % compileObjective(nlp,[],export_path);
 % compileConstraint(nlp,[],export_path);
 % compileConstraint(nlp,{'motorModelPos','motorLimitPos','motorModelNeg','motorLimitNeg'},export_path);
-% compileConstraint(nlp,{'trackState'},export_path);
+compileConstraint(nlp,{'initState','finalState'},export_path);
 
 % % Save expression 
 % load_path   = 'gen/sym';
@@ -42,14 +42,14 @@ toc
 
 % update initial condition
 
-% temp = load('local/current_gait.mat');
-% gait = temp.gait;
-% sol = temp.sol;
+temp = load('local/current_gait.mat');
+gait = temp.gait;
+sol = temp.sol;
 % info = temp.info;
 
 % gait = opt.getInitGait(nlp, bounds);
  
-% opt.updateInitCondition(nlp,gait);
+opt.updateInitCondition(nlp,gait);
 %% solve
 [gait, sol, info] = opt.solve(nlp);
 % [gait, sol, info] = opt.solve(nlp, sol, info);
@@ -64,7 +64,3 @@ checkConstraints(nlp,sol,tol,'local/constr_check.txt'); %
 checkVariables(nlp,sol,tol,'local/var_check.txt'); % 
 
 checkCosts(nlp,sol,'local/cost_check.txt') % 
-
-
-
-

@@ -6,13 +6,15 @@ domain = nlp.Plant;
 x = domain.States.x;
 dx = domain.States.dx;
 
-finalPos = [x('BasePosX')
-    x('BasePosY')
+finalPos = [x('BaseRotX')
+    x('BaseRotY')
     x('BaseRotZ')];
 
-finalVel = [dx('BasePosX')
-    dx('BasePosY')
-    dx('BaseRotZ')];
+finalVel = [dx('BaseRotX')
+    dx('BaseRotY')
+    dx('BaseRotZ')
+    dx('tail_joint_1')
+    dx('tail_joint_2')];
 
 
 finalState = SymFunction('finalState', [finalPos; finalVel], {x,dx});

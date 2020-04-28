@@ -38,8 +38,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.0693"/>
-      <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.000072"/>
+      <mass value="0.000001"/>
+      <inertia ixx="0.000001" ixy="0.0" ixz="0.0" iyy="0.000001" iyz="0.0" izz="0.000001"/>
       <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     </inertial>
   </link>
@@ -73,9 +73,9 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.0693"/>
-      <inertia ixx="0.000001375" ixy="0.0" ixz="0.0" iyy="0.000072" iyz="0.0" izz="0.000072"/>
-      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.000001" ixy="0.0" ixz="0.0" iyy="0.000001" iyz="0.0" izz="0.000001"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 1.0"/>
     </inertial>
   </link>
   <joint name="tail_joint_2" type="continuous">

@@ -8,7 +8,7 @@ end
 if nargin < 3
     T = 0.2;
 end
-T = 1;
+T = 3;
 tmin = 0.001;
 %     tmin = 0;
 
@@ -17,11 +17,11 @@ model_bounds = model.getLimits(); % x, dx, ddx, u
 
 model_bounds.constrBounds.stallTorque = 3;
 
-model_bounds.states.x.lb = [0;0;0;-pi;-pi/2;-pi;-100;-100];
-model_bounds.states.x.ub = [0;0;0;pi;pi/2;pi;100;100];
+model_bounds.states.x.lb = [-10;-10;-10;-pi;-pi/2;-pi;-100;-100];
+model_bounds.states.x.ub = [10;10;10;pi;pi/2;pi;100;100];
 
-model_bounds.states.dx.lb = [0;0;0;-100;-100;-100;-100;-100];
-model_bounds.states.dx.ub = [0;0;0;100;100;100;100;100];
+model_bounds.states.dx.lb = [-10;-10;-10;-100;-100;-100;-100;-100];
+model_bounds.states.dx.ub = [10;10;10;100;100;100;100;100];
 
 model_bounds.params.pFixedbase.lb = zeros(3,1);
 model_bounds.params.pFixedbase.ub = zeros(3,1);
