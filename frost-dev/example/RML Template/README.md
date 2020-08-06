@@ -1,7 +1,7 @@
 # RML Template
 
 ### Usage
-This template contains example scripts to create, solve, and visualize a trajectory optimization that maximizes Spirit 40 jumping height. If FROST is installed correctly this script should run out of the box (if it doesn't please contact jnorby@andrew.cmu.edu), but it can also be used as a starting point for creating other robot optimizations. For a simpler example (e.g. one without a urdf), see `examples/nlp_example`. 
+This template contains example scripts to create, solve, and visualize a trajectory optimization that maximizes Spirit 40 jumping height. If FROST is installed correctly this script should run out of the box (if it doesn't please contact jnorby@andrew.cmu.edu), but it can also be used as a starting point for creating other robot optimizations. For a simpler example (e.g. one without a urdf), see `examples/nlp_example`. See the powerpoint 'A Brief FROST Tutorial' for more information about the inner workings of FROST.
 
 To create a new optimization:
 - Copy the RML Template folder and rename to your project (Do not alter this one!)
