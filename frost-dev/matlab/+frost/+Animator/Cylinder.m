@@ -62,7 +62,7 @@ classdef Cylinder < frost.Animator.DisplayItem
             
             
             obj.surface = surface(obj.ax, x, y, z,...
-                'FaceColor', 'blue', 'EdgeColor', 'none');
+                'FaceColor', [0.2 0.2 0.2], 'EdgeColor', 'none');
         end
         
         function obj = update(obj, x)

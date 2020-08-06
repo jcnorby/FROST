@@ -99,15 +99,21 @@ classdef AbstractAnimator < handle
             
             % Define Terrain
             if isempty(varargin)
-                [terrain.Tx, terrain.Ty] = meshgrid(-10:1:10, -10:1:10);
+                [terrain.Tx, terrain.Ty] = meshgrid(-1.5:1:1.5, -1.5:1:1.5);
                 terrain.Tz = 0.*terrain.Tx;
             else
                 terrain = varargin{1};
             end
             
-            obj.ground = surf(terrain.Tx,terrain.Ty,terrain.Tz,'FaceColor',[0.5 0.8 0.5]); hold on;
-            
-            
+%             if exist('ground_plane.jpg')
+%                 I = imread('ground_plane.jpg');
+%                 obj.ground = warp(terrain.Tx,terrain.Ty,terrain.Tz,I); hold on;
+%             else
+%                 obj.ground = surf(terrain.Tx,terrain.Ty,terrain.Tz,'FaceColor',[0.5 0.8 0.5]); hold on;
+%             end
+           
+            obj.ground = surf(terrain.Tx,terrain.Ty,terrain.Tz,'FaceColor',1/255*[210 180 140]); hold on;
+           
             
         end
         
@@ -215,8 +221,8 @@ classdef AbstractAnimator < handle
                     hAngle = hAngle + 225;
                     vAngle = vAngle + 45;
                 case frost.Animator.AnimatorPointOfView.TopFrontLeft
-                    hAngle = hAngle + 225 + yaw;
-                    vAngle = vAngle + 45;
+                    hAngle = hAngle + 45;
+                    vAngle = vAngle + 15;
             end
             
             if obj.pov ~= frost.Animator.AnimatorPointOfView.Free
@@ -266,9 +272,10 @@ classdef AbstractAnimator < handle
         end
         
         function [center, radius, yaw] = GetCenter(obj, t, x)            
-            center = [x(1),0,0];
-%             center = [0.25,0,0];
-            radius = 0.75;
+%             center = [x(1),0,0];
+            center = [0,0,0];
+%             radius = 0.75;
+            radius = 1.5;
             yaw = 0;
         end
         
@@ -323,7 +330,7 @@ classdef AbstractAnimator < handle
         function createGRFQuiver(obj)
             for i = 1:4
 %                 view(obj.axs, 0, 0);
-                obj.quiverGRF{i} = quiver3([0],[0],[0],[0],[1],[1], 0, 'r', 'lineWidth', 2); hold on;
+                obj.quiverGRF{i} = quiver3([0],[0],[0],[0],[1],[1], 0, 'r', 'lineWidth', 2, 'MaxHeadSize', 1); hold on;
             end
             
         end

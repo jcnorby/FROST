@@ -17,7 +17,7 @@ classdef LinkSphere < frost.Animator.Sphere
             obj = obj@frost.Animator.Sphere(ax, model, linkFrame, name, varargin{:});
             
             obj.radius = 0.03;
-            obj.surface.FaceColor = 'blue';
+            obj.surface.FaceColor = [0.2 0.2 0.2];
         end
     end
 end

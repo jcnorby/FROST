@@ -57,7 +57,7 @@ classdef Patch < frost.Animator.DisplayItem
             
             
             obj.patch = patch(obj.ax, 'Faces',obj.faces,'Vertices',v,...
-                'FaceColor', 'blue', 'EdgeColor', 'white');
+                'FaceColor', [0.2 0.2 0.2], 'EdgeColor', [0 0 0]);
         end
         
         function obj = update(obj, x)

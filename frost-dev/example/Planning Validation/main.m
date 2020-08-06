@@ -47,9 +47,11 @@ for i = 1:N
 %     traj.state = [0 0 0.35000 1.0000 0 -1.0000];
 %     traj.action = [6.6667, 0, 3.5233, -6.6667, 0, 9.6833, 0.3000, 0.1000];
 
-%     traj.state = [0           0     0.44971      1.2741      1.2165    -0.19288];
-%     traj.action = [1.7329      2.9726      1.5159     -1.8753     -1.8989      3.1826     0.36058    0.026843];
-
+% State: 0           0     0.47185    -0.88622    -0.07459    -0.53885     0.25897           0
+% Action: 7.7033    -0.32241      1.8836      2.7333      2.2626     -2.6276     0.24614     0.13059     -3.5535    -0.67694
+% 
+%     traj.state = [0           0     0.47185    -0.88622    -0.07459    -0.53885     0.25897           0];
+%     traj.action = [7.7033    -0.32241      1.8836      2.7333      2.2626     -2.6276     0.24614     0.13059     -3.5535    -0.67694];
     
 %     temp = load('local/intxdot_error_state_action_pair');
 %     traj = temp.traj;
@@ -85,13 +87,17 @@ for i = 1:N
         
 %     gait = opt.interpGait(gait, nlp.Phase(1).NumNode);
 %     gait = opt.interpGait(gait(1:3), nlp.Phase(1).NumNode);
-%     opt.updateInitCondition(nlp,gait);
+    opt.updateInitCondition(nlp,gait);
     
     %% Solve
 %     timeout = 1800; tic;
     [gait, sol, info] = opt.solve(nlp);
 %     [gait, sol, info] = opt.solve(nlp, sol);
 %     [gait, sol, info] = opt.solve(nlp, sol, info);
+    if ((info.status == -1))
+        [gait, sol, info] = opt.solve(nlp, sol);
+    end
+    
     if ((info.status == -1))
         [gait, sol, info] = opt.solve(nlp, sol);
     end
