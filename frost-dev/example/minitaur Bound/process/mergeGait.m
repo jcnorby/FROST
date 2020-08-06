@@ -1,4 +1,4 @@
-function new_gait = mergeGait(gait, obj)
+function new_gait = mergeGait(gait)
 
 tspan = [];
 
@@ -10,14 +10,23 @@ end
 
 inputnames = {'u','fFoot0','fFoot1','fFoot2','fFoot3'};
 inputsize = [9,3,3,3,3];
+% slidingPhases = [];
+% for i = 1:length(gait)
+%     if isfield(gait(i).inputs, 'fFoot0X')
+%         slidingPhases = [slidingPhases, i];
+%         inputnames = {inputnames{:},'fFoot0X','fFoot1X','fFoot2X','fFoot3X'};
+%         inputsize = [9,3,3,3,3,1,1,1,1];
+%     end
+% end
+
 for j = 1:length(inputnames)
     inputs.(inputnames{j}) = [];
 end
 
-for i = 1:length(obj.Phase)
-    if obj.Phase(i).NumNode > 1
+for i = 1:length(gait)
+    if ~isempty(gait(i).tspan)
         
-        N = obj.Phase(i).NumNode;
+        N = length(gait(i).tspan);
         tspan = [tspan gait(i).tspan];
 
         for j = 1:length(statenames)

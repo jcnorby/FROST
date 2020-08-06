@@ -1,6 +1,5 @@
 function distance_traveled(nlp, bounds)
-
-if any(strcmp(fieldnames(nlp.OptVarTable), 'd'))
+    
     domain = nlp.Plant;
     x = domain.States.x;
     d = domain.Params.d;
@@ -17,7 +16,25 @@ if any(strcmp(fieldnames(nlp.OptVarTable), 'd'))
         'Dimension',1,'lb',0, 'ub',0,'Type','Linear',...
         'SymFun',d_fun,'DepVariables',[x0_var;xf_var;d_var]);
     addConstraint(nlp, 'distParam', 'last', d_cstr);
-end
+
+%     p_lb = bounds.constrBounds.periodicity.lb;
+%     p_ub = bounds.constrBounds.periodicity.ub;
+%     x0 = x;
+%     xf = SymVariable('xf',size(x));
+%     p_error = tomatrix(xf(2:end)-x0(2:end));
+%     p_fun = SymFunction('periodicity',p_error,{x0, xf});
+%     x0_var = nlp.OptVarTable.x(1);
+%     xf_var = nlp.OptVarTable.x(end);
+%     p_cstr = NlpFunction('Name',p_fun.Name,...
+%         'Dimension',length(p_error),'lb',p_lb, 'ub',p_ub,'Type','Nonlinear',...
+%         'SymFun',p_fun,'DepVariables',[x0_var;xf_var]);
+%     addConstraint(nlp, 'periodicity', 'last', p_cstr);
+    
+%     dist = x(1);
+%     minDist = SymFunction('minDist', dist, {x});
+%     addNodeConstraint(nlp, minDist, {'x'}, 'last',  ...
+%         bounds.constrBounds.minDist.lb, ...
+%         bounds.constrBounds.minDist.ub,'Linear');
 
 end
 

@@ -9,7 +9,7 @@ for loopNum = 1:nLoops-1
     tempGait = gait;
     for i = 1:2:length(gait)
         tempGait(i).states.x(1,:) = gait(i).states.x(1,:) + loopedGait(end).states.x(1,end);
-        tempGait(i).tspan = gait(i).tspan + loopedGait(end-1).tspan(end);
+        tempGait(i).tspan = gait(i).tspan + loopedGait(end).tspan(end);
     end
     for i = 2:2:length(gait)
         tempGait(i).states.x(1,:) = gait(i).states.x(1,:) + loopedGait(end).states.x(1,end);

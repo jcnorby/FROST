@@ -4,7 +4,6 @@ function no_slip(nlp, bounds, Foot0, Foot1, Foot2, Foot3)
     domain = nlp.Plant;
     x = domain.States.x;
     dx = domain.States.dx;
-    
     foot0Contact = domain.Inputs.External.foot0Contact;
     foot1Contact = domain.Inputs.External.foot1Contact;
     foot2Contact = domain.Inputs.External.foot2Contact;

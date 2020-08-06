@@ -1,6 +1,6 @@
 function bounds = GetBounds(model, vel, T)
 
-
+global bInactive
 if nargin < 2
     vel = [0.0,0];
 end
@@ -9,7 +9,7 @@ if nargin < 3
     T = 0.5;
 end
 T = 0.5;
-tmin = 0.05;
+tmin = 0.125;
 
 %     tmin = 0;
 
@@ -19,41 +19,50 @@ model_bounds = model.getLimits(); % x, dx, ddx, u
 model_bounds.constrBounds.stallTorque = 3;
 
 % state constraints
-motorlb = -pi/2;
+motorlb = -pi;
 motorub = pi;
 kneelb = 0;
 kneeub = pi;
+bodylb = -20*pi/180; 
+bodyub = 20*pi/180;
+
+taillb = -pi/2; % -pi/2
+if bInactive
+    tailub = -pi/2+0.2; % pi/2
+else
+    tailub = pi/2;
+end
 
 if model.numState == 22
-    model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
-    model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub];
+    model_bounds.states.x.lb = [0;0;0.1;0;bodylb;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb];
+    model_bounds.states.x.ub = [10;0;2;0;bodyub;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub];
     
-    model_bounds.states.dx.lb = [0.4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100];
-    model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
+    model_bounds.states.dx.lb = [1;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100];
+    model_bounds.states.dx.ub = [10;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
 elseif  model.numState == 23
-    model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -pi/2];
-    model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; pi/2];
+    model_bounds.states.x.lb = [0;0;0.1;0;bodylb;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -pi/2];
+    model_bounds.states.x.ub = [10;0;2;0;bodyub;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; pi/2];
     
-    model_bounds.states.dx.lb = [0.4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100];
-    model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
+    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100];
+    model_bounds.states.dx.ub = [10;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100];
 elseif model.numState == 25
-    model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -pi/2 + 0.25;0;0];
-    model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; pi/2 - 0.25;0;0];
+    model_bounds.states.x.lb = [0;0;0.1;0;bodylb;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; taillb;0;0];
+    model_bounds.states.x.ub = [10;0;2;0;bodyub;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; tailub;0;0];
     
 %     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -0.005;0;0];
 %     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; 0.005;0;0];    
     
-    model_bounds.states.dx.lb = [0.4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0];
-    model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0];
+    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0];
+    model_bounds.states.dx.ub = [10;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0];
 elseif model.numState == 26
-    model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -pi/2 + 0.25;0;0;0];
-    model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; pi/2 - 0.25;0;0;0];
+    model_bounds.states.x.lb = [0;0;0.1;0;bodylb;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; taillb;0;0;0];
+    model_bounds.states.x.ub = [10;0;2;0;bodyub;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; tailub ;0;0;0];
     
 %     model_bounds.states.x.lb = [0;0;0.1;0;-pi/2;0;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb;motorlb;motorlb;kneelb;kneelb; -0.005;0;0];
 %     model_bounds.states.x.ub = [10;0;2;0;pi/2;0;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub;motorub;motorub;kneeub;kneeub; 0.005;0;0];    
     
-    model_bounds.states.dx.lb = [0.4;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0;0];
-    model_bounds.states.dx.ub = [4;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0;0];
+    model_bounds.states.dx.lb = [0;0;-100;0;-100;0;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100;-100; -100;0;0;0];
+    model_bounds.states.dx.ub = [10;0;100;0;100;0;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;100;0;0;0];
 end
         
 
@@ -77,9 +86,14 @@ if isnan(getJointIndices(model, 'tail_joint'))
     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque;
     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque;
 else
-    model_bounds.params.r.lb = 1;
-    model_bounds.params.r.ub = 1;
     
+    if model.Joints(getJointIndices(model, 'tail_joint')).Actuator.Ratio ~= 1
+        model_bounds.params.r.lb = 1; % 0.1
+        model_bounds.params.r.ub = 1; % 50
+    else
+        model_bounds.params.r.lb = 0.1;
+        model_bounds.params.r.ub = 50;
+    end
 %     model_bounds.inputs.Control.u.lb = -model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];
 %     model_bounds.inputs.Control.u.ub = model_bounds.constrBounds.stallTorque*[1;1;1;1;1;1;1;1;model_bounds.params.r.ub];
     
@@ -88,9 +102,9 @@ else
 end
 
 % Joint min/max
-model_bounds.constrBounds.jointAng.lb = -pi/2;
-model_bounds.constrBounds.jointAng.ub = pi/2;
-model_bounds.constrBounds.jointExt.lb = 0.3;
+model_bounds.constrBounds.jointAng.lb = -pi/6;
+model_bounds.constrBounds.jointAng.ub = pi/6;
+model_bounds.constrBounds.jointExt.lb = 0.8;
 model_bounds.constrBounds.jointExt.ub = pi - model_bounds.constrBounds.jointExt.lb;
 
 % Distance travelled
@@ -124,15 +138,9 @@ model_bounds.params.dfinal.ub = 2;
 
 
 % Step size
-model_bounds.params.d.lb = 0.001;
-%     model_bounds.params.d.lb = 0;
-model_bounds.params.d.ub = Inf;
-
-%     model_bounds.params.r.lb = 0.01;
-%     model_bounds.params.r.ub = 10;
-
-%     model_bounds.params.r.lb = 1;
-%     model_bounds.params.r.ub = 1;
+% model_bounds.params.d.lb = 0.001;
+% model_bounds.params.d.lb = 0;
+% model_bounds.params.d.ub = Inf;
 
 model_bounds.params.kp.lb = 0;
 model_bounds.params.kp.ub = 5;
@@ -145,45 +153,56 @@ model_bounds.params.qDes.ub = model_bounds.states.x.ub(end);
 
 %% construct the boundary values for each domain
 bounds = struct();
+bounds = model_bounds;
 
-bounds.Stance03 = model_bounds;
-%     bounds.FrontStance.params.pFoot0.lb = zeros(3,1);
-%     bounds.FrontStance.params.pFoot0.ub = zeros(3,1);
-%     bounds.FrontStance.params.pFoot2.lb = zeros(3,1);
-%     bounds.FrontStance.params.pFoot2.ub = zeros(3,1);
+bounds.Stance = model_bounds;
+bounds.BackStance = model_bounds;
+bounds.FrontStance = model_bounds;
+bounds.SlidingStance = model_bounds;
 
-bounds.Stance12 = model_bounds;
-%     bounds.BackStance.params.pFoot1.lb = zeros(3,1);
-%     bounds.BackStance.params.pFoot1.ub = zeros(3,1);
-%     bounds.BackStance.params.pFoot3.lb = zeros(3,1);
-%     bounds.BackStance.params.pFoot3.ub = zeros(3,1);
+bounds.FrontLiftOff = model_bounds;
+bounds.FrontLiftOff.states.x = model_bounds.states.x;
+bounds.FrontLiftOff.states.xn = model_bounds.states.x;
+bounds.FrontLiftOff.states.dx = model_bounds.states.dx;
+bounds.FrontLiftOff.states.dxn = model_bounds.states.dx;
 
-bounds.Impact03 = model_bounds;
-bounds.Impact03.states.x = model_bounds.states.x;
-bounds.Impact03.states.xn = model_bounds.states.x;
-bounds.Impact03.states.dx = model_bounds.states.dx;
-bounds.Impact03.states.dxn = model_bounds.states.dx;
+bounds.FrontImpact = model_bounds;
+bounds.FrontImpact.states.x = model_bounds.states.x;
+bounds.FrontImpact.states.xn = model_bounds.states.x;
+bounds.FrontImpact.states.dx = model_bounds.states.dx;
+bounds.FrontImpact.states.dxn = model_bounds.states.dx;
+
+bounds.Flight = model_bounds;
+bounds.Flight.time.tf.lb = 0.01;
+
+bounds.BackLiftOff = model_bounds;
+bounds.BackLiftOff.states.x = model_bounds.states.x;
+bounds.BackLiftOff.states.xn = model_bounds.states.x;
+bounds.BackLiftOff.states.dx = model_bounds.states.dx;
+bounds.BackLiftOff.states.dxn = model_bounds.states.dx;
+
+bounds.BackImpact = model_bounds;
+bounds.BackImpact.states.x = model_bounds.states.x;
+bounds.BackImpact.states.xn = model_bounds.states.x;
+bounds.BackImpact.states.dx = model_bounds.states.dx;
+bounds.BackImpact.states.dxn = model_bounds.states.dx;
+
+bounds.Impact1 = model_bounds;
+bounds.Impact1.states.x = model_bounds.states.x;
+bounds.Impact1.states.xn = model_bounds.states.x;
+bounds.Impact1.states.dx = model_bounds.states.dx;
+bounds.Impact1.states.dxn = model_bounds.states.dx;
+
+bounds.Impact2 = model_bounds;
+bounds.Impact2.states.x = model_bounds.states.x;
+bounds.Impact2.states.xn = model_bounds.states.x;
+bounds.Impact2.states.dx = model_bounds.states.dx;
+bounds.Impact2.states.dxn = model_bounds.states.dx;
 
 
-% bounds.FrontLiftOff = model_bounds;
-% bounds.FrontLiftOff.states.x = model_bounds.states.x;
-% bounds.FrontLiftOff.states.xn = model_bounds.states.x;
-% bounds.FrontLiftOff.states.dx = model_bounds.states.dx;
-% bounds.FrontLiftOff.states.dxn = model_bounds.states.dx;
+% model_bounds.inputs.ConstraintWrench.u.lb = -model_bounds.constrBounds.stallTorque;
+% model_bounds.inputs.ConstraintWrench.u.ub = model_bounds.constrBounds.stallTorque;
 
-
-bounds.Impact12 = model_bounds;
-bounds.Impact12.states.x = model_bounds.states.x;
-bounds.Impact12.states.xn = model_bounds.states.x;
-bounds.Impact12.states.dx = model_bounds.states.dx;
-bounds.Impact12.states.dxn = model_bounds.states.dx;
-
-
-% bounds.BackLiftOff = model_bounds;
-% bounds.BackLiftOff.states.x = model_bounds.states.x;
-% bounds.BackLiftOff.states.xn = model_bounds.states.x;
-% bounds.BackLiftOff.states.dx = model_bounds.states.dx;
-% bounds.BackLiftOff.states.dxn = model_bounds.states.dx;
 
 
 end

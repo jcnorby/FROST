@@ -1,7 +1,7 @@
 function reflected_inertia_const(nlp, bounds)
 %     constraints for motor torque
 
-return;
+% return;
 domain = nlp.Plant;
 uRIL = domain.Inputs.External.uReflectedInertiaLoad;
 uRIB = domain.Inputs.External.uReflectedInertiaBody;
